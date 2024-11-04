@@ -17,8 +17,8 @@ aims to assist users in improving their offerings by understanding how different
 ‘persona’ with the general characteristics of her target audience. She can then converse with this persona to receive 
 feedback on her product. [Team Story]
 
-- Samantha logs out, and wants her friend Tiara to try Samatha’s personas, so she gives her login to Tiara for 
-her to try. [Allan]
+- Samantha logs out, and wants to see her past actions since she forgot what she was working on. 
+She logs in to her account again and is able to see the version history.  [Allan]
 
 - Samatha wonders about who would be interested in the product she wants to sell. She can get specific target 
 audience(s) based on the information she gives about her product. [Rainy]
