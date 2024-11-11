@@ -17,10 +17,10 @@ aims to assist users in improving their offerings by understanding how different
 ‘persona’ with the general characteristics of her target audience. She can then converse with this persona to receive 
 feedback on her product. [Team Story]
 
-- Samantha logs out, and wants to see her past actions since she forgot what she was working on. 
-She logs in to her account again and is able to see the version history.  [Allan]
+- Samantha logs out, and wants to check what she previously worked on, and when she logs back in, she can check the 
+chat history to see each of her pitches and how each persona reacts to them. [Allan]
 
-- Samatha wonders about who would be interested in the product she wants to sell. She can get specific target 
+- Samantha wonders about who would be interested in the product she wants to sell. She can get specific target 
 audience(s) based on the information she gives about her product. [Rainy]
 
 - Samantha wants to know which persona would fit better with her envisioned target audience. She can compare two 
