@@ -1,36 +1,46 @@
 package app;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Creates a class for openapi.
+ */
 public class openapi {
 
-    public static String chatGPT(String prompt) {
-        String url = "https://api.openai.com/v1/chat/completions";
-        String apiKey = "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";
-        String model = "gpt-3.5-turbo";
+    /**
+     * Creates a class for chat.
+     * @param prompt is what the input is to access chatgpt
+     */
+    public static String chat(String prompt) {
+        final String url = "https://api.openai.com/v1/chat/completions";
+        final String apiKey = "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";
+        final String model = "gpt-3.5-turbo";
 
         try {
-            URL obj = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            final URL obj = new URL(url);
+            final HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Authorization", "Bearer " + apiKey);
             connection.setRequestProperty("Content-Type", "application/json");
 
             // The request body
-            String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
+            final String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
             connection.setDoOutput(true);
-            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+            final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(body);
             writer.flush();
             writer.close();
 
             // Response from ChatGPT
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            final BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
 
-            StringBuffer response = new StringBuffer();
+            final StringBuilder response = new StringBuilder();
 
             while ((line = br.readLine()) != null) {
                 response.append(line);
@@ -40,23 +50,31 @@ public class openapi {
             // calls the method to extract the message.
             return extractMessageFromJSONResponse(response.toString());
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Creates a class for openapi.
+     */
     public static String extractMessageFromJSONResponse(String response) {
-        int start = response.indexOf("content")+ 11;
+        final int start = response.indexOf("content")+ 11;
 
-        int end = response.indexOf("\"", start);
+        final int end = response.indexOf("\"", start);
 
         return response.substring(start, end);
 
     }
 
+    /**
+     * Creates a class for openapi.
+     * @param args for the string input.
+     */
     public static void main(String[] args) {
 
-        System.out.println(chatGPT("hello, how are you? Can you tell me what's a Fibonacci Number?"));
+        System.out.println(chat("hello, how are you? Can you tell me what's a Fibonacci Number?"));
 
     }
 }
