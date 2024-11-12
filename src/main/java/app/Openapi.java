@@ -10,15 +10,18 @@ import java.net.URL;
 /**
  * Creates a class for openapi.
  */
-public class openapi {
+public class Openapi {
 
     /**
      * Creates a class for chat.
      * @param prompt is what the input is to access chatgpt
+     * @return the extracted message.
+     * @throws RuntimeException if there is an issue.
      */
     public static String chat(String prompt) {
         final String url = "https://api.openai.com/v1/chat/completions";
-        final String apiKey = "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";
+        final String apiKey = "sk-proj-jgoflH3wDt9aSnqiOxjV0l7hJSRbMW4T8mlIraMNS2_hwAEZkqG9ODyay5bakuFr2MYezzLNErT3"
+                + "BlbkFJGTOfo1kbtZBGNVRlLS2nJRNGdtq7voWZPS8TAkt1Zgu74OhhlY1WVOxfd1AGDuvm3_uRoiDUcA";
         final String model = "gpt-3.5-turbo";
 
         try {
@@ -29,7 +32,8 @@ public class openapi {
             connection.setRequestProperty("Content-Type", "application/json");
 
             // The request body
-            final String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
+            final String body = "{\"model\": \"" + model + "\", \"messages\": [{\"role\": \"user\", \"content\": \""
+                    + prompt + "\"}]}";
             connection.setDoOutput(true);
             final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
             writer.write(body);
@@ -48,7 +52,7 @@ public class openapi {
             br.close();
 
             // calls the method to extract the message.
-            return extractMessageFromJSONResponse(response.toString());
+            return messageFromJSONResponse(response.toString());
 
         }
         catch (IOException e) {
@@ -58,9 +62,11 @@ public class openapi {
 
     /**
      * Creates a class for openapi.
+     * @param response is the response of chatgpt.
+     * @return the response of the chatgpt.
      */
-    public static String extractMessageFromJSONResponse(String response) {
-        final int start = response.indexOf("content")+ 11;
+    public static String messageFromJSONResponse(String response) {
+        final int start = response.indexOf("content") + 11;
 
         final int end = response.indexOf("\"", start);
 
