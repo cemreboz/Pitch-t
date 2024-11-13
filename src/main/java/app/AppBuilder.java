@@ -177,6 +177,12 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
+        // shutdown hook, registered into JVM, independent of this jFrame object
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Executing cleanup before exit...");
+            // Place any necessary cleanup code here
+        }));
+
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
 
