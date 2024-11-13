@@ -28,7 +28,7 @@ public class Application {
                     "messages": [
                         {
                             "role": "user",
-                            "content": "Tell me a good dad joke about cats"
+                            "content": "give me a dad joke"
                         }
                     ]
                 }""";
