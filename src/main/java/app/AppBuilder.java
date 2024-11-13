@@ -179,8 +179,11 @@ public class AppBuilder {
 
         // shutdown hook, registered into JVM, independent of this jFrame object
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Executing cleanup before exit...");
-            // Place any necessary cleanup code here
+            // checks the current view before executing save, saves on log out
+            if (!viewManagerModel.getState().toString()
+                    .equals("sign up") && !viewManagerModel.getState().toString().equals("log in")) {
+                System.out.println("Executing save before exit...");
+            }
         }));
 
         viewManagerModel.setState(signupView.getViewName());
