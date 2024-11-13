@@ -22,39 +22,52 @@ public class Application {
         // Fetch the OpenAI API key from environment variables
         final String apiKey = System.getenv("OPENAI_API_KEY");
 
-        // Prompt the user for input in the terminal
-        final Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter your message for OpenAI: ");
-        final String userMessage = scanner.nextLine();
-
-        // JSON request body with the user's input
-        final String body = """
-                {
-                    "model": "gpt-4",
-                    "messages": [
-                        {
-                            "role": "user",
-                            "content": "%s"
-                        }
-                    ]
-                }""".formatted(userMessage);
-
-        // Create HTTP request
-        final HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.openai.com/v1/chat/completions"))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-
-        // Create HTTP client and send the request
+        // Create HTTP client outside of the loop to reuse it
         final HttpClient client = HttpClient.newHttpClient();
-        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Print the response in the terminal
-        System.out.println("Response from OpenAI:");
-        System.out.println(response.body());
+        // Set up scanner for user input
+        final Scanner scanner = new Scanner(System.in);
 
+        while (true) {
+            // Prompt the user for input in the terminal
+            System.out.print("Enter your message for OpenAI (or type 'exit' to quit): ");
+            final String userMessage = scanner.nextLine();
+
+            // Exit the loop if the user types "exit"
+            if ("exit".equalsIgnoreCase(userMessage)) {
+                System.out.println("Exiting program.");
+                break;
+            }
+
+            // JSON request body with the user's input
+            final String body = """
+                    {
+                        "model": "gpt-4",
+                        "messages": [
+                            {
+                                "role": "user",
+                                "content": "%s"
+                            }
+                        ]
+                    }""".formatted(userMessage);
+
+            // Create HTTP request
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + apiKey)
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .build();
+
+            // Send the request and get the response
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Print the response in the terminal
+            System.out.println("Response from OpenAI:");
+            System.out.println(response.body());
+        }
+
+        // Close the scanner
         scanner.close();
     }
 }
