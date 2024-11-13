@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Scanner;
 
 /**
  * Main application class to send a request to OpenAI's API.
@@ -21,17 +22,22 @@ public class Application {
         // Fetch the OpenAI API key from environment variables
         final String apiKey = System.getenv("OPENAI_API_KEY");
 
-        // JSON request body
+        // Prompt the user for input in the terminal
+        final Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your message for OpenAI: ");
+        final String userMessage = scanner.nextLine();
+
+        // JSON request body with the user's input
         final String body = """
                 {
                     "model": "gpt-4",
                     "messages": [
                         {
                             "role": "user",
-                            "content": "give me a dad joke"
+                            "content": "%s"
                         }
                     ]
-                }""";
+                }""".formatted(userMessage);
 
         // Create HTTP request
         final HttpRequest request = HttpRequest.newBuilder()
@@ -45,8 +51,10 @@ public class Application {
         final HttpClient client = HttpClient.newHttpClient();
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Print the response
+        // Print the response in the terminal
         System.out.println("Response from OpenAI:");
         System.out.println(response.body());
+
+        scanner.close();
     }
 }
