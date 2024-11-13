@@ -1,5 +1,7 @@
 package app;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,6 +13,8 @@ import java.util.Scanner;
  * Main application class to send a request to OpenAI's API.
  */
 public class Application {
+
+    private static final String LOG_FILE_PATH = "api_calls.txt";
 
     /**
      * The main method for executing the API call.
@@ -63,11 +67,34 @@ public class Application {
             final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             // Print the response in the terminal
+            final String apiResponse = response.body();
             System.out.println("Response from OpenAI:");
-            System.out.println(response.body());
+            System.out.println(apiResponse);
+
+            // Log the input and output to a file
+            logApiCall(userMessage, apiResponse);
         }
 
         // Close the scanner
         scanner.close();
+    }
+
+    /**
+     * Logs the API call input and output to a file.
+     * @param input The user's input message.
+     * @param output The API response.
+     */
+    private static void logApiCall(String input, String output) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(LOG_FILE_PATH, true))) {
+            writer.write("User Input: " + input);
+            writer.newLine();
+            writer.write("API Output: " + output);
+            writer.newLine();
+            writer.write("----------------------------------------------------");
+            writer.newLine();
+        }
+        catch (IOException e) {
+            System.out.println("Error logging API call: " + e.getMessage());
+        }
     }
 }
