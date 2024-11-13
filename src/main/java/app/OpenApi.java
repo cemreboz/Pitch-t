@@ -8,9 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Creates a class for openapi.
+ * Creates a class for openAPI.
  */
-public class Openapi {
+public class OpenApi {
 
     /**
      * Creates a class for chat.
