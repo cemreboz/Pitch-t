@@ -1,4 +1,4 @@
-# Lab 5: Logout
+# Pitch !t Blueprint
 
 ## Domain
 An AI-powered platform designed for entrepreneurs and business professionals to receive feedback on their products, 
