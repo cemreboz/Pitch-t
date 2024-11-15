@@ -90,10 +90,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
                     final JSONObject infoObject = userJSONObject.getJSONObject(INFO_FIELD);
                     if (infoObject.has(PITCHES_KEY)) {
-                        dbUser.setPitches(pitchesFromJsonString(infoObject.getString(PITCHES_KEY)));
+                        dbUser.setPitches(pitchesFromJson(infoObject.getString(PITCHES_KEY)));
                     }
                     if (infoObject.has(EXPERTS_KEY)) {
-                        dbUser.setExperts(expertsFromJsonString(infoObject.getString(EXPERTS_KEY)));
+                        dbUser.setExperts(expertsFromJson(infoObject.getString(EXPERTS_KEY)));
                     }
                 }
                 return user;
@@ -193,8 +193,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         if (user instanceof DBUser) {
             final DBUser dbUser = (DBUser) user;
             final JSONObject infoObject = new JSONObject();
-            infoObject.put(PITCHES_KEY, pitchesToJsonString(dbUser.getPitches()));
-            infoObject.put(EXPERTS_KEY, expertsToJsonString(dbUser.getExperts()));
+            infoObject.put(PITCHES_KEY, pitchesToJson(dbUser.getPitches()));
+            infoObject.put(EXPERTS_KEY, expertsToJson(dbUser.getExperts()));
             requestBody.put(INFO_FIELD, infoObject);
         }
 
@@ -266,7 +266,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return name;
     }
 
-    private String pitchesToJsonString(List<Pitch> pitches) {
+    private String pitchesToJson(List<Pitch> pitches) {
         final JSONArray pitchesArray = new JSONArray();
         for (Pitch pitch : pitches) {
             final JSONObject pitchJson = new JSONObject();
@@ -282,7 +282,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitchesArray.toString();
     }
 
-    private String expertsToJsonString(List<Expert> experts) {
+    private String expertsToJson(List<Expert> experts) {
         final JSONArray expertsArray = new JSONArray();
         for (Expert expert : experts) {
             final JSONObject expertJson = new JSONObject();
@@ -293,7 +293,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return expertsArray.toString();
     }
 
-    private List<Pitch> pitchesFromJsonString(String pitchesJson) {
+    private List<Pitch> pitchesFromJson(String pitchesJson) {
         final List<Pitch> pitches = new ArrayList<>();
         final JSONArray pitchesArray = new JSONArray(pitchesJson);
 
@@ -322,7 +322,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitches;
     }
 
-    private List<Expert> expertsFromJsonString(String expertsJson) {
+    private List<Expert> expertsFromJson(String expertsJson) {
         final List<Expert> experts = new ArrayList<>();
         final JSONArray expertsArray = new JSONArray(expertsJson);
 
