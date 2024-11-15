@@ -18,7 +18,7 @@ public class DBUserFactory implements UserFactory {
      * @param password password of user
      * @param pitches list of pitch objects associated to user
      * @param experts list of experts associated to user
-     * @return
+     * @return the DB user
      */
     public DBUser create(String name, String password, List<Pitch> pitches, List<Expert> experts) {
         final DBUser dbUser = new DBUser(name, password);
