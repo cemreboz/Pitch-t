@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +15,7 @@ public class Persona {
     private String location;
     private List<String> interests;
     private String quote;
+    private List<String> chatHistory;
 
     public Persona() {
         this.personaID = personaID;
@@ -24,6 +26,7 @@ public class Persona {
         this.location = location;
         this.interests = interests;
         this.quote = quote;
+        this.chatHistory = new ArrayList<>();
     }
 
     public int getPersonaID() {
@@ -88,6 +91,29 @@ public class Persona {
 
     public void setQuote(String quote) {
         this.quote = quote;
+    }
+
+    public List<String> getChatHistory() {
+        return chatHistory;
+    }
+
+    public void setChatHistory(List<String> chatHistory) {
+        this.chatHistory = chatHistory;
+    }
+
+    /**
+     * Adds message to chat history.
+     * @param message to add
+     */
+    public void addChatMessage(String message) {
+        this.chatHistory.add(message);
+    }
+
+    /**
+     * Clears chat history.
+     */
+    public void clearChatHistory() {
+        this.chatHistory.clear();
     }
 }
 
