@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
 import entity.CommonUserFactory;
+import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
@@ -53,7 +54,7 @@ public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
     // thought question: is the hard dependency below a problem?
-    private final UserFactory userFactory = new CommonUserFactory();
+    private final UserFactory userFactory = new DBUserFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
