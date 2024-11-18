@@ -20,15 +20,12 @@ public class DBUser implements User {
         this.experts = new ArrayList<>();
     }
 
-    public String getUsername() {
+    @Override
+    public String getName() {
         return username;
     }
 
     @Override
-    public String getName() {
-        return "";
-    }
-
     public String getPassword() {
         return password;
     }
