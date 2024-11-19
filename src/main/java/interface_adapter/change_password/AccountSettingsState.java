@@ -3,20 +3,20 @@ package interface_adapter.change_password;
 /**
  * The State information representing the logged-in user.
  */
-public class LoggedInState {
+public class AccountSettingsState {
     private String username = "";
 
     private String password = "";
     private String passwordError;
 
-    public LoggedInState(LoggedInState copy) {
+    public AccountSettingsState(AccountSettingsState copy) {
         username = copy.username;
         password = copy.password;
         passwordError = copy.passwordError;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
-    public LoggedInState() {
+    public AccountSettingsState() {
 
     }
 
