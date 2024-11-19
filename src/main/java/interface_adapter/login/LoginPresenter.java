@@ -1,8 +1,8 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.LoggedInState;
-import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.change_password.AccountSettingsState;
+import interface_adapter.change_password.AccountSettingsViewModel;
 import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
@@ -13,15 +13,15 @@ import use_case.login.LoginOutputData;
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
-    private final LoggedInViewModel loggedInViewModel;
+    private final AccountSettingsViewModel accountSettingsViewModel;
     private final ViewManagerModel viewManagerModel;
     private final SignupViewModel signupViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+                          AccountSettingsViewModel accountSettingsViewModel,
                           LoginViewModel loginViewModel, SignupViewModel signupViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.loggedInViewModel = loggedInViewModel;
+        this.accountSettingsViewModel = accountSettingsViewModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
     }
@@ -30,12 +30,12 @@ public class LoginPresenter implements LoginOutputBoundary {
     public void prepareSuccessView(LoginOutputData response) {
         // On success, switch to the logged in view.
 
-        final LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername(response.getUsername());
-        this.loggedInViewModel.setState(loggedInState);
-        this.loggedInViewModel.firePropertyChanged();
+        final AccountSettingsState accountSettingsState = accountSettingsViewModel.getState();
+        accountSettingsState.setUsername(response.getUsername());
+        this.accountSettingsViewModel.setState(accountSettingsState);
+        this.accountSettingsViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(loggedInViewModel.getViewName());
+        this.viewManagerModel.setState(accountSettingsViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
