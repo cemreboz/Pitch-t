@@ -1,5 +1,6 @@
 package interface_adapter.change_password;
 
+import interface_adapter.account_settings.AccountSettingsViewModel;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.change_password.ChangePasswordOutputData;
 

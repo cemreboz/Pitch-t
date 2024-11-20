@@ -1,8 +1,6 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.AccountSettingsState;
-import interface_adapter.change_password.AccountSettingsViewModel;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.signup.SignupViewModel;

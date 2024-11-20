@@ -1,7 +1,6 @@
 package app;
 
 import java.awt.CardLayout;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +10,7 @@ import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.AccountSettingsViewModel;
+import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.dashboard.DashboardViewModel;

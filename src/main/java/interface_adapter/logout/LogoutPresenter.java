@@ -1,8 +1,8 @@
 package interface_adapter.logout;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.AccountSettingsState;
-import interface_adapter.change_password.AccountSettingsViewModel;
+import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import use_case.logout.LogoutOutputBoundary;

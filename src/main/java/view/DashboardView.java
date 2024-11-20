@@ -33,6 +33,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final JButton newPitch;
     private final JButton experts;
+    private final int fifty = 50;
+    private final int hundred = 100;
+    private final int thousand = 1000;
+
     // private DashboardController dashboardController;
     // private NewPitchController newPitchController;
     // private ExpertController expertController;
@@ -49,14 +53,14 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         final JPanel headerPanel = new JPanel();
 
         headerPanel.setLayout(new BorderLayout());
-        headerPanel.setMaximumSize(new Dimension(1000, 100));
+        headerPanel.setMaximumSize(new Dimension(thousand, hundred));
         final HamburgerMenu hamburgerMenu = new HamburgerMenu();
 
         final JLabel title = new JLabel("Dashboard");
 
         final JPanel menuWrapper = new JPanel();
         menuWrapper.setLayout(new BorderLayout());
-        menuWrapper.setMaximumSize(new Dimension(50, 50));
+        menuWrapper.setMaximumSize(new Dimension(fifty, fifty));
         menuWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         menuWrapper.add(hamburgerMenu, BorderLayout.CENTER);
@@ -68,7 +72,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         buttons.add(newPitch);
         experts = new JButton("Experts");
         buttons.add(experts);
-        buttons.setMaximumSize(new Dimension(1000, 100));
+        buttons.setMaximumSize(new Dimension(thousand, hundred));
 
         pitchHistoryPanel.setLayout(new BoxLayout(pitchHistoryPanel, BoxLayout.Y_AXIS));
         final JScrollPane scrollPane = new JScrollPane(pitchHistoryPanel);
@@ -137,7 +141,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                             // replace messagedialog ^ with this: DashboardController.execute(pitch)
                         }
                     });
-            System.out.println(pitch.getName());
             pitchHistoryPanel.add(pitchButton);
         }
         pitchHistoryPanel.revalidate();

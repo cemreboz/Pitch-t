@@ -1,4 +1,4 @@
-package interface_adapter.change_password;
+package interface_adapter.account_settings;
 
 import interface_adapter.ViewModel;
 

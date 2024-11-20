@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import interface_adapter.change_password.AccountSettingsState;
-import interface_adapter.change_password.AccountSettingsViewModel;
+import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.logout.LogoutController;
 
