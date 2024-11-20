@@ -179,6 +179,21 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the dashboard use case as part of the hamburger menu.
+     * @return this builder
+     */
+    public AppBuilder addDashboardUseCase() {
+        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
+                dashboardViewModel, loginViewModel, signupViewModel);
+        final LoginInputBoundary loginInteractor = new LoginInteractor(
+                userDataAccessObject, loginOutputBoundary);
+
+        final LoginController loginController = new LoginController(loginInteractor);
+        dashboardView.setLoginController(loginController);
+        return this;
+    }
+
+    /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
      * @return the application
      */

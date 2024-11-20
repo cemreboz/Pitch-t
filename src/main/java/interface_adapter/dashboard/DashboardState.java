@@ -10,6 +10,7 @@ import entity.Pitch;
  */
 public class DashboardState {
     private String username = "";
+    private String password = "";
     private String pitchLoadError;
     private List<Pitch> pitches = new ArrayList<>();
 
@@ -35,5 +36,13 @@ public class DashboardState {
 
     public void setPitchLoadError(String pitchLoadError) {
         this.pitchLoadError = pitchLoadError;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

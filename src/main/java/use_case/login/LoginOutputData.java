@@ -12,11 +12,13 @@ public class LoginOutputData {
     private final String username;
     private final boolean useCaseFailed;
     private final List<Pitch> pitches;
+    private final String password;
 
-    public LoginOutputData(String username, boolean useCaseFailed, List<Pitch> pitches) {
+    public LoginOutputData(String username, String password, boolean useCaseFailed, List<Pitch> pitches) {
         this.username = username;
         this.useCaseFailed = useCaseFailed;
         this.pitches = pitches;
+        this.password = password;
     }
 
     public String getUsername() {
@@ -25,6 +27,10 @@ public class LoginOutputData {
 
     public List<Pitch> getPitches() {
         return pitches;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
 }
