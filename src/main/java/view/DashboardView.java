@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import entity.Pitch;
+import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
@@ -42,7 +43,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     // private DashboardController dashboardController;
     // private NewPitchController newPitchController;
     // private ExpertController expertController;
-    private LoginController loginController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
@@ -105,9 +105,20 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     }
 
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
     public void setLoginController(LoginController loginController) {
-        this.loginController = loginController;
         hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
     /*
     public void setNewPitchController(NewPitchController newPitchController) {
