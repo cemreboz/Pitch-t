@@ -27,6 +27,7 @@ public class AccountSettingsPresenter implements AccountSettingsOutputBoundary {
     public void prepareSuccessView(AccountSettingsOutputData response) {
         final AccountSettingsState accountSettingsState = accountSettingsViewModel.getState();
         accountSettingsState.setUsername(response.getUsername());
+        accountSettingsState.setConfirmedPassword(response.getPassword());
 
         this.accountSettingsViewModel.setState(accountSettingsState);
         this.accountSettingsViewModel.firePropertyChanged();

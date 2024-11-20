@@ -19,4 +19,8 @@ public class AccountSettingsOutputData {
         return username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
 }

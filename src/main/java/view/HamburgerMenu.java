@@ -13,7 +13,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.account_settings.AccountSettingsState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
@@ -26,10 +28,10 @@ public class HamburgerMenu extends JPanel {
 
     private LoginController loginController;
     private AccountSettingsController accountSettingsController;
-    private DashboardViewModel dashboardViewModel;
+    private ViewModel viewModel;
 
-    public HamburgerMenu(DashboardViewModel dashboardViewModel) {
-        this.dashboardViewModel = dashboardViewModel;
+    public HamburgerMenu(ViewModel viewModel) {
+        this.viewModel = viewModel;
 
         final JLabel menuIcon = new JLabel("\u2630");
         menuIcon.setFont(new Font("Arial", Font.PLAIN, 24));
@@ -53,8 +55,17 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem dashboardItem = new JMenuItem("Dashboard");
         dashboardItem.addActionListener(evt -> {
-            final DashboardState currentState = dashboardViewModel.getState();
-            loginController.execute(currentState.getUsername(), currentState.getPassword());
+            if (viewModel.getState() instanceof DashboardState) {
+                final DashboardState currentState = (DashboardState) viewModel.getState();
+                loginController.execute(currentState.getUsername(), currentState.getPassword());
+            }
+            else if (viewModel.getState() instanceof AccountSettingsState) {
+                final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                loginController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "error");
+            }
         });
         menu.add(dashboardItem);
 
@@ -72,8 +83,17 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem accountSettingsItem = new JMenuItem("Account Settings");
         accountSettingsItem.addActionListener(evt -> {
-            final DashboardState currentState = dashboardViewModel.getState();
-            accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+            if (viewModel.getState() instanceof DashboardState) {
+                final DashboardState currentState = (DashboardState) viewModel.getState();
+                accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+            }
+            else if (viewModel.getState() instanceof AccountSettingsState) {
+                final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                accountSettingsController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "error");
+            }
         });
         menu.add(accountSettingsItem);
 
@@ -88,4 +108,5 @@ public class HamburgerMenu extends JPanel {
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         this.accountSettingsController = accountSettingsController;
     }
+
 }

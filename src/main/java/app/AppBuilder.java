@@ -195,6 +195,7 @@ public class AppBuilder {
 
         final LoginController loginController = new LoginController(loginInteractor);
         dashboardView.setLoginController(loginController);
+        accountSettingsView.setLoginController(loginController);
         return this;
     }
 
@@ -211,6 +212,7 @@ public class AppBuilder {
         final AccountSettingsController accountSettingsController = new AccountSettingsController(
                 accountSettingsInteractor);
         dashboardView.setAccountSettingsController(accountSettingsController);
+        accountSettingsView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
