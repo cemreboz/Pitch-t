@@ -184,7 +184,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the dashboard use case as part of the hamburger menu.
+     * Adds the dashboard use case as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addDashboardUseCase() {
@@ -200,7 +200,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the account settings use case as part of the hamburger menu.
+     * Adds the account settings use case as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addAccountSettingsUseCase() {
