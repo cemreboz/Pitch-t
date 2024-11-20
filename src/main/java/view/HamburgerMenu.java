@@ -13,12 +13,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import interface_adapter.dashboard.DashboardState;
+import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginState;
+
 /**
  * A panel for the hamburger menu.
  */
 public class HamburgerMenu extends JPanel {
 
-    public HamburgerMenu() {
+    private LoginController loginController;
+    private DashboardViewModel dashboardViewModel;
+
+    public HamburgerMenu(DashboardViewModel dashboardViewModel) {
+        this.dashboardViewModel = dashboardViewModel;
+
         final JLabel menuIcon = new JLabel("\u2630");
         menuIcon.setFont(new Font("Arial", Font.PLAIN, 24));
         menuIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -41,7 +51,8 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem dashboardItem = new JMenuItem("Dashboard");
         dashboardItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+            final DashboardState currentState = dashboardViewModel.getState();
+            loginController.execute(currentState.getUsername(), currentState.getPassword());
         });
         menu.add(dashboardItem);
 
@@ -65,5 +76,9 @@ public class HamburgerMenu extends JPanel {
 
         // Show the popup menu
         menu.show(invoker, 0, invoker.getHeight());
+    }
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 }

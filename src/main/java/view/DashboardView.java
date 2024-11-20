@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import entity.Pitch;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.login.LoginController;
 
 /**
  * The view for when the user is logged in and at the dashboard page.
@@ -30,6 +31,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
+    private final HamburgerMenu hamburgerMenu;
 
     private final JButton newPitch;
     private final JButton experts;
@@ -40,6 +42,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     // private DashboardController dashboardController;
     // private NewPitchController newPitchController;
     // private ExpertController expertController;
+    private LoginController loginController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
@@ -54,7 +57,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
         headerPanel.setLayout(new BorderLayout());
         headerPanel.setMaximumSize(new Dimension(thousand, hundred));
-        final HamburgerMenu hamburgerMenu = new HamburgerMenu();
+
+        hamburgerMenu = new HamburgerMenu(dashboardViewModel);
 
         final JLabel title = new JLabel("Dashboard");
 
@@ -101,6 +105,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     }
 
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
+        hamburgerMenu.setLoginController(loginController);
+    }
     /*
     public void setNewPitchController(NewPitchController newPitchController) {
         this.newPitchController = newPitchController;
