@@ -3,6 +3,8 @@ package interface_adapter.login;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.AccountSettingsState;
 import interface_adapter.change_password.AccountSettingsViewModel;
+import interface_adapter.dashboard.DashboardState;
+import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
@@ -13,29 +15,31 @@ import use_case.login.LoginOutputData;
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
-    private final AccountSettingsViewModel accountSettingsViewModel;
+    //private final AccountSettingsViewModel accountSettingsViewModel;
+    private final DashboardViewModel dashboardViewModel;
     private final ViewManagerModel viewManagerModel;
     private final SignupViewModel signupViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
-                          AccountSettingsViewModel accountSettingsViewModel,
+                          DashboardViewModel dashboardViewModel,
                           LoginViewModel loginViewModel, SignupViewModel signupViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.accountSettingsViewModel = accountSettingsViewModel;
+        this.dashboardViewModel = dashboardViewModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
     }
 
     @Override
     public void prepareSuccessView(LoginOutputData response) {
-        // On success, switch to the logged in view.
+        // On success, switch to the dashboard view.
 
-        final AccountSettingsState accountSettingsState = accountSettingsViewModel.getState();
-        accountSettingsState.setUsername(response.getUsername());
-        this.accountSettingsViewModel.setState(accountSettingsState);
-        this.accountSettingsViewModel.firePropertyChanged();
+        final DashboardState dashboardState = dashboardViewModel.getState();
+        dashboardState.setUsername(response.getUsername());
+        dashboardState.setPitches(response.getPitches());
+        this.dashboardViewModel.setState(dashboardState);
+        this.dashboardViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(accountSettingsViewModel.getViewName());
+        this.viewManagerModel.setState(dashboardViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 

@@ -1,5 +1,6 @@
 package use_case.login;
 
+import entity.DBUser;
 import entity.User;
 
 /**
@@ -30,9 +31,13 @@ public class LoginInteractor implements LoginInputBoundary {
             else {
 
                 final User user = userDataAccessObject.get(loginInputData.getUsername());
+                final DBUser dbUser = (DBUser) user;
 
                 userDataAccessObject.setCurrentUsername(user.getName());
-                final LoginOutputData loginOutputData = new LoginOutputData(user.getName(), false);
+                userDataAccessObject.setCurrentUser(user);
+
+                final LoginOutputData loginOutputData = new LoginOutputData(user
+                        .getName(), false, dbUser.getPitches());
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }

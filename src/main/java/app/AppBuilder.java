@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -33,10 +35,7 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.AccountSettingsView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -66,6 +65,8 @@ public class AppBuilder {
     private AccountSettingsViewModel accountSettingsViewModel;
     private AccountSettingsView accountSettingsView;
     private LoginView loginView;
+    private DashboardViewModel dashboardViewModel;
+    private DashboardView dashboardView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -90,6 +91,17 @@ public class AppBuilder {
         loginViewModel = new LoginViewModel();
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Dashboard View to the application.
+     * @return this builder
+     */
+    public AppBuilder addDashboardView() {
+        dashboardViewModel = new DashboardViewModel();
+        dashboardView = new DashboardView(dashboardViewModel);
+        cardPanel.add(dashboardView, dashboardView.getViewName());
         return this;
     }
 
@@ -125,7 +137,7 @@ public class AppBuilder {
      */
     public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                accountSettingsViewModel, loginViewModel, signupViewModel);
+                dashboardViewModel, loginViewModel, signupViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 
@@ -176,6 +188,9 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
+
+        application.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        application.setLocationRelativeTo(null);
 
         // shutdown hook, registered into JVM, independent of this jFrame object
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
