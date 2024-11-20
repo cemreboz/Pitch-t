@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -13,9 +13,11 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
 
 /**
@@ -36,12 +38,33 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
     private final JTextField passwordInputField = new JTextField(15);
     private final JButton changePassword;
 
+    private final int fifty = 50;
+    private final int hundred = 100;
+    private final int thousand = 1000;
+    private final HamburgerMenu hamburgerMenu;
+
     public AccountSettingsView(AccountSettingsViewModel accountSettingsViewModel) {
         this.accountSettingsViewModel = accountSettingsViewModel;
         this.accountSettingsViewModel.addPropertyChangeListener(this);
 
+        final JPanel headerPanel = new JPanel();
+
+        headerPanel.setLayout(new BorderLayout());
+        headerPanel.setMaximumSize(new Dimension(thousand, hundred));
+
+        hamburgerMenu = new HamburgerMenu(accountSettingsViewModel);
+
         final JLabel title = new JLabel("Logged In Screen");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        final JPanel menuWrapper = new JPanel();
+        menuWrapper.setLayout(new BorderLayout());
+        menuWrapper.setMaximumSize(new Dimension(fifty, fifty));
+        menuWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        menuWrapper.add(hamburgerMenu, BorderLayout.CENTER);
+        headerPanel.add(menuWrapper, BorderLayout.WEST);
+        headerPanel.add(title, BorderLayout.CENTER);
 
         final LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel("Password"), passwordInputField);
@@ -108,7 +131,7 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
                 }
         );
 
-        this.add(title);
+        this.add(headerPanel);
         this.add(usernameInfo);
         this.add(username);
 
@@ -140,5 +163,21 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
 
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;
+    }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
 }

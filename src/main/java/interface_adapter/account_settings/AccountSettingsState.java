@@ -7,6 +7,7 @@ public class AccountSettingsState {
     private String username = "";
 
     private String password = "";
+    private String confirmedPassword = "";
     private String passwordError;
 
     public AccountSettingsState(AccountSettingsState copy) {
@@ -38,5 +39,13 @@ public class AccountSettingsState {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setConfirmedPassword(String confirmedPassword) {
+        this.confirmedPassword = confirmedPassword;
+    }
+
+    public String getConfirmedPassword() {
+        return confirmedPassword;
     }
 }
