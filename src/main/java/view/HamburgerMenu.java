@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
@@ -24,6 +25,7 @@ import interface_adapter.login.LoginState;
 public class HamburgerMenu extends JPanel {
 
     private LoginController loginController;
+    private AccountSettingsController accountSettingsController;
     private DashboardViewModel dashboardViewModel;
 
     public HamburgerMenu(DashboardViewModel dashboardViewModel) {
@@ -70,7 +72,8 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem accountSettingsItem = new JMenuItem("Account Settings");
         accountSettingsItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+            final DashboardState currentState = dashboardViewModel.getState();
+            accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
         });
         menu.add(accountSettingsItem);
 
@@ -80,5 +83,9 @@ public class HamburgerMenu extends JPanel {
 
     public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
+    }
+
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        this.accountSettingsController = accountSettingsController;
     }
 }

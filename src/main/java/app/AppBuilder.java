@@ -10,6 +10,8 @@ import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
@@ -22,6 +24,9 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import use_case.account_settings.AccountSettingsInputBoundary;
+import use_case.account_settings.AccountSettingsInteractor;
+import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -190,6 +195,22 @@ public class AppBuilder {
 
         final LoginController loginController = new LoginController(loginInteractor);
         dashboardView.setLoginController(loginController);
+        return this;
+    }
+
+    /**
+     * Adds the account settings use case as part of the hamburger menu.
+     * @return this builder
+     */
+    public AppBuilder addAccountSettingsUseCase() {
+        final AccountSettingsOutputBoundary accountSettingsOutputBoundary = new AccountSettingsPresenter(
+                dashboardViewModel, accountSettingsViewModel, viewManagerModel);
+        final AccountSettingsInputBoundary accountSettingsInteractor = new AccountSettingsInteractor(userDataAccessObject,
+                accountSettingsOutputBoundary);
+
+        final AccountSettingsController accountSettingsController = new AccountSettingsController(
+                accountSettingsInteractor);
+        dashboardView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
