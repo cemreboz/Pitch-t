@@ -1,5 +1,7 @@
 package use_case.change_password;
 
+import entity.DBUser;
+import entity.DBUserFactory;
 import entity.User;
 import entity.UserFactory;
 
@@ -21,11 +23,21 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
 
     @Override
     public void execute(ChangePasswordInputData changePasswordInputData) {
-        final User user = userFactory.create(changePasswordInputData.getUsername(),
-                                             changePasswordInputData.getPassword());
-        userDataAccessObject.changePassword(user);
+        final User newUser;
+        final User existingUser = userDataAccessObject.get(changePasswordInputData.getUsername());
+        if (existingUser instanceof DBUser) {
+            final DBUser castedUser = (DBUser) existingUser;
+            final DBUserFactory castedUserFactory = (DBUserFactory) userFactory;
+            newUser = castedUserFactory.create(changePasswordInputData.getUsername(),
+                    changePasswordInputData.getPassword(), castedUser.getPitches(), castedUser.getExperts());
+        }
+        else {
+            newUser = userFactory.create(changePasswordInputData.getUsername(), changePasswordInputData.getPassword());
+        }
 
-        final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(user.getName(),
+        userDataAccessObject.changePassword(newUser);
+
+        final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(newUser.getName(),
                                                                                   false);
         userPresenter.prepareSuccessView(changePasswordOutputData);
     }
