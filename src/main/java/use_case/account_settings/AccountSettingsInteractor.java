@@ -1,16 +1,15 @@
 package use_case.account_settings;
 
 import entity.User;
-import use_case.login.LoginUserDataAccessInterface;
 
 /**
  * The account settings interactor.
  */
 public class AccountSettingsInteractor implements AccountSettingsInputBoundary {
-    private LoginUserDataAccessInterface userDataAccessObject;
+    private AccountSettingsDataAccessInterface userDataAccessObject;
     private AccountSettingsOutputBoundary accountSettingsPresenter;
 
-    public AccountSettingsInteractor(LoginUserDataAccessInterface userDataAccessObject,
+    public AccountSettingsInteractor(AccountSettingsDataAccessInterface userDataAccessObject,
                                      AccountSettingsOutputBoundary accountSettingsPresenter) {
         this.userDataAccessObject = userDataAccessObject;
         this.accountSettingsPresenter = accountSettingsPresenter;
