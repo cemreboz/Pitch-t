@@ -1,8 +1,6 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -10,11 +8,13 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import entity.Pitch;
 import interface_adapter.account_settings.AccountSettingsController;
@@ -37,6 +37,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final int hundred = 100;
     private final int thousand = 1000;
 
+    private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
+
     // private DashboardController dashboardController;
     // private NewPitchController newPitchController;
     // private ExpertController expertController;
@@ -48,24 +50,31 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         this.dashboardViewModel = dashboardViewModel;
         this.dashboardViewModel.addPropertyChangeListener(this);
 
-        // TODO Logo
+        this.setLayout(new BorderLayout());
+        this.setBackground(Color.WHITE);
+
+        final JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         final JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(Color.WHITE);
 
         headerPanel.setLayout(new BorderLayout());
         headerPanel.setMaximumSize(new Dimension(thousand, hundred));
 
         hamburgerMenu = new HamburgerMenu(dashboardViewModel);
+        hamburgerMenu.setBackground(Color.WHITE);
 
         final JLabel title = new JLabel("Dashboard");
 
         final JPanel menuWrapper = new JPanel();
         menuWrapper.setLayout(new BorderLayout());
         menuWrapper.setMaximumSize(new Dimension(fifty, fifty));
-        menuWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        menuWrapper.setBackground(Color.WHITE);
 
         menuWrapper.add(hamburgerMenu, BorderLayout.CENTER);
         headerPanel.add(menuWrapper, BorderLayout.WEST);
+        headerPanel.add(logoLabel, BorderLayout.EAST);
         headerPanel.add(title, BorderLayout.CENTER);
 
         final JPanel buttons = new JPanel();
@@ -74,8 +83,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         experts = new JButton("Experts");
         buttons.add(experts);
         buttons.setMaximumSize(new Dimension(thousand, hundred));
+        buttons.setBackground(Color.WHITE);
 
         pitchHistoryPanel.setLayout(new BoxLayout(pitchHistoryPanel, BoxLayout.Y_AXIS));
+        pitchHistoryPanel.setBackground(Color.WHITE);
+        pitchHistoryPanel.setMaximumSize(new Dimension(thousand, thousand));
         final JScrollPane scrollPane = new JScrollPane(pitchHistoryPanel);
 
         newPitch.addActionListener(
