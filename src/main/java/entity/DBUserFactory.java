@@ -20,7 +20,7 @@ public class DBUserFactory implements UserFactory {
      * @param experts list of experts associated to user
      * @return the DB user
      */
-    public DBUser create(String name, String password, List<Pitch> pitches, List<Expert> experts) {
+    public User create(String name, String password, List<Pitch> pitches, List<Expert> experts) {
         final DBUser dbUser = new DBUser(name, password);
         dbUser.setPitches(pitches);
         dbUser.setExperts(experts);
