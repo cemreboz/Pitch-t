@@ -39,7 +39,11 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.*;
+import view.AccountSettingsView;
+import view.DashboardView;
+import view.LoginView;
+import view.SignupView;
+import view.ViewManager;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -206,8 +210,8 @@ public class AppBuilder {
     public AppBuilder addAccountSettingsUseCase() {
         final AccountSettingsOutputBoundary accountSettingsOutputBoundary = new AccountSettingsPresenter(
                 dashboardViewModel, accountSettingsViewModel, viewManagerModel);
-        final AccountSettingsInputBoundary accountSettingsInteractor = new AccountSettingsInteractor(userDataAccessObject,
-                accountSettingsOutputBoundary);
+        final AccountSettingsInputBoundary accountSettingsInteractor = new AccountSettingsInteractor(
+                userDataAccessObject, accountSettingsOutputBoundary);
 
         final AccountSettingsController accountSettingsController = new AccountSettingsController(
                 accountSettingsInteractor);
