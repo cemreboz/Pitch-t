@@ -9,23 +9,19 @@ import java.util.List;
 public class Persona {
     private int personaID;
     private String name;
-    private String ageRange;
+    private int age;
     private String gender;
-    private String occupation;
+    private String education;
+    private String salaryRange;
+    private String about;
+    private String stats;
     private String location;
+    private String occupation;
+    private String avatar;
     private List<String> interests;
-    private String quote;
     private List<String> chatHistory;
 
     public Persona() {
-        this.personaID = personaID;
-        this.name = name;
-        this.ageRange = ageRange;
-        this.gender = gender;
-        this.occupation = occupation;
-        this.location = location;
-        this.interests = interests;
-        this.quote = quote;
         this.chatHistory = new ArrayList<>();
     }
 
@@ -45,12 +41,12 @@ public class Persona {
         this.name = name;
     }
 
-    public String getAgeRange() {
-        return ageRange;
+    public int getAge() {
+        return age;
     }
 
-    public void setAgeRange(String ageRange) {
-        this.ageRange = ageRange;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getGender() {
@@ -77,20 +73,52 @@ public class Persona {
         this.location = location;
     }
 
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getSalaryRange() {
+        return salaryRange;
+    }
+
+    public void setSalaryRange(String salaryrange) {
+        this.salaryRange = salaryrange;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getStats() {
+        return stats;
+    }
+
+    public void setStats(String stats) {
+        this.stats = stats;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public List<String> getInterests() {
         return interests;
     }
 
     public void setInterests(List<String> interests) {
         this.interests = interests;
-    }
-
-    public String getQuote() {
-        return quote;
-    }
-
-    public void setQuote(String quote) {
-        this.quote = quote;
     }
 
     public List<String> getChatHistory() {

@@ -8,6 +8,9 @@ import java.util.List;
  */
 public class Expert {
     private String id;
+    private String name;
+    private String description;
+    private String avatar;
     private List<String> chatHistory;
 
     public Expert(String id) {
@@ -21,6 +24,30 @@ public class Expert {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String expertName) {
+        this.name = expertName;
+    }
+
+    public void setAvatar(String expertAvatar) {
+        this.avatar = expertAvatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<String> getChatHistory() {
