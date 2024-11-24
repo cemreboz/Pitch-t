@@ -1,7 +1,9 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A pitch of the product.
@@ -10,12 +12,10 @@ public class Pitch {
 
     private String pitchID;
     private String name;
-
-    // TODO Think about how to do the images for the pitch. URL?
     private String image;
-
     private String description;
     private List<String> targetAudienceList;
+    private Map<String, DetailedTargetAudience> detailedTargetAudienceMap;
     private List<Persona> personas = new ArrayList<>();
 
     public Pitch(String pitchID, String name, String image, String description, List<String> targetAudienceList) {
@@ -24,6 +24,7 @@ public class Pitch {
         this.image = image;
         this.description = description;
         this.targetAudienceList = targetAudienceList;
+        this.detailedTargetAudienceMap = new HashMap<>();
     }
 
     public String getPitchID() {
@@ -48,5 +49,13 @@ public class Pitch {
 
     public List<Persona> getPersonas() {
         return personas;
+    }
+
+    public Map<String, DetailedTargetAudience> getDetailedTargetAudienceMap() {
+        return detailedTargetAudienceMap;
+    }
+
+    public void setDetailedTargetAudienceMap(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
+        this.detailedTargetAudienceMap = detailedTargetAudienceMap;
     }
 }

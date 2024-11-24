@@ -2,13 +2,16 @@ package data_access;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import entity.DBUser;
+import entity.DetailedTargetAudience;
 import entity.Expert;
 import entity.Persona;
 import entity.Pitch;
@@ -45,6 +48,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String INFO_FIELD = "info";
     private static final String ID_FIELD = "id";
     private static final String NAME_FIELD = "name";
+    private static final String GENDER_FIELD = "gender";
+    private static final String OCCUPATION_FIELD = "occupation";
     private static final String CHATHISTORY_FIELD = "chatHistory";
     private static final String PITCHES_KEY = "pitches";
     private static final String EXPERTS_KEY = "experts";
@@ -281,22 +286,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return name;
     }
 
-    private String pitchesToJson(List<Pitch> pitches) {
-        final JSONArray pitchesArray = new JSONArray();
-        for (Pitch pitch : pitches) {
-            final JSONObject pitchJson = new JSONObject();
-            pitchJson.put(ID_FIELD, pitch.getPitchID());
-            pitchJson.put(NAME_FIELD, pitch.getName());
-            pitchJson.put("image", pitch.getImage());
-            pitchJson.put("description", pitch.getDescription());
-            pitchJson.put("targetAudienceList", new JSONArray(pitch.getTargetAudienceList()));
-            pitchJson.put("personas", new JSONArray(pitch.getPersonas().stream().map(this::personaToJson)
-                    .toArray()));
-            pitchesArray.put(pitchJson);
-        }
-        return pitchesArray.toString();
-    }
-
     private String expertsToJson(List<Expert> experts) {
         final JSONArray expertsArray = new JSONArray();
         for (Expert expert : experts) {
@@ -306,35 +295,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             expertsArray.put(expertJson);
         }
         return expertsArray.toString();
-    }
-
-    private List<Pitch> pitchesFromJson(String pitchesJson) {
-        final List<Pitch> pitches = new ArrayList<>();
-        final JSONArray pitchesArray = new JSONArray(pitchesJson);
-
-        for (int i = 0; i < pitchesArray.length(); i++) {
-            final JSONObject pitchJson = pitchesArray.getJSONObject(i);
-            final List<String> targetAudienceList = new ArrayList<>();
-            final JSONArray targetAudienceArray = pitchJson.getJSONArray("targetAudienceList");
-            for (int j = 0; j < targetAudienceArray.length(); j++) {
-                targetAudienceList.add(targetAudienceArray.getString(j));
-            }
-
-            final Pitch pitch = new Pitch(
-                    pitchJson.getString(ID_FIELD),
-                    pitchJson.getString(NAME_FIELD),
-                    pitchJson.getString("image"),
-                    pitchJson.getString("description"),
-                    targetAudienceList
-            );
-
-            final JSONArray personasArray = pitchJson.getJSONArray("personas");
-            for (int j = 0; j < personasArray.length(); j++) {
-                pitch.getPersonas().add(personaFromJson(personasArray.getJSONObject(j)));
-            }
-            pitches.add(pitch);
-        }
-        return pitches;
     }
 
     private List<Expert> expertsFromJson(String expertsJson) {
@@ -357,16 +317,170 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return experts;
     }
 
+    private String pitchesToJson(List<Pitch> pitches) {
+        final JSONArray pitchesArray = new JSONArray();
+        for (Pitch pitch : pitches) {
+            final JSONObject pitchJson = new JSONObject();
+            pitchJson.put(ID_FIELD, pitch.getPitchID());
+            pitchJson.put(NAME_FIELD, pitch.getName());
+            pitchJson.put("image", pitch.getImage());
+            pitchJson.put("description", pitch.getDescription());
+            pitchJson.put("targetAudienceList", new JSONArray(pitch.getTargetAudienceList()));
+
+            pitchJson.put("personas", new JSONArray(pitch.getPersonas().stream().map(this::personaToJson).toArray()));
+
+            pitchJson.put("detailedTargetAudienceMap", detailedTargetAudienceMapToJson(pitch
+                    .getDetailedTargetAudienceMap()));
+
+            pitchesArray.put(pitchJson);
+        }
+        return pitchesArray.toString();
+    }
+
+    private List<Pitch> pitchesFromJson(String pitchesJson) {
+        final List<Pitch> pitches = new ArrayList<>();
+        final JSONArray pitchesArray = new JSONArray(pitchesJson);
+
+        for (int i = 0; i < pitchesArray.length(); i++) {
+            final JSONObject pitchJson = pitchesArray.getJSONObject(i);
+
+            final List<String> targetAudienceList = new ArrayList<>();
+            final JSONArray targetAudienceArray = pitchJson.getJSONArray("targetAudienceList");
+            for (int j = 0; j < targetAudienceArray.length(); j++) {
+                targetAudienceList.add(targetAudienceArray.getString(j));
+            }
+
+            final Pitch pitch = new Pitch(
+                    pitchJson.getString(ID_FIELD),
+                    pitchJson.getString(NAME_FIELD),
+                    pitchJson.getString("image"),
+                    pitchJson.getString("description"),
+                    targetAudienceList
+            );
+
+            final JSONArray personasArray = pitchJson.getJSONArray("personas");
+            for (int j = 0; j < personasArray.length(); j++) {
+                pitch.getPersonas().add(personaFromJson(personasArray.getJSONObject(j)));
+            }
+
+            pitch.setDetailedTargetAudienceMap(detailedTargetAudienceMapFromJson(pitchJson
+                    .getJSONObject("detailedTargetAudienceMap")));
+
+            pitches.add(pitch);
+        }
+        return pitches;
+    }
+
+    private JSONObject detailedTargetAudienceMapToJson(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
+        final JSONObject detailedTargetAudienceMapJson = new JSONObject();
+        for (Map.Entry<String, DetailedTargetAudience> entry : detailedTargetAudienceMap.entrySet()) {
+            final DetailedTargetAudience detailedTargetAudience = entry.getValue();
+            final JSONObject detailedTargetAudienceJson = new JSONObject();
+            detailedTargetAudienceJson.put(NAME_FIELD, detailedTargetAudience.getName());
+            detailedTargetAudienceJson.put("minAge", detailedTargetAudience.getMinAge());
+            detailedTargetAudienceJson.put("maxAge", detailedTargetAudience.getMaxAge());
+            detailedTargetAudienceJson.put(GENDER_FIELD, detailedTargetAudience.getGender());
+            detailedTargetAudienceJson.put("educationLevel", detailedTargetAudience.getEducationLevel());
+            detailedTargetAudienceJson.put(OCCUPATION_FIELD, detailedTargetAudience.getOccupation());
+            detailedTargetAudienceJson.put("incomeLevel", detailedTargetAudience.getIncomeLevel());
+            detailedTargetAudienceJson.put("geographicLocation", detailedTargetAudience.getGeographicLocation());
+            detailedTargetAudienceJson.put("interestsAndPassions", new JSONArray(detailedTargetAudience
+                    .getInterestsAndPassions()));
+            detailedTargetAudienceJson.put("values", new JSONArray(detailedTargetAudience.getValues()));
+            detailedTargetAudienceJson.put("personalityTraits", new JSONArray(detailedTargetAudience
+                    .getPersonalityTraits()));
+            detailedTargetAudienceJson.put("lifestyle", detailedTargetAudience.getLifestyle());
+            detailedTargetAudienceJson.put("isEarlyAdopter", detailedTargetAudience.isEarlyAdopter());
+            detailedTargetAudienceJson.put("techSavviness", detailedTargetAudience.getTechSavviness());
+            detailedTargetAudienceJson.put("gadgetOwnership", new JSONArray(detailedTargetAudience
+                    .getGadgetOwnership()));
+            detailedTargetAudienceJson.put("mediaConsumption", new JSONArray(detailedTargetAudience
+                    .getMediaConsumption()));
+            detailedTargetAudienceJson.put("onlineEngagement", new JSONArray(detailedTargetAudience
+                    .getOnlineEngagement()));
+            detailedTargetAudienceJson.put("isInfluencer", detailedTargetAudience.isInfluencer());
+            detailedTargetAudienceJson.put("eventParticipation", new JSONArray(detailedTargetAudience
+                    .getEventParticipation()));
+            detailedTargetAudienceJson.put("hobbies", new JSONArray(detailedTargetAudience.getHobbies()));
+            detailedTargetAudienceJson.put("brandAffinity", new JSONArray(detailedTargetAudience.getBrandAffinity()));
+            detailedTargetAudienceJson.put("environmentalConcerns", detailedTargetAudience.isEnvironmentalConcerns());
+            detailedTargetAudienceJson.put("globalPerspective", detailedTargetAudience.isGlobalPerspective());
+            detailedTargetAudienceJson.put("multilingualAbilities", detailedTargetAudience.isMultilingualAbilities());
+
+            detailedTargetAudienceMapJson.put(entry.getKey(), detailedTargetAudienceJson);
+        }
+        return detailedTargetAudienceMapJson;
+    }
+
+    private Map<String, DetailedTargetAudience> detailedTargetAudienceMapFromJson(
+            JSONObject detailedTargetAudienceMapJson) {
+        final Map<String, DetailedTargetAudience> detailedTargetAudienceMap = new HashMap<>();
+        for (String key : detailedTargetAudienceMapJson.keySet()) {
+            final JSONObject detailedTargetAudienceJson = detailedTargetAudienceMapJson.getJSONObject(key);
+            final DetailedTargetAudience detailedTargetAudience = new DetailedTargetAudience(detailedTargetAudienceJson
+                    .getString(NAME_FIELD));
+            detailedTargetAudience.setMinAge(detailedTargetAudienceJson.getInt("minAge"));
+            detailedTargetAudience.setMaxAge(detailedTargetAudienceJson.getInt("maxAge"));
+            detailedTargetAudience.setGender(detailedTargetAudienceJson.getString(GENDER_FIELD));
+            detailedTargetAudience.setEducationLevel(detailedTargetAudienceJson.getString("educationLevel"));
+            detailedTargetAudience.setOccupation(detailedTargetAudienceJson.getString(OCCUPATION_FIELD));
+            detailedTargetAudience.setIncomeLevel(detailedTargetAudienceJson.getString("incomeLevel"));
+            detailedTargetAudience.setGeographicLocation(detailedTargetAudienceJson.getString("geographicLocation"));
+            detailedTargetAudience.setInterestsAndPassions(convertJsonArrayToStringList(detailedTargetAudienceJson
+                            .getJSONArray("interestsAndPassions")));
+            detailedTargetAudience.setValues(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("values")));
+            detailedTargetAudience.setPersonalityTraits(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("personalityTraits")));
+            detailedTargetAudience.setLifestyle(detailedTargetAudienceJson.getString("lifestyle"));
+            detailedTargetAudience.setEarlyAdopter(detailedTargetAudienceJson.getBoolean("isEarlyAdopter"));
+            detailedTargetAudience.setTechSavviness(detailedTargetAudienceJson.getString("techSavviness"));
+            detailedTargetAudience.setGadgetOwnership(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("gadgetOwnership")));
+            detailedTargetAudience.setMediaConsumption(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("mediaConsumption")));
+            detailedTargetAudience.setOnlineEngagement(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("onlineEngagement")));
+            detailedTargetAudience.setInfluencer(detailedTargetAudienceJson.getBoolean("isInfluencer"));
+            detailedTargetAudience.setEventParticipation(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("eventParticipation")));
+            detailedTargetAudience.setHobbies(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("hobbies")));
+            detailedTargetAudience.setBrandAffinity(convertJsonArrayToStringList(detailedTargetAudienceJson
+                    .getJSONArray("brandAffinity")));
+            detailedTargetAudience.setEnvironmentalConcerns(detailedTargetAudienceJson
+                    .getBoolean("environmentalConcerns"));
+            detailedTargetAudience.setGlobalPerspective(detailedTargetAudienceJson.getBoolean("globalPerspective"));
+            detailedTargetAudience.setMultilingualAbilities(detailedTargetAudienceJson
+                    .getBoolean("multilingualAbilities"));
+
+            detailedTargetAudienceMap.put(key, detailedTargetAudience);
+        }
+        return detailedTargetAudienceMap;
+    }
+
+    private List<String> convertJsonArrayToStringList(JSONArray jsonArray) {
+        final List<String> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            list.add(jsonArray.getString(i));
+        }
+        return list;
+    }
+
     private JSONObject personaToJson(Persona persona) {
         final JSONObject personaJson = new JSONObject();
         personaJson.put("personaID", persona.getPersonaID());
         personaJson.put(NAME_FIELD, persona.getName());
-        personaJson.put("ageRange", persona.getAgeRange());
-        personaJson.put("gender", persona.getGender());
-        personaJson.put("occupation", persona.getOccupation());
+        personaJson.put("age", persona.getAge());
+        personaJson.put(GENDER_FIELD, persona.getGender());
+        personaJson.put(OCCUPATION_FIELD, persona.getOccupation());
         personaJson.put("location", persona.getLocation());
+        personaJson.put("education", persona.getEducation());
+        personaJson.put("salaryRange", persona.getSalaryRange());
+        personaJson.put("about", persona.getAbout());
+        personaJson.put("stats", persona.getStats());
+        personaJson.put("avatar", persona.getAvatar());
         personaJson.put("interests", new JSONArray(persona.getInterests()));
-        personaJson.put("quote", persona.getQuote());
         personaJson.put(CHATHISTORY_FIELD, new JSONArray(persona.getChatHistory()));
         return personaJson;
     }
@@ -375,10 +489,15 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final Persona persona = new Persona();
         persona.setPersonaID(personaJson.getInt("personaID"));
         persona.setName(personaJson.getString(NAME_FIELD));
-        persona.setAgeRange(personaJson.getString("ageRange"));
-        persona.setGender(personaJson.getString("gender"));
-        persona.setOccupation(personaJson.getString("occupation"));
+        persona.setAge(personaJson.getInt("age"));
+        persona.setGender(personaJson.getString(GENDER_FIELD));
+        persona.setOccupation(personaJson.getString(OCCUPATION_FIELD));
         persona.setLocation(personaJson.getString("location"));
+        persona.setEducation(personaJson.getString("education"));
+        persona.setSalaryRange(personaJson.getString("salaryRange"));
+        persona.setAbout(personaJson.getString("about"));
+        persona.setStats(personaJson.getString("stats"));
+        persona.setAvatar(personaJson.getString("avatar"));
 
         final List<String> interests = new ArrayList<>();
         final JSONArray interestsArray = personaJson.getJSONArray("interests");
@@ -394,7 +513,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
         persona.setChatHistory(chatHistory);
 
-        persona.setQuote(personaJson.getString("quote"));
         return persona;
     }
 }
