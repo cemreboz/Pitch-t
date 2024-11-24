@@ -327,8 +327,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             pitchJson.put("description", pitch.getDescription());
             pitchJson.put("targetAudienceList", new JSONArray(pitch.getTargetAudienceList()));
 
-            pitchJson.put("personas", new JSONArray(pitch.getPersonas().stream().map(this::personaToJson).toArray()));
-
+            final JSONArray personasArray = new JSONArray();
+            for (Persona persona : pitch.getPersonas()) {
+                personasArray.put(personaToJson(persona));
+            }
+            pitchJson.put("personas", personasArray);
             pitchJson.put("detailedTargetAudienceMap", detailedTargetAudienceMapToJson(pitch
                     .getDetailedTargetAudienceMap()));
 
@@ -365,7 +368,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
             pitch.setDetailedTargetAudienceMap(detailedTargetAudienceMapFromJson(pitchJson
                     .getJSONObject("detailedTargetAudienceMap")));
-
             pitches.add(pitch);
         }
         return pitches;
@@ -493,26 +495,31 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         persona.setGender(personaJson.getString(GENDER_FIELD));
         persona.setOccupation(personaJson.getString(OCCUPATION_FIELD));
         persona.setLocation(personaJson.getString("location"));
-        persona.setEducation(personaJson.getString("education"));
-        persona.setSalaryRange(personaJson.getString("salaryRange"));
-        persona.setAbout(personaJson.getString("about"));
-        persona.setStats(personaJson.getString("stats"));
-        persona.setAvatar(personaJson.getString("avatar"));
+        persona.setEducation(personaJson.optString("education", ""));
+        persona.setSalaryRange(personaJson.optString("salaryRange", ""));
+        persona.setAbout(personaJson.optString("about", ""));
+        persona.setStats(personaJson.optString("stats", ""));
+        persona.setAvatar(personaJson.optString("avatar", ""));
 
         final List<String> interests = new ArrayList<>();
-        final JSONArray interestsArray = personaJson.getJSONArray("interests");
-        for (int i = 0; i < interestsArray.length(); i++) {
-            interests.add(interestsArray.getString(i));
+        final JSONArray interestsArray = personaJson.optJSONArray("interests");
+        if (interestsArray != null) {
+            for (int i = 0; i < interestsArray.length(); i++) {
+                interests.add(interestsArray.getString(i));
+            }
         }
         persona.setInterests(interests);
 
         final List<String> chatHistory = new ArrayList<>();
-        final JSONArray chatHistoryArray = personaJson.getJSONArray(CHATHISTORY_FIELD);
-        for (int i = 0; i < chatHistoryArray.length(); i++) {
-            chatHistory.add(chatHistoryArray.getString(i));
+        final JSONArray chatHistoryArray = personaJson.optJSONArray(CHATHISTORY_FIELD);
+        if (chatHistoryArray != null) {
+            for (int i = 0; i < chatHistoryArray.length(); i++) {
+                chatHistory.add(chatHistoryArray.getString(i));
+            }
         }
         persona.setChatHistory(chatHistory);
 
         return persona;
     }
+
 }
