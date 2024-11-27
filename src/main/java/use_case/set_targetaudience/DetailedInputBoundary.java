@@ -8,7 +8,7 @@ import entity.DetailedTargetAudience;
  * Input boundary for the Detailed Interactor.
  * Defines the contract for fetching detailed target audiences based on a category.
  */
-public interface DetailedInteractorInterface {
+public interface DetailedInputBoundary {
 
     /**
      * Fetches a list of detailed target audiences for the given category.

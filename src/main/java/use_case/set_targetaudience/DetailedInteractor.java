@@ -13,7 +13,7 @@ import entity.DetailedTargetAudience;
 /**
  * Class for the Detailed Target Audience Interactor.
  */
-public class DetailedInteractor implements DetailedInteractorInterface {
+public class DetailedInteractor implements DetailedInputBoundary {
 
     private final DetailedDataAccessObjectInterface dataAccess;
 

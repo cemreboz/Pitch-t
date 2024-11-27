@@ -1,20 +1,22 @@
 package use_case.set_targetaudience;
 
-import data_access.ChatgptDataAccessObject;
+import data_access.DetailedDataAccessObjectInterface;
 import entity.Pitch;
 
 /**
- * Class that implements the interface TargetAudienceDataAccessInterface.
+ * Public class for the Target Audience Interactor.
  */
 public class TargetAudienceInteractor implements TargetAudienceDataAccessInterface {
 
-    /**
-     * Generates a list of target audiences based on a project description.
-     *
-     * @param pitch The pitch itself.
-     * @return A list of target audience categories.
-     * @throws Exception If any error occurs during data fetching.
-     */
+    private final DetailedDataAccessObjectInterface dataAccessObject;
+
+    public TargetAudienceInteractor(DetailedDataAccessObjectInterface dataAccessObject) {
+        if (dataAccessObject == null) {
+            throw new IllegalArgumentException("Data access object cannot be null.");
+        }
+        this.dataAccessObject = dataAccessObject;
+    }
+
     @Override
     public String generateTargetAudience(Pitch pitch) throws Exception {
         validatePitch(pitch);
@@ -31,19 +33,13 @@ public class TargetAudienceInteractor implements TargetAudienceDataAccessInterfa
 
         final String userMessage = pitch.getName() + " " + pitch.getDescription();
 
-        return ChatgptDataAccessObject.utilizeApi(systemMessage, userMessage);
+        // Use the injected instance of the DAO
+        return dataAccessObject.utilizeApi(systemMessage, userMessage);
     }
 
-    /**
-     * Validates the pitch to ensure required fields are present.
-     *
-     * @param pitch The pitch to validate.
-     * @throws IllegalArgumentException If the pitch is invalid.
-     */
     private void validatePitch(Pitch pitch) {
-        if (pitch == null || pitch.getName() == null || pitch.getName().isBlank()
-            || pitch.getDescription() == null || pitch.getDescription().isBlank()) {
-            throw new IllegalArgumentException("Invalid Pitch: Name and Description must not be null or empty.");
+        if (pitch == null || pitch.getName() == null || pitch.getDescription() == null) {
+            throw new IllegalArgumentException("Pitch, its name, or its description cannot be null.");
         }
     }
 }
