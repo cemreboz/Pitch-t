@@ -6,7 +6,7 @@ import entity.Pitch;
 /**
  * Class that implements the Interface TargetAudienceRepository.
  */
-public class TargetAudienceRepositoryImpl implements TargetAudienceRepository {
+public class TargetAudienceInteractor implements TargetAudienceDataAccessInterface {
 
     /**
      * Generates a list of target audiences based on a project description.

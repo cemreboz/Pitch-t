@@ -7,10 +7,10 @@ import entity.Pitch;
  */
 public class GenerateTargetAudienceUseCase {
 
-    private final TargetAudienceRepository targetAudienceRepository;
+    private final TargetAudienceInteractor targetAudienceInteractor;
 
-    public GenerateTargetAudienceUseCase(TargetAudienceRepository repository) {
-        this.targetAudienceRepository = repository;
+    public GenerateTargetAudienceUseCase(TargetAudienceInteractor targetAudienceInteractor) {
+        this.targetAudienceInteractor = targetAudienceInteractor;
     }
 
     /**
@@ -21,6 +21,6 @@ public class GenerateTargetAudienceUseCase {
      * @throws Exception if the API call doesn't work.
      */
     public String execute(Pitch pitch) throws Exception {
-        return targetAudienceRepository.generateTargetAudience(pitch);
+        return targetAudienceInteractor.generateTargetAudience(pitch);
     }
 }

@@ -5,7 +5,7 @@ import entity.Pitch;
 /**
  * Sets the interface for target audience repository.
  */
-public interface TargetAudienceRepository {
+public interface TargetAudienceDataAccessInterface {
 
     /**
      * Generates a list of target audiences based on a project description.
