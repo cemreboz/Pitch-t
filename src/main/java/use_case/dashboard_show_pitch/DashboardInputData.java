@@ -7,13 +7,25 @@ import entity.Pitch;
  */
 public class DashboardInputData {
 
+    private final String username;
+    private final String password;
     private final Pitch pitch;
 
-    public DashboardInputData(Pitch pitch) {
+    public DashboardInputData(Pitch pitch, String username, String password) {
         this.pitch = pitch;
+        this.username = username;
+        this.password = password;
     }
 
     public Pitch getPitch() {
         return pitch;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

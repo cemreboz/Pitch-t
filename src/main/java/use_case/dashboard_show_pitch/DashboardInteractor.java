@@ -17,7 +17,7 @@ public class DashboardInteractor implements DashboardInputBoundary {
     public void execute(DashboardInputData dashboardInputData) {
 
         final DashboardOutputData dashboardOutputData = new DashboardOutputData(dashboardInputData.getPitch(),
-                false);
+                false, dashboardInputData.getUsername(), dashboardInputData.getPassword());
         dashboardPresenter.prepareSuccessView(dashboardOutputData);
     }
 

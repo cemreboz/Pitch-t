@@ -18,9 +18,11 @@ public class DashboardController {
     /**
      * Executes the dashboard show pitch use case.
      * @param pitch to be shown
+     * @param username username of user
+     * @param password password of user
      */
-    public void execute(Pitch pitch) {
-        final DashboardInputData dashboardInputData = new DashboardInputData(pitch);
+    public void execute(Pitch pitch, String username, String password) {
+        final DashboardInputData dashboardInputData = new DashboardInputData(pitch, username, password);
         dashboardUseCaseInteractor.execute(dashboardInputData);
     }
 

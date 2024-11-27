@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -20,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import entity.Pitch;
 import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
@@ -41,7 +43,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
 
-    // private DashboardController dashboardController;
+    private DashboardController dashboardController;
     // private NewPitchController newPitchController;
     // private ExpertController expertController;
 
@@ -109,7 +111,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         newPitch.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        JOptionPane.showMessageDialog(newPitch, "go to new pitch");
+                        final DashboardState state = dashboardViewModel.getState();
+                        dashboardController.execute(new Pitch("123",
+                                "Awesome pitch device", "url", "aaaa", new ArrayList<>()),
+                                state.getUsername(), state.getPassword());
+                        //JOptionPane.showMessageDialog(newPitch, "go to new pitch");
                     }
                 }
         );
@@ -140,6 +146,14 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
+
+    /**
+     * Method to set the dashboard pitch view controller.
+     * @param dashboardController dashboard controller
+     */
+    public void setDashboardController(DashboardController dashboardController) {
+        this.dashboardController = dashboardController;
+    }
     /*
     public void setNewPitchController(NewPitchController newPitchController) {
         this.newPitchController = newPitchController;
@@ -147,10 +161,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     public void setExpertController(ExpertController expertController) {
         this.expertController = expertController;
-    }
-
-    public void setDashboardController(DashboardController dashboardController) {
-        this.dashboardController = dashboardController;
     }
     */
     @Override
@@ -176,8 +186,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             pitchButton.addActionListener(
                     new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
-                            JOptionPane.showMessageDialog(pitchButton, "go to" + pitch.getName());
-                            // replace messagedialog ^ with this: DashboardController.execute(pitch)
+                            final DashboardState state = dashboardViewModel.getState();
+                            dashboardController.execute(pitch, state.getUsername(), state.getPassword());
                         }
                     });
             pitchHistoryPanel.add(pitchButton);

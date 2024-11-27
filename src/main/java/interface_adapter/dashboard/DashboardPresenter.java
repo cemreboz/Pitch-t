@@ -26,6 +26,8 @@ public class DashboardPresenter implements DashboardOutputBoundary {
     public void prepareSuccessView(DashboardOutputData response) {
         final PitchState pitchState = pitchViewModel.getState();
         pitchState.setPitch(response.getPitch());
+        pitchState.setUsername(response.getUsername());
+        pitchState.setPassword(response.getPassword());
 
         pitchViewModel.setState(pitchState);
         pitchViewModel.firePropertyChanged();
