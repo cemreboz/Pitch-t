@@ -13,8 +13,29 @@ public class Expert {
     private String avatar;
     private List<String> chatHistory;
 
+    /**
+     * Constructs an expert with only an ID.
+     *
+     * @param id The unique identifier for the expert.
+     */
     public Expert(String id) {
         this.id = id;
+        this.chatHistory = new ArrayList<>();
+    }
+
+    /**
+     * Constructs an expert with full details.
+     *
+     * @param id          The unique identifier for the expert.
+     * @param name        The name of the expert.
+     * @param description A brief description of the expert.
+     * @param avatar      The path or filename for the expert's avatar.
+     */
+    public Expert(String id, String name, String description, String avatar) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.avatar = avatar;
         this.chatHistory = new ArrayList<>();
     }
 
@@ -60,14 +81,15 @@ public class Expert {
 
     /**
      * Adds a message to the chat history.
-     * @param message is a message to be added
+     *
+     * @param message The message to be added.
      */
     public void addChatMessage(String message) {
         this.chatHistory.add(message);
     }
 
     /**
-     * Clears all message from the chat history.
+     * Clears all messages from the chat history.
      */
     public void clearChatHistory() {
         this.chatHistory.clear();

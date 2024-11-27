@@ -18,6 +18,7 @@ import javax.swing.JPopupMenu;
 import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.chat_expert.ChatExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
 import interface_adapter.pitch.PitchState;
@@ -84,7 +85,10 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem expertsItem = new JMenuItem("Experts");
         expertsItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+            // Set the ChatExpertState
+            final ChatExpertState expertState = new ChatExpertState("currentUser");
+            viewModel.setState(expertState);
+            viewModel.firePropertyChanged();
         });
         menu.add(expertsItem);
 

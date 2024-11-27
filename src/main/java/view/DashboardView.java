@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import entity.Pitch;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
@@ -33,6 +34,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
     private HamburgerMenu hamburgerMenu;
+    private final ViewManagerModel viewManagerModel;
 
     private JButton newPitch;
     private JButton experts;
@@ -48,10 +50,11 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
-    public DashboardView(DashboardViewModel dashboardViewModel) {
+    public DashboardView(DashboardViewModel dashboardViewModel, ViewManagerModel viewManagerModel) {
 
         this.dashboardViewModel = dashboardViewModel;
         this.dashboardViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
@@ -115,13 +118,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 }
         );
 
-        experts.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        JOptionPane.showMessageDialog(experts, "go to experts");
-                    }
-                }
-        );
+        experts.addActionListener(event -> {
+            viewManagerModel.setState("ExpertChatView");
+            viewManagerModel.firePropertyChanged();
+        });
 
         return buttons;
     }
@@ -161,12 +161,20 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            final DashboardState state = (DashboardState) evt.getNewValue();
-            if (state.getPitchLoadError() == null) {
-                updatePitchHistory(state.getPitches());
+            final Object newState = evt.getNewValue();
+
+            if (newState instanceof DashboardState) {
+                final DashboardState state = (DashboardState) newState;
+                if (state.getPitchLoadError() == null) {
+                    updatePitchHistory(state.getPitches());
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, state.getPitchLoadError());
+                }
             }
             else {
-                JOptionPane.showMessageDialog(this, state.getPitchLoadError());
+                // Log or ignore unexpected state changes
+                System.err.println("DashboardView received an unexpected state: " + newState.getClass().getName());
             }
         }
     }
