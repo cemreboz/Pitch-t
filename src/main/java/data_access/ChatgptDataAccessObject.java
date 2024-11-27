@@ -1,4 +1,4 @@
-package app;
+package data_access;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -11,7 +11,7 @@ import java.net.http.HttpResponse;
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public class Application {
+public class ChatgptDataAccessObject {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 

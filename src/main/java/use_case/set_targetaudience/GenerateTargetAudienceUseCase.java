@@ -1,8 +1,6 @@
 package use_case.set_targetaudience;
 
-import java.util.List;
-
-import entity.TargetAudience;
+import entity.Pitch;
 
 /**
  * Class that generates the target audience.
@@ -17,11 +15,12 @@ public class GenerateTargetAudienceUseCase {
 
     /**
      * Generates the Target Audience based on the pitch.
-     * @param projectDescription the pitch description.
+     *
+     * @param pitch the pitch itself.
      * @return the Target Audience based on the pitch.
      * @throws Exception if the API call doesn't work.
      */
-    public List<TargetAudience> execute(String projectDescription) throws Exception {
-        return targetAudienceRepository.generateTargetAudience(projectDescription);
+    public String execute(Pitch pitch) throws Exception {
+        return targetAudienceRepository.generateTargetAudience(pitch);
     }
 }

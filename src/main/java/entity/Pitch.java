@@ -31,7 +31,7 @@ public class Pitch {
         return pitchID;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
@@ -39,7 +39,7 @@ public class Pitch {
         return image;
     }
 
-    public static String getDescription() {
+    public String getDescription() {
         return description;
     }
 
