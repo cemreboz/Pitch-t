@@ -1,57 +1,58 @@
 package use_case.create_pitch;
 
-import data_access.DBUserDataAccessObject;
 import entity.Pitch;
-
-import java.util.List;
+import entity.DBUser;
+// Todo: currently db user, should add pitch method be in interface user?
 
 /**
- * The interactor for the Create Pitch use case.
- * This class implements the business logic for creating a new pitch.
+ * Interactor for creating a new pitch and associating it with a user.
  */
 public class NewPitchInteractor implements NewPitchInputBoundary {
+    private final NewPitchDataAccess newPitchDataAccess;
+    private final DBUser currentUser;
 
-    private final DBUserDataAccessObject dbUserDataAccessObject;
-
-    public NewPitchInteractor(DBUserDataAccessObject dbUserDataAccessObject) {
-        this.dbUserDataAccessObject = dbUserDataAccessObject;
+    /**
+     * Constructor for the NewPitchInteractor.
+     *
+     * @param newPitchDataAccess Gateway for pitch-related data access.
+     * @param currentUser        The currently logged-in user.
+     */
+    public NewPitchInteractor(NewPitchDataAccess newPitchDataAccess, DBUser currentUser) {
+        this.newPitchDataAccess = newPitchDataAccess;
+        this.currentUser = currentUser;
     }
 
     @Override
     public void execute(NewPitchInputData inputData) {
-        // Validate the input data
-        if (inputData.getName().isEmpty()) {
-            // Here you can handle invalid input data (e.g., throw an exception or return an error message)
-            throw new IllegalArgumentException("Pitch name cannot be empty");
-        }
+        // Validate input
+        if (inputData.getName().isEmpty()) throw new IllegalArgumentException("Pitch name cannot be empty");
+        if (inputData.getDescription().isEmpty()) throw new IllegalArgumentException("Pitch description cannot be empty");
+        if (inputData.getTargetAudienceList().isEmpty()) throw new IllegalArgumentException("Target audience list cannot be empty");
+        // Image is nice but not mandatory.
+        // TODO: validate image somehow?
 
-        if (inputData.getDescription().isEmpty()) {
-            throw new IllegalArgumentException("Pitch description cannot be empty");
-        }
-
-        if (inputData.getTargetAudienceList().isEmpty()) {
-            throw new IllegalArgumentException("Target audience list cannot be empty");
-        }
-
-        // Create a new Pitch object from the input data
+        // Create a new Pitch
         Pitch newPitch = new Pitch(
-                generatePitchID(),  // Generate a new unique pitch ID
+                generatePitchID(),
                 inputData.getName(),
+                inputData.getImage(),  // Image is optional and can be null
                 inputData.getDescription(),
                 inputData.getTargetAudienceList()
         );
 
-        // Save the pitch using the DBUserDataAccessObject (data access layer)
-        dbUserDataAccessObject.savePitch(newPitch);
+        // Add the pitch to the user's in-memory list
+        currentUser.addPitch(newPitch);
 
+        // Use the gateway to persist the pitch
+        newPitchDataAccess.addPitch(currentUser.getName(), newPitch);
     }
 
     /**
-     * Generates a new pitch ID based on the current timestamp.
-     * @return the generated pitch ID.
+     * Generates a unique pitch ID. (Cause I like giving id to things)
+     *
+     * @return The generated pitch ID.
      */
     private String generatePitchID() {
-        // ID generation based on the current timestamp
         return String.valueOf(System.currentTimeMillis());
     }
 }

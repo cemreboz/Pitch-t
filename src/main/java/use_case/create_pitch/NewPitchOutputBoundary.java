@@ -7,9 +7,8 @@ package use_case.create_pitch;
 public interface NewPitchOutputBoundary {
 
     /**
-     * Sends the result of creating a new pitch.
-     * @param success true if the pitch was created successfully, false otherwise.
-     * @param message a message indicating success or failure.
+     * Sends the result of creating a new pitch and updates the view model.
+     * @param outputData the result from the interactor (success/failure).
      */
-    void sendNewPitchResult(boolean success, String message);
+    void presentOutput(NewPitchOutputData outputData);
 }

@@ -28,6 +28,7 @@ import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.create_pitch.NewPitchDataAccess;
 
 /**
  * The DAO for user data.
@@ -37,6 +38,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
+        NewPitchDataAccess,
         AccountSettingsDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
@@ -522,4 +524,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return persona;
     }
 
+    @Override
+    public void addPitch(String userId, Pitch pitch) {
+        // TODO: implement me
+    }
 }
