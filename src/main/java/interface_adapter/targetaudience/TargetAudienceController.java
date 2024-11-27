@@ -1,4 +1,4 @@
-package interface_adapter;
+package interface_adapter.targetaudience;
 
 import entity.Pitch;
 import use_case.set_targetaudience.TargetAudienceInteractor;

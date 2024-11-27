@@ -1,4 +1,4 @@
-package interface_adapter;
+package interface_adapter.targetaudience;
 
 import java.util.List;
 
