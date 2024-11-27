@@ -17,12 +17,14 @@ public class Main {
                                             .addSignupView()
                                             .addAccountSettingsView()
                                             .addDashboardView()
+                                            .addPitchView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()
                                             .addLogoutUseCase()
                                             .addDashboardUseCase()
                                             .addAccountSettingsUseCase()
+                                            .addPitchUseCase()
                                             .build();
 
         application.pack();
