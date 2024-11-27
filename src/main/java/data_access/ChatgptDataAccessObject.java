@@ -8,6 +8,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Main application class to send a request to OpenAI's API.
  */
@@ -15,26 +19,12 @@ public class ChatgptDataAccessObject {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        // Fetch the OpenAI API key from environment variables
-        // Example system and user messages
-        final String systemMessage = "You are an assistant that provides helpful responses.";
-        final String userMessage = "Can you explain the concept of machine learning?";
-
-        // Call the API and get the response
-        final String response = String.valueOf(utilizeApi(systemMessage, userMessage));
-
-        // Print the response
-        System.out.println("Response from OpenAI:");
-        System.out.println(response);
-    }
-
     /**
      * Sends a message to OpenAI's API with a system and user message.
      *
      * @param systemMessage The system message providing context to the assistant.
      * @param userMessage   The user message or query.
-     * @return The API response as a string.
+     * @return The API response content as a string.
      * @throws IOException              If an I/O error occurs during the API call.
      * @throws InterruptedException     If the operation is interrupted.
      * @throws IllegalArgumentException if the API key is invalid.
@@ -49,7 +39,7 @@ public class ChatgptDataAccessObject {
         }
 
         // JSON request body with system and user messages
-        final String body = """
+        final String body = """ 
             {
                 "model": "gpt-4",
                 "messages": [
@@ -78,10 +68,37 @@ public class ChatgptDataAccessObject {
         // Send the request and get the response
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Log the input and output to a file
-        logApiCall(systemMessage, userMessage, response.body());
+        // Extract content from the API response
+        final String content = extractContent(response.body());
 
-        return response.body();
+        // Log the input and output to a file
+        logApiCall(systemMessage, userMessage, content);
+
+        return content;
+    }
+
+    /**
+     * Extracts the "content" field from the OpenAI API response JSON.
+     *
+     * @param responseBody The raw response body as a JSON string.
+     * @return The content field of the assistant's message.
+     * @throws IllegalArgumentException If the response format is invalid or does not contain the required fields.
+     */
+    private static String extractContent(String responseBody) {
+        String content = "No content found in the API response.";
+
+        try {
+            final JSONObject jsonResponse = new JSONObject(responseBody);
+            final JSONArray choices = jsonResponse.getJSONArray("choices");
+            if (!choices.isEmpty()) {
+                final JSONObject firstChoice = choices.getJSONObject(0);
+                content = firstChoice.getJSONObject("message").getString("content").trim();
+            }
+        }
+        catch (JSONException e) {
+            throw new IllegalArgumentException("Invalid response format or missing fields in the API response.", e);
+        }
+        return content;
     }
 
     /**
