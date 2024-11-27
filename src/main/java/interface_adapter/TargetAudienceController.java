@@ -1,6 +1,7 @@
-package use_case.set_targetaudience;
+package interface_adapter;
 
 import entity.Pitch;
+import use_case.set_targetaudience.TargetAudienceInteractor;
 
 /**
  * Controller class that generates the target audience.

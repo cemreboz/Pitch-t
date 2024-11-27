@@ -15,7 +15,7 @@ import org.json.JSONObject;
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject {
+public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -33,7 +33,7 @@ public final class ChatgptDataAccessObject {
      * @throws InterruptedException     If the operation is interrupted.
      * @throws IllegalArgumentException if the API key is invalid.
      */
-    public static String utilizeApi(String systemMessage, String userMessage)
+    public String utilizeApi(String systemMessage, String userMessage)
             throws IOException, InterruptedException {
         final String apiKey = System.getenv("OPENAI_API_KEY");
 
