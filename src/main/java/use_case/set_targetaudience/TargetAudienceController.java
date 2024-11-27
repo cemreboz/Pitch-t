@@ -5,11 +5,11 @@ import entity.Pitch;
 /**
  * Class that generates the target audience.
  */
-public class GenerateTargetAudienceUseCase {
+public class TargetAudienceController {
 
     private final TargetAudienceInteractor targetAudienceInteractor;
 
-    public GenerateTargetAudienceUseCase(TargetAudienceInteractor targetAudienceInteractor) {
+    public TargetAudienceController(TargetAudienceInteractor targetAudienceInteractor) {
         this.targetAudienceInteractor = targetAudienceInteractor;
     }
 

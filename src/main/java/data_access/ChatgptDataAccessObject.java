@@ -15,9 +15,13 @@ import org.json.JSONObject;
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public class ChatgptDataAccessObject {
+public final class ChatgptDataAccessObject {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
+
+    private ChatgptDataAccessObject() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     /**
      * Sends a message to OpenAI's API with a system and user message.
@@ -54,10 +58,8 @@ public class ChatgptDataAccessObject {
                 ]
             }""".formatted(systemMessage, userMessage);
 
-        // Create HTTP client
         final HttpClient client = HttpClient.newHttpClient();
 
-        // Create HTTP request
         final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.openai.com/v1/chat/completions"))
                 .header("Content-Type", "application/json")
@@ -65,13 +67,10 @@ public class ChatgptDataAccessObject {
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .build();
 
-        // Send the request and get the response
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Extract content from the API response
         final String content = extractContent(response.body());
 
-        // Log the input and output to a file
         logApiCall(systemMessage, userMessage, content);
 
         return content;
@@ -95,8 +94,9 @@ public class ChatgptDataAccessObject {
                 content = firstChoice.getJSONObject("message").getString("content").trim();
             }
         }
-        catch (JSONException e) {
-            throw new IllegalArgumentException("Invalid response format or missing fields in the API response.", e);
+        catch (JSONException exception) {
+            throw new IllegalArgumentException("Invalid response format or missing fields in the API response.",
+                    exception);
         }
         return content;
     }
@@ -119,8 +119,8 @@ public class ChatgptDataAccessObject {
             writer.write("----------------------------------------------------");
             writer.newLine();
         }
-        catch (IOException e) {
-            System.out.println("Error logging API call: " + e.getMessage());
+        catch (IOException exception) {
+            System.out.println("Error logging API call: " + exception.getMessage());
         }
     }
 }
