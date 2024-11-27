@@ -23,4 +23,8 @@ public class AccountSettingsOutputData {
         return password;
     }
 
+    public boolean isUseCaseFailed() {
+        return useCaseFailed;
+    }
+
 }
