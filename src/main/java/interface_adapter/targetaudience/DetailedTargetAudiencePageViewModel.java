@@ -1,31 +1,14 @@
 package interface_adapter.targetaudience;
 
-import entity.DetailedTargetAudience;
+import interface_adapter.ViewModel;
 
 /**
- * ViewModel for the Detailed Target Audience UI.
+ * The View Model for the Dashboard view.
  */
-public class DetailedTargetAudiencePageViewModel {
-    private DetailedTargetAudience detailedTargetAudience;
-    private String errorMessage;
+public class DetailedTargetAudiencePageViewModel extends ViewModel<DetailedTargetAudienceState> {
 
-    public DetailedTargetAudience getDetailedTargetAudience() {
-        return detailedTargetAudience;
-    }
-
-    /**
-     * Updates the Target Audience.
-     * @param detailedTargetAudience the detailed target audience.
-     */
-    public void updateDetailedTargetAudience(DetailedTargetAudience detailedTargetAudience) {
-        this.detailedTargetAudience = detailedTargetAudience;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public DetailedTargetAudiencePageViewModel() {
+        super("detailedTA");
+        setState(new DetailedTargetAudienceState());
     }
 }

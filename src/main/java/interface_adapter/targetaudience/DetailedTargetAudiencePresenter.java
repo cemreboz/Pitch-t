@@ -1,36 +1,79 @@
 package interface_adapter.targetaudience;
 
+import java.util.List;
+
 import entity.DetailedTargetAudience;
 import use_case.set_targetaudience.DetailedInteractor;
+import use_case.set_targetaudience.DetailedOutputBoundary;
+import use_case.set_targetaudience.DetailedOutputData;
 
 /**
- * Presenter for the Detailed Target Audience Use Case.
+ * The Presenter for the Detailed Target Audience Use Case.
  */
-public class DetailedTargetAudiencePresenter {
+public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
     private final DetailedTargetAudiencePageViewModel viewModel;
-    private final DetailedInteractor interactor;
 
-    public DetailedTargetAudiencePresenter(DetailedTargetAudiencePageViewModel viewModel, DetailedInteractor interactor) {
+    public DetailedTargetAudiencePresenter(DetailedTargetAudiencePageViewModel viewModel) {
         this.viewModel = viewModel;
-        this.interactor = interactor;
     }
 
     /**
-     * Fetches the detailed target audience for a given category.
+     * Prepares the success view for the DetailedTA.
      *
-     * @param audienceCategory The category of the target audience.
+     * @param outputData The output data containing the detailed target audience.
      */
-    public void fetchDetailedTargetAudience(String audienceCategory) {
-        try {
-            // Fetch from interactor
-            final var detailedAudience = interactor.fetchDetailedTargetAudience(audienceCategory);
+    @Override
+    public void prepareSuccessView(DetailedOutputData outputData) {
+        final DetailedTargetAudienceState detailedState = viewModel.getState();
+        final DetailedTargetAudience detailedTargetAudience = outputData.getDetailedTargetAudience();
 
-            // Update ViewModel
-            viewModel.updateDetailedTargetAudience((DetailedTargetAudience) detailedAudience);
+        // Update the state with the detailed target audience data
+        detailedState.setDetailedTargetAudience(detailedTargetAudience);
+        detailedState.setLoading(false);
+
+        // Notify the view model of the state update
+        viewModel.setState(detailedState);
+        viewModel.firePropertyChanged();
+    }
+
+    /**
+     * Prepares the fail view with an error message.
+     *
+     * @param errorMessage The error message to display.
+     */
+    @Override
+    public void prepareFailView(String errorMessage) {
+        final DetailedTargetAudienceState detailedState = viewModel.getState();
+
+        // Update the state with the error message
+        detailedState.setErrorMessage(errorMessage);
+        detailedState.setLoading(false);
+
+        // Notify the view model of the state update
+        viewModel.setState(detailedState);
+        viewModel.firePropertyChanged();
+    }
+
+    /**
+     * Fetches the detailed target audience and updates the view model.
+     *
+     * @param audienceCategory The category that the detailed target audience is based on.
+     * @param interactor       The interactor from the use case layer.
+     */
+    public void fetchDetailedTargetAudience(String audienceCategory, DetailedInteractor interactor) {
+        final DetailedTargetAudienceState detailedState = viewModel.getState();
+        detailedState.setLoading(true);
+
+        try {
+            final List<DetailedTargetAudience> response = interactor.fetchDetailedTargetAudience(audienceCategory);
+
+            final DetailedOutputData outputData = new DetailedOutputData(String.valueOf(response));
+
+            prepareSuccessView(outputData);
         }
         catch (Exception exception) {
-            // Handle error in fetching
-            viewModel.setErrorMessage("Error fetching detailed target audience: " + exception.getMessage());
+            prepareFailView("Failed to fetch detailed target audience: " + exception.getMessage());
         }
+
     }
 }
