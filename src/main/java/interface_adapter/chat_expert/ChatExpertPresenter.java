@@ -29,7 +29,7 @@ public class ChatExpertPresenter implements ChatExpertOutputBoundary {
     @Override
     public void presentChat(ChatExpertOutputData outputData) {
         // Update the view model with new data
-        viewModel.setExpertResponse(outputData.getExpertResponse());
-        viewModel.setChatHistory(outputData.getChatHistory());
+        viewModel.getState().setExpertResponse(outputData.getExpertResponse());
+        viewModel.getState().setChatHistory(outputData.getChatHistory());
     }
 }

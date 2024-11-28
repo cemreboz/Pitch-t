@@ -70,6 +70,10 @@ public class HamburgerMenu extends JPanel {
                     final PitchState currentState = (PitchState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof ChatExpertState) {
+                    final ChatExpertState currentState = (ChatExpertState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, "error");
                 }
@@ -85,10 +89,6 @@ public class HamburgerMenu extends JPanel {
 
         final JMenuItem expertsItem = new JMenuItem("Experts");
         expertsItem.addActionListener(evt -> {
-            // Set the ChatExpertState
-            final ChatExpertState expertState = new ChatExpertState("currentUser");
-            viewModel.setState(expertState);
-            viewModel.firePropertyChanged();
         });
         menu.add(expertsItem);
 

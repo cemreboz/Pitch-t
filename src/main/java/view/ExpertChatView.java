@@ -1,12 +1,16 @@
 package view;
 
 import interface_adapter.chat_expert.ChatExpertController;
+import interface_adapter.chat_expert.ChatExpertState;
 import interface_adapter.chat_expert.ChatExpertViewModel;
+import interface_adapter.login.LoginState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,10 +18,12 @@ import java.util.Objects;
  * Unified view for selecting an expert and chatting.
  * Combines the expert list, chat area, and message input.
  */
-public class ExpertChatView extends JPanel {
+public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
+    private final String viewName = "expert chat";
     private final ChatExpertController controller;
     private final ChatExpertViewModel viewModel;
+    private HamburgerMenu hamburgerMenu;
 
     private final JLabel headerNameLabel;
     private final JLabel headerAvatarLabel;
@@ -43,7 +49,7 @@ public class ExpertChatView extends JPanel {
 
         // Header Panel with Hamburger Menu and Logo
         final JPanel headerPanel = new JPanel(new BorderLayout());
-        final JButton hamburgerMenu = createHamburgerMenu();
+        hamburgerMenu = createHamburgerMenu();
         final JLabel logo = new JLabel("Pitch!t", SwingConstants.CENTER);
         logo.setFont(new Font("Arial", Font.BOLD, 24));
         headerAvatarLabel = new JLabel(); // Placeholder for expert avatar
@@ -138,13 +144,9 @@ public class ExpertChatView extends JPanel {
      * @return The hamburger menu button.
      */
 
-    private JButton createHamburgerMenu() {
-        final JButton hamburgerMenu = new JButton("☰");
-        hamburgerMenu.setFont(new Font("Arial", Font.PLAIN, 18));
-        hamburgerMenu.addActionListener(event -> {
-            // Invoke the pre-implemented hamburger menu functionality
-            JOptionPane.showMessageDialog(this, "Hamburger Menu Clicked");
-        });
+    private HamburgerMenu createHamburgerMenu() {
+        hamburgerMenu = new HamburgerMenu(viewModel);
+        hamburgerMenu.setBackground(Color.WHITE);
         return hamburgerMenu;
     }
 
@@ -153,9 +155,15 @@ public class ExpertChatView extends JPanel {
      */
     private void updateChatArea() {
         final StringBuilder chatContent = new StringBuilder();
-        for (String message : viewModel.getChatHistory()) {
+        for (String message : viewModel.getState().getChatHistory()) {
             chatContent.append(message).append("\n");
         }
         chatArea.setText(chatContent.toString());
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final ChatExpertViewModel state = (ChatExpertState) evt.getNewValue();
+
     }
 }
