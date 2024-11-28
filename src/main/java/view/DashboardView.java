@@ -119,9 +119,14 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 }
         );
 
-        experts.addActionListener(event -> {
-            expertController.execute();
-        });
+        experts.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        final DashboardState state = dashboardViewModel.getState();
+                        expertController.execute(state.getUsername(), state.getPassword());
+                    }
+                }
+        );
 
         return buttons;
     }

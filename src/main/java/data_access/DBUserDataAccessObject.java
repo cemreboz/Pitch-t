@@ -24,8 +24,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
+import use_case.expert.ExpertDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.new_pitch.NewPitchDataAccessInterface;
@@ -41,7 +43,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
         NewPitchDataAccessInterface,
-        CreateNewPitchDataAccessInterface {
+        CreateNewPitchDataAccessInterface,
+        ChatExpertDataAccessInterface,
+        ExpertDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -86,6 +90,12 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public User getCurrentUser() {
         return this.currentUser;
+    }
+
+    @Override
+    public Expert getExpertById(String expertId) {
+        final DBUser castedCurrentUser = (DBUser) this.currentUser;
+        return castedCurrentUser.getExpertById(expertId);
     }
 
     @Override
@@ -314,7 +324,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 chatHistory.add(chatHistoryArray.getString(j));
             }
 
-            final Expert expert = new Expert(expertJson.getString(ID_FIELD));
+            final Expert expert = Expert.createNewExpert(expertJson.getString(ID_FIELD));
             expert.setChatHistory(chatHistory);
             experts.add(expert);
         }

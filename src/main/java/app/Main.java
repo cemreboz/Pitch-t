@@ -29,6 +29,8 @@ public class Main {
                                             .addPitchUseCase()
                                             .addNewPitchUseCase()
                                             .addCreateNewPitchUseCase()
+                                            .addExpertUseCase()
+                                            .addChatExpertUseCase()
                                             .build();
 
         application.pack();

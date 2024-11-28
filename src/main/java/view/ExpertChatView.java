@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
  */
 public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "expert chat";
+    private final String viewName =  "chat expert";
     private final ExpertViewModel expertViewModel;
     private HamburgerMenu hamburgerMenu;
     private final ViewManagerModel viewManagerModel;

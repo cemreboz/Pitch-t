@@ -15,8 +15,12 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.chat_expert.ChatExpertController;
+import interface_adapter.chat_expert.ChatExpertPresenter;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertPresenter;
 import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
@@ -39,9 +43,15 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.chat_expert.ChatExpertInputBoundary;
+import use_case.chat_expert.ChatExpertInteractor;
+import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
 import use_case.new_pitch.NewPitchInputBoundary;
 import use_case.new_pitch.NewPitchInteractor;
 import use_case.new_pitch.NewPitchOutputBoundary;
@@ -328,6 +338,38 @@ public class AppBuilder {
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
         newPitchView.setCreateNewPitchController(createNewPitchController);
+        return this;
+    }
+
+    /**
+     * Adds the expert view use case.
+     * @return this builder
+     */
+    public AppBuilder addExpertUseCase() {
+        final ExpertOutputBoundary expertOutputBoundary = new ExpertPresenter(
+                expertViewModel, viewManagerModel);
+        final ExpertInputBoundary expertInteractor = new ExpertInteractor(
+                userDataAccessObject, expertOutputBoundary);
+
+        final ExpertController expertController = new ExpertController(
+                expertInteractor);
+        dashboardView.setExpertController(expertController);
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual expert use case.
+     * @return this builder
+     */
+    public AppBuilder addChatExpertUseCase() {
+        final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
+                expertViewModel, viewManagerModel);
+        final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
+                userDataAccessObject, chatExpertOutputBoundary);
+
+        final ChatExpertController chatExpertController = new ChatExpertController(
+                chatExpertInteractor);
+        expertChatView.setChatExpertController(chatExpertController);
         return this;
     }
 

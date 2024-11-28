@@ -1,8 +1,11 @@
 package interface_adapter.chat_expert;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.expert.ExpertViewModel;
 import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.chat_expert.ChatExpertOutputData;
+
+import javax.swing.text.View;
 
 /**
  * Presenter for the Chat with Expert use case.
@@ -11,14 +14,16 @@ import use_case.chat_expert.ChatExpertOutputData;
 public class ChatExpertPresenter implements ChatExpertOutputBoundary {
 
     private final ExpertViewModel viewModel;
+    private ViewManagerModel viewManagerModel;
 
     /**
      * Constructs a ChatExpertPresenter object.
      *
      * @param viewModel The view model to update with output data.
      */
-    public ChatExpertPresenter(ExpertViewModel viewModel) {
+    public ChatExpertPresenter(ExpertViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     /**
@@ -32,5 +37,8 @@ public class ChatExpertPresenter implements ChatExpertOutputBoundary {
         // Update the view model with new data
         viewModel.getState().setExpertResponse(outputData.getExpertResponse());
         viewModel.getState().setChatHistory(outputData.getChatHistory());
+
+        viewModel.firePropertyChanged();
+        viewManagerModel.firePropertyChanged();
     }
 }
