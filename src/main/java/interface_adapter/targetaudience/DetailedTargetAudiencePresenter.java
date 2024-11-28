@@ -1,43 +1,36 @@
 package interface_adapter.targetaudience;
 
-import java.util.List;
-
 import entity.DetailedTargetAudience;
 import use_case.set_targetaudience.DetailedInteractor;
 
 /**
- * Class for the Detailed TA presenter.
+ * Presenter for the Detailed Target Audience Use Case.
  */
 public class DetailedTargetAudiencePresenter {
-    private final DetailedTargetAudienceView view;
+    private final DetailedTargetAudiencePageViewModel viewModel;
     private final DetailedInteractor interactor;
 
-    public DetailedTargetAudiencePresenter(DetailedTargetAudienceView view, DetailedInteractor interactor) {
-        this.view = view;
+    public DetailedTargetAudiencePresenter(DetailedTargetAudiencePageViewModel viewModel, DetailedInteractor interactor) {
+        this.viewModel = viewModel;
         this.interactor = interactor;
     }
 
     /**
-     * Method for fetching the Detailed TA.
-     * @param audienceCategory the audience category that the detailed TA is based off of.
-     * @throws Exception when there is an error.
-     * @throws IllegalArgumentException when the Audience Category is null/empty.
+     * Fetches the detailed target audience for a given category.
+     *
+     * @param audienceCategory The category of the target audience.
      */
-    public void fetchDetailedTargetAudience(String audienceCategory) throws Exception {
-        view.showLoading();
+    public void fetchDetailedTargetAudience(String audienceCategory) {
+        try {
+            // Fetch from interactor
+            final var detailedAudience = interactor.fetchDetailedTargetAudience(audienceCategory);
 
-        // Validate input
-        if (audienceCategory == null || audienceCategory.isEmpty()) {
-            throw new IllegalArgumentException("Audience category cannot be null or empty.");
+            // Update ViewModel
+            viewModel.updateDetailedTargetAudience((DetailedTargetAudience) detailedAudience);
         }
-
-        // Fetch detailed target audience from the Interactor
-        final List<DetailedTargetAudience> detailedTargetAudience =
-                interactor.fetchDetailedTargetAudience(audienceCategory);
-
-        // Update the View
-        view.hideLoading();
-        view.displayDetailedTargetAudience(detailedTargetAudience);
-
+        catch (Exception exception) {
+            // Handle error in fetching
+            viewModel.setErrorMessage("Error fetching detailed target audience: " + exception.getMessage());
+        }
     }
 }

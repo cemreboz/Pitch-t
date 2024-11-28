@@ -3,41 +3,42 @@ package interface_adapter.targetaudience;
 import java.util.List;
 
 import entity.Pitch;
+import interface_adapter.pitch.PitchState;
+import interface_adapter.pitch.PitchViewModel;
 import use_case.set_targetaudience.TargetAudienceInteractor;
 
 /**
- * Presenter Class for Target Audience.
+ * Presenter for the General Target Audience Use Case.
  */
 public class TargetAudiencePresenter {
-    private final TargetAudienceView view;
+    private final PitchViewModel viewModel;
     private final TargetAudienceInteractor interactor;
 
-    public TargetAudiencePresenter(TargetAudienceView view, TargetAudienceInteractor interactor) {
-        this.view = view;
+    public TargetAudiencePresenter(PitchViewModel viewModel, TargetAudienceInteractor interactor) {
+        this.viewModel = viewModel;
         this.interactor = interactor;
     }
 
     /**
-     * Method for fetchTargetAudience.
-     * @param pitch from teh pitch class.
-     * @throws Exception if there is an exception.
-     * @throws IllegalArgumentException if the pitch data is invalid.
+     * Fetches the target audience for a given pitch and updates the PitchViewModel.
+     *
+     * @param pitch The pitch for which to generate the target audience.
      */
-    public void fetchTargetAudience(Pitch pitch) throws Exception {
-        view.showLoading();
+    public void fetchTargetAudience(Pitch pitch) {
+        final PitchState pitchState = viewModel.getState();
+        pitchState.setLoading(true);
 
-        // Validate the pitch
-        if (pitch == null || pitch.getName() == null || pitch.getDescription() == null) {
-            throw new IllegalArgumentException("Invalid pitch data.");
+        try {
+            final String targetAudienceResponse = interactor.generateTargetAudience(pitch);
+            final List<String> targetAudience = List.of(targetAudienceResponse.split(";"));
+
+            pitchState.setTargetAudience(targetAudience);
         }
-
-        // Fetch the target audience from the Interactor
-        final String targetAudienceResponse = interactor.generateTargetAudience(pitch);
-        final List<String> targetAudience = List.of(targetAudienceResponse.split(";"));
-
-        // Update the View
-        view.hideLoading();
-        view.displayTargetAudience(targetAudience);
-
+        catch (Exception exception) {
+            pitchState.setErrorMessage("Error generating target audience: " + exception.getMessage());
+        }
+        finally {
+            pitchState.setLoading(false);
+        }
     }
 }
