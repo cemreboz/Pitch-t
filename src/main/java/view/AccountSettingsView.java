@@ -56,7 +56,7 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
 
         hamburgerMenu = new HamburgerMenu(accountSettingsViewModel);
 
-        final JLabel title = new JLabel("Logged In Screen");
+        final JLabel title = new JLabel("Account Settings");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final JPanel menuWrapper = new JPanel();

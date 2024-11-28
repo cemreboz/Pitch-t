@@ -15,12 +15,15 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.dashboard.DashboardController;
+import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
@@ -30,6 +33,9 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.dashboard_show_pitch.DashboardInputBoundary;
+import use_case.dashboard_show_pitch.DashboardInteractor;
+import use_case.dashboard_show_pitch.DashboardOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -42,6 +48,7 @@ import use_case.signup.SignupOutputBoundary;
 import view.AccountSettingsView;
 import view.DashboardView;
 import view.LoginView;
+import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
 
@@ -71,10 +78,12 @@ public class AppBuilder {
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
     private AccountSettingsViewModel accountSettingsViewModel;
+    private PitchViewModel pitchViewModel;
     private AccountSettingsView accountSettingsView;
     private LoginView loginView;
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
+    private PitchView pitchView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -114,13 +123,24 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn View to the application.
+     * Adds the AccountSettings View to the application.
      * @return this builder
      */
     public AppBuilder addAccountSettingsView() {
         accountSettingsViewModel = new AccountSettingsViewModel();
         accountSettingsView = new AccountSettingsView(accountSettingsViewModel);
         cardPanel.add(accountSettingsView, accountSettingsView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Pitch View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPitchView() {
+        pitchViewModel = new PitchViewModel();
+        pitchView = new PitchView(pitchViewModel);
+        cardPanel.add(pitchView, pitchView.getViewName());
         return this;
     }
 
@@ -188,7 +208,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the dashboard use case as part of the hamburger menu to each view with the menu.
+     * Adds the dashboard use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addDashboardUseCase() {
@@ -200,11 +220,12 @@ public class AppBuilder {
         final LoginController loginController = new LoginController(loginInteractor);
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
+        pitchView.setLoginController(loginController);
         return this;
     }
 
     /**
-     * Adds the account settings use case as part of the hamburger menu to each view with the menu.
+     * Adds the account settings use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addAccountSettingsUseCase() {
@@ -217,6 +238,23 @@ public class AppBuilder {
                 accountSettingsInteractor);
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
+        pitchView.setAccountSettingsController(accountSettingsController);
+        return this;
+    }
+
+    /**
+     * Adds the pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addPitchUseCase() {
+        final DashboardOutputBoundary dashboardOutputBoundary = new DashboardPresenter(
+                dashboardViewModel, pitchViewModel, viewManagerModel);
+        final DashboardInputBoundary dashboardInteractor = new DashboardInteractor(
+                userDataAccessObject, dashboardOutputBoundary);
+
+        final DashboardController dashboardController = new DashboardController(
+                dashboardInteractor);
+        dashboardView.setDashboardController(dashboardController);
         return this;
     }
 

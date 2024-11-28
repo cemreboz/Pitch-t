@@ -20,6 +20,7 @@ import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
+import interface_adapter.pitch.PitchState;
 
 /**
  * A panel for the hamburger menu.
@@ -39,7 +40,6 @@ public class HamburgerMenu extends JPanel {
         menuIcon.setFont(new Font("Arial", Font.PLAIN, hamburgerSize));
         menuIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        // Add mouse listener to display the popup menu
         menuIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -52,7 +52,6 @@ public class HamburgerMenu extends JPanel {
     }
 
     private void showMenu(Component invoker) {
-        // Create the popup menu
         final JPopupMenu menu = new JPopupMenu();
 
         final JMenuItem dashboardItem = new JMenuItem("Dashboard");
@@ -65,6 +64,10 @@ public class HamburgerMenu extends JPanel {
                 else if (viewModel.getState() instanceof AccountSettingsState) {
                     final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, "error");
@@ -95,6 +98,10 @@ public class HamburgerMenu extends JPanel {
                 else if (viewModel.getState() instanceof AccountSettingsState) {
                     final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
                     JOptionPane.showMessageDialog(accountSettingsItem, "error");
