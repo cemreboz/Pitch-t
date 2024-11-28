@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
-import interface_adapter.chat_expert.ChatExpertState;
+import interface_adapter.expert.ExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
 import interface_adapter.pitch.PitchState;
@@ -70,8 +70,8 @@ public class HamburgerMenu extends JPanel {
                     final PitchState currentState = (PitchState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
-                else if (viewModel.getState() instanceof ChatExpertState) {
-                    final ChatExpertState currentState = (ChatExpertState) viewModel.getState();
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {

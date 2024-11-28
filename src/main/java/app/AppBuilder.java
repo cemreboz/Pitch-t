@@ -1,13 +1,11 @@
 package app;
 
 import java.awt.CardLayout;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.ChatExpertDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -17,9 +15,7 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
-import interface_adapter.chat_expert.ChatExpertController;
-import interface_adapter.chat_expert.ChatExpertPresenter;
-import interface_adapter.chat_expert.ChatExpertViewModel;
+import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -38,7 +34,6 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
-import use_case.chat_expert.ChatExpertInteractor;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
@@ -91,6 +86,8 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
     private PitchView pitchView;
+    private ExpertChatView expertChatView;
+    private ExpertViewModel expertViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -151,41 +148,13 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the expert chat view to the application.
+     * @return this builder
+     */
     public AppBuilder addExpertChatView() {
-        final ChatExpertViewModel chatExpertViewModel = new ChatExpertViewModel();
-        final ChatExpertPresenter chatExpertPresenter = new ChatExpertPresenter(chatExpertViewModel);
-        final ChatExpertInteractor chatExpertInteractor = new ChatExpertInteractor(
-                new ChatExpertDataAccessObject(), chatExpertPresenter);
-        final ChatExpertController chatExpertController = new ChatExpertController(chatExpertInteractor);
-
-        final ExpertChatView expertChatView = new ExpertChatView(chatExpertController, chatExpertViewModel,
-                List.of(
-                        new String[]{"1", "Mark Cuban", "Mark Cuban is a billionaire entrepreneur and Dallas " +
-                                "Mavericks owner known for his bold style on Shark Tank. After selling " +
-                                "Broadcast.com, he became an influential investor across tech, sports, and " +
-                                "entertainment. Mark is direct, competitive, and growth-focused. He values clear, " +
-                                "scalable ideas and isn’t afraid to call out weaknesses, backing only pitches that " +
-                                "show true potential for innovation and success.", "expert_avatars/mark-cuban.png"},
-                        new String[]{"2", "Elena Romero", "Elena Romero is a sustainable investing advocate and " +
-                                "former Silicon Valley venture capitalist. She built her wealth through early " +
-                                "investments in green technology and renewable energy. Thoughtful and idealistic, " +
-                                "Elena values business ideas with environmental and societal impact. In pitches, " +
-                                "she urges founders to consider sustainability, aligning her support with projects " +
-                                "that prioritize ethical practices and long-term positive change.", "expert_avatars/elena-romero.png"},
-                        new String[]{"3", "Raj Patel", "Raj Patel is a fintech pioneer who founded a leading digital" +
-                                " payment platform, transforming the way we transact online. Known for his calm, " +
-                                "analytical approach, Raj focuses on data, scalability, and clear profitability. " +
-                                "He values pitches with strong financial foundations and realistic growth models, " +
-                                "offering insightful feedback and investment if the numbers show real promise. " +
-                                "Raj is precise, calculated, and driven by logical assessment.", "expert_avatars/raj-patel.png"},
-                        new String[]{"4", "Jensen Huang", "Jensen Huang is the visionary founder and CEO of NVIDIA, " +
-                                "a company that revolutionized graphics processing and artificial intelligence. " +
-                                "Known for his innovative mindset and strategic brilliance, Jensen thrives on " +
-                                "cutting-edge technology and ambitious ideas. In pitches, he seeks projects " +
-                                "with groundbreaking potential, focusing on tech-driven scalability and real-world " +
-                                "impact. Analytical yet inspiring, he values bold visions backed " +
-                                "by solid technical foundations.", "expert_avatars/jensen-huang.png"}
-                ));
+        expertViewModel = new ExpertViewModel();
+        expertChatView = new ExpertChatView(expertViewModel, viewManagerModel);
         cardPanel.add(expertChatView, "ExpertChatView");
 
         return this;

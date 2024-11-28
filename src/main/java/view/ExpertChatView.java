@@ -1,18 +1,14 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.chat_expert.ChatExpertController;
-import interface_adapter.chat_expert.ChatExpertState;
-import interface_adapter.chat_expert.ChatExpertViewModel;
-import interface_adapter.login.LoginState;
+import interface_adapter.expert.ExpertState;
+import interface_adapter.expert.ExpertViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Unified view for selecting an expert and chatting.
@@ -21,9 +17,10 @@ import java.util.Objects;
 public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "expert chat";
-    private final ChatExpertController controller;
-    private final ChatExpertViewModel viewModel;
+    private final ExpertViewModel expertViewModel;
     private HamburgerMenu hamburgerMenu;
+    private final ViewManagerModel viewManagerModel;
+    private ChatExpertController chatExpertController;
 
     private final JLabel headerNameLabel;
     private final JLabel headerAvatarLabel;
@@ -34,16 +31,13 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     /**
      * Constructs an ExpertChatView object.
-     *
-     * @param controller The controller to handle user actions.
-     * @param viewModel  The view model containing chat data.
-     * @param experts    The list of experts to display.
+     * @param expertViewModel expert view model
+     * @param viewManagerModel view maanger model
      */
-    public ExpertChatView(ChatExpertController controller,
-                          ChatExpertViewModel viewModel,
-                          List<String[]> experts) {
-        this.controller = controller;
-        this.viewModel = viewModel;
+    public ExpertChatView(ExpertViewModel expertViewModel, ViewManagerModel viewManagerModel) {
+        this.expertViewModel = expertViewModel;
+        this.expertViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
 
         setLayout(new BorderLayout());
 
@@ -68,7 +62,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         // Left Panel: Expert List
         final JPanel expertListPanel = new JPanel();
         expertListPanel.setLayout(new BoxLayout(expertListPanel, BoxLayout.Y_AXIS));
-        for (String[] expert : experts) {
+        for (String[] expert : expertViewModel.getState().getExperts()) {
             final String expertId = expert[0];
             final String name = expert[1];
             final String description = expert[2];
@@ -83,7 +77,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             selectButton.addActionListener(event -> {
                 headerNameLabel.setText(name);
                 headerAvatarLabel.setIcon(loadAvatar(expert[3]));
-                controller.startChat(expertId, "Hi! I'd like to discuss my idea.");
+                chatExpertController.startChat(expertId, "Hi! I'd like to discuss my idea.");
                 updateChatArea();
             });
 
@@ -109,7 +103,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         sendButton.addActionListener(e -> {
             final String userMessage = messageInput.getText().trim();
             if (!userMessage.isEmpty()) {
-                controller.startChat(headerNameLabel.getText(), userMessage);
+                chatExpertController.startChat(headerNameLabel.getText(), userMessage);
                 updateChatArea();
                 messageInput.setText("");
             }
@@ -145,7 +139,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      */
 
     private HamburgerMenu createHamburgerMenu() {
-        hamburgerMenu = new HamburgerMenu(viewModel);
+        hamburgerMenu = new HamburgerMenu(expertViewModel);
         hamburgerMenu.setBackground(Color.WHITE);
         return hamburgerMenu;
     }
@@ -155,7 +149,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      */
     private void updateChatArea() {
         final StringBuilder chatContent = new StringBuilder();
-        for (String message : viewModel.getState().getChatHistory()) {
+        for (String message : expertViewModel.getState().getChatHistory()) {
             chatContent.append(message).append("\n");
         }
         chatArea.setText(chatContent.toString());
@@ -163,7 +157,12 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final ChatExpertViewModel state = (ChatExpertState) evt.getNewValue();
+        final ExpertState state = (ExpertState) evt.getNewValue();
 
+        updateChatArea();
+    }
+
+    public void setChatExpertController(ChatExpertController chatExpertController) {
+        this.chatExpertController = chatExpertController;
     }
 }

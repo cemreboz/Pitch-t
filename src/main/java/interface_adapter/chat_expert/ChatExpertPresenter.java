@@ -1,5 +1,6 @@
 package interface_adapter.chat_expert;
 
+import interface_adapter.expert.ExpertViewModel;
 import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.chat_expert.ChatExpertOutputData;
 
@@ -9,14 +10,14 @@ import use_case.chat_expert.ChatExpertOutputData;
  */
 public class ChatExpertPresenter implements ChatExpertOutputBoundary {
 
-    private final ChatExpertViewModel viewModel;
+    private final ExpertViewModel viewModel;
 
     /**
      * Constructs a ChatExpertPresenter object.
      *
      * @param viewModel The view model to update with output data.
      */
-    public ChatExpertPresenter(ChatExpertViewModel viewModel) {
+    public ChatExpertPresenter(ExpertViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

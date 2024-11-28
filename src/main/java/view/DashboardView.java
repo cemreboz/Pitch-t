@@ -161,23 +161,16 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            final Object newState = evt.getNewValue();
-
-            if (newState instanceof DashboardState) {
-                final DashboardState state = (DashboardState) newState;
-                if (state.getPitchLoadError() == null) {
-                    updatePitchHistory(state.getPitches());
-                }
-                else {
-                    JOptionPane.showMessageDialog(this, state.getPitchLoadError());
-                }
+            final DashboardState state = (DashboardState) evt.getNewValue();
+            if (state.getPitchLoadError() == null) {
+                updatePitchHistory(state.getPitches());
             }
             else {
-                // Log or ignore unexpected state changes
-                System.err.println("DashboardView received an unexpected state: " + newState.getClass().getName());
+                JOptionPane.showMessageDialog(this, state.getPitchLoadError());
             }
         }
     }
+
 
     private void updatePitchHistory(List<Pitch> pitches) {
         pitchHistoryPanel.removeAll();
