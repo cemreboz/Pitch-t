@@ -1,12 +1,10 @@
 package use_case.create_pitch;
 
+import java.util.List;
+
 import entity.DBUser;
 import entity.Pitch;
 import interface_adapter.targetaudience.TargetAudienceController;
-import use_case.dashboard_show_pitch.DashboardOutputData;
-import use_case.new_pitch.NewPitchInputData;
-
-import java.util.List;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.
