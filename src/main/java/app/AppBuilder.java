@@ -15,6 +15,8 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.create_pitch.CreateNewPitchController;
+import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -36,6 +38,9 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.create_pitch.CreateNewPitchInputBoundary;
+import use_case.create_pitch.CreateNewPitchInteractor;
+import use_case.create_pitch.CreateNewPitchOutputBoundary;
 import use_case.new_pitch.NewPitchInputBoundary;
 import use_case.new_pitch.NewPitchInteractor;
 import use_case.new_pitch.NewPitchOutputBoundary;
@@ -291,6 +296,22 @@ public class AppBuilder {
         final NewPitchController newPitchController = new NewPitchController(
                 newPitchInteractor);
         dashboardView.setNewPitchController(newPitchController);
+        return this;
+    }
+
+    /**
+     * Adds the create new pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addCreateNewPitchUseCase() {
+        final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
+                newPitchViewModel, pitchViewModel, viewManagerModel);
+        final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
+                userDataAccessObject, createNewPitchOutputBoundary);
+
+        final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
+                createNewPitchInteractor);
+        newPitchView.setCreateNewPitchController(createNewPitchController);
         return this;
     }
 

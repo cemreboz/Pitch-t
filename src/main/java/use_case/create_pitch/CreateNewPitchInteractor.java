@@ -1,12 +1,13 @@
 package use_case.create_pitch;
 
 import entity.Pitch;
+import use_case.dashboard_show_pitch.DashboardOutputData;
 import use_case.new_pitch.NewPitchInputData;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.
  */
-public class CreateNewPitchInteractor {
+public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
     private CreateNewPitchDataAccessInterface userDataAccessObject;
     private final CreateNewPitchOutputBoundary userPresenter;
 
@@ -23,35 +24,37 @@ public class CreateNewPitchInteractor {
     }
 
     @Override
-    public void execute(NewPitchInputData inputData) {
+    public void execute(CreateNewPitchInputData createNewPitchInputData) {
         // Validate input
-        if (inputData.getName().isEmpty()) {
-            throw new IllegalArgumentException("Pitch name cannot be empty");
+        if (createNewPitchInputData.getName().isEmpty()) {
+            userPresenter.prepareFailView("Pitch name cannot be empty");
         }
-        if (inputData.getDescription().isEmpty()) {
-            throw new IllegalArgumentException("Pitch description cannot be empty");
+        if (createNewPitchInputData.getDescription().isEmpty()) {
+            userPresenter.prepareFailView("Pitch description cannot be empty");
         }
-        if (inputData.getTargetAudienceList().isEmpty()) {
-            throw new IllegalArgumentException("Target audience list cannot be empty");
+        if (createNewPitchInputData.getTargetAudienceList().isEmpty()) {
+            userPresenter.prepareFailView("Pitch target audience list cannot be empty");
+            // TODO Rainy get the general TAs here, use your controller to insert it into the pitch object
+            // instead of making users manually put them in remove this if and have it so the General TA is generated
+            // based off of everything else
         }
 
-    // Image is nice but not mandatory.
-    // TODO: validate image somehow?
+        // Image is nice but not mandatory.
+        // TODO: validate image somehow?
 
-    // Create a new Pitch
-    Pitch newPitch = new Pitch(
+        // Create a new Pitch
+        final Pitch newPitch = new Pitch(
             generatePitchID(),
-            inputData.getName(),
-            inputData.getImage(),  // Image is optional and can be null
-            inputData.getDescription(),
-            inputData.getTargetAudienceList()
-    );
+            createNewPitchInputData.getName(),
+            createNewPitchInputData.getImage(),  // Image is optional and can be null
+            createNewPitchInputData.getDescription(),
+            createNewPitchInputData.getTargetAudienceList()
+        );
 
-    // Add the pitch to the user's in-memory list
-        currentUser.addPitch(newPitch);
-
-    // Use the gateway to persist the pitch
-        newPitchDataAccess.addPitch(currentUser.getName(), newPitch);
+        final CreateNewPitchOutputData createNewPitchOutputData = new CreateNewPitchOutputData(false,
+                newPitch, userDataAccessObject.getCurrentUser().getName(),
+                userDataAccessObject.getCurrentUser().getPassword());
+        userPresenter.prepareSuccessView(createNewPitchOutputData);
     }
 
     /**

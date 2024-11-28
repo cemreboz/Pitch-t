@@ -1,5 +1,6 @@
 package use_case.create_pitch;
 
+import use_case.dashboard_show_pitch.DashboardOutputData;
 import use_case.new_pitch.NewPitchOutputData;
 
 /**
@@ -9,8 +10,14 @@ import use_case.new_pitch.NewPitchOutputData;
 public interface CreateNewPitchOutputBoundary {
 
     /**
-     * Sends the result of creating a new pitch and updates the view model.
-     * @param outputData the result from the interactor (success/failure).
+     * Prepares the success view for the create new pitch use case.
+     * @param outputData the output data
      */
-    void presentOutput(NewPitchOutputData outputData);
+    void prepareSuccessView(CreateNewPitchOutputData outputData);
+
+    /**
+     * Prepares the failure view for the create new pitch use case.
+     * @param errorMessage explanation of the failure
+     */
+    void prepareFailView(String errorMessage);
 }

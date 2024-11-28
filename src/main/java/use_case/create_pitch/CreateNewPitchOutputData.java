@@ -1,21 +1,34 @@
 package use_case.create_pitch;
 
+import entity.Pitch;
+
 public class CreateNewPitchOutputData {
 
-    private final boolean success;
-    private final String message;
+    private final boolean useCaseFailed;
+    private final Pitch newPitch;
+    private final String username;
+    private final String password;
 
-    public CreateNewPitchOutputData(boolean success, String message) {
-        this.success = success;
-        this.message = message;
+    public CreateNewPitchOutputData(boolean useCaseFailed, Pitch newPitch, String username, String password) {
+        this.useCaseFailed = useCaseFailed;
+        this.newPitch = newPitch;
+        this.username = username;
+        this.password = password;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public boolean isUseCaseFailed() {
+        return useCaseFailed;
     }
 
-    public String getMessage() {
-        return message;
+    public Pitch getNewPitch() {
+        return newPitch;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

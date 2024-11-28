@@ -3,6 +3,9 @@ package interface_adapter.create_pitch;
 import interface_adapter.new_pitch.NewPitchPresenter;
 import interface_adapter.new_pitch.NewPitchState;
 import interface_adapter.new_pitch.NewPitchViewModel;
+import use_case.create_pitch.CreateNewPitchInputBoundary;
+import use_case.create_pitch.CreateNewPitchInputData;
+import use_case.create_pitch.CreateNewPitchOutputData;
 import use_case.new_pitch.NewPitchInputBoundary;
 import use_case.new_pitch.NewPitchInputData;
 import use_case.new_pitch.NewPitchOutputData;
@@ -13,12 +16,11 @@ import java.util.List;
  * The controller for the Create New Pitch Use Case.
  */
 public class CreateNewPitchController {
-    private final NewPitchViewModel newPitchViewModel;
 
-    private final NewPitchInputBoundary newPitchUseCaseInteractor;
+    private final CreateNewPitchInputBoundary createNewPitchInputBoundary;
 
-    public CreateNewPitchController(NewPitchInputBoundary newPitchUseCaseInteractor) {
-        this.newPitchUseCaseInteractor = newPitchUseCaseInteractor;
+    public CreateNewPitchController(CreateNewPitchInputBoundary createNewPitchUseCaseInteractor) {
+        this.createNewPitchInputBoundary = createNewPitchUseCaseInteractor;
     }
 
     /**
@@ -31,10 +33,11 @@ public class CreateNewPitchController {
      */
     public void execute(String name, String description, String image, List<String> targetAudience) {
         // Creating an input data object for the use case
-        final CreateNewPitchInputData createNewPitchInputData = new CreateNewPitchInputData();
+        final CreateNewPitchInputData createNewPitchInputData = new CreateNewPitchInputData(name, description,
+                image, targetAudience);
 
         // Execute the use case to create the pitch
-        newPitchUseCaseInteractor.execute(newPitchInputData);
+        createNewPitchInputBoundary.execute(createNewPitchInputData);
     }
 
     /**

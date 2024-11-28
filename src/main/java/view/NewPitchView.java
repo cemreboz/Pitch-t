@@ -6,7 +6,11 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import interface_adapter.create_pitch.CreateNewPitchController;
+import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.new_pitch.NewPitchViewModel;
 import interface_adapter.new_pitch.NewPitchState;
 
@@ -17,6 +21,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "new pitch";
     private final NewPitchViewModel newPitchViewModel;
+    private CreateNewPitchController createNewPitchController;
 
     private final JTextField nameField;
     private final JTextArea descriptionArea;
@@ -114,12 +119,15 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void savePitch() {
         String name = nameField.getText();
         String description = descriptionArea.getText();
-        String targetAudience = targetAudienceField.getText();
+        List<String> targetAudience = new ArrayList<String>();
+        targetAudience.add(targetAudienceField.getText());
         String image = imageField.getText();
+        // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
+        // the target audience field should be removed from the view too but its their temporarily for IDk what reason
+        // viktor put it there
+        // i.e. the controller below shouldnt't need to take targetAudience, it should be generated in the interactor
 
-        // Here you should trigger your ViewModel to save the pitch
-
-        JOptionPane.showMessageDialog(this, "Pitch saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        createNewPitchController.execute(name, description, image, targetAudience);
     }
 
     /**
@@ -156,5 +164,13 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
 
     public String getViewName() {
         return viewName;
+    }
+
+    /**
+     * Method to set the new pitch view controller.
+     * @param createNewPitchController new pitch controller
+     */
+    public void setCreateNewPitchController(CreateNewPitchController createNewPitchController) {
+        this.createNewPitchController = createNewPitchController;
     }
 }

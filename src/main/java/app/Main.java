@@ -27,6 +27,7 @@ public class Main {
                                             .addAccountSettingsUseCase()
                                             .addPitchUseCase()
                                             .addNewPitchUseCase()
+                                            .addCreateNewPitchUseCase()
                                             .build();
 
         application.pack();

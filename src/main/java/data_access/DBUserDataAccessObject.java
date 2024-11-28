@@ -24,6 +24,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -39,7 +40,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
-        NewPitchDataAccessInterface {
+        NewPitchDataAccessInterface,
+        CreateNewPitchDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";

@@ -6,6 +6,7 @@ import java.util.Map;
 import entity.User;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -22,7 +23,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
-        NewPitchDataAccessInterface {
+        NewPitchDataAccessInterface,
+        CreateNewPitchDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

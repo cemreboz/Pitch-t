@@ -1,6 +1,6 @@
 package use_case.create_pitch;
 
-import entity.Pitch;
+import entity.User;
 
 /**
  * Gateway interface for handling pitch-related data access.
@@ -8,10 +8,14 @@ import entity.Pitch;
 public interface CreateNewPitchDataAccessInterface {
 
     /**
-     * Adds a pitch to the specified user.
-     *
-     * @param userId the ID of the user to associate the pitch with.
-     * @param pitch  the pitch to add.
-     * */
-    void addPitch(String userId, Pitch pitch);
+     * Provides the current user to the dashboard.
+     * @return the user currently logged in.
+     */
+    User getCurrentUser();
+
+    /**
+     * Sets the user indicating the current user of the application.
+     * @param user the new user object; null to indicate that no one is currently logged into the application
+     */
+    void setCurrentUser(User user);
 }
