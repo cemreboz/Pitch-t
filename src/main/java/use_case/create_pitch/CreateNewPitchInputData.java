@@ -11,13 +11,11 @@ public class CreateNewPitchInputData {
     private final String name;
     private final String description;
     private final String image;
-    private final List<String> targetAudienceList;
 
-    public CreateNewPitchInputData(String name, String description, String image, List<String> targetAudienceList) {
+    public CreateNewPitchInputData(String name, String description, String image) {
         this.name = name;
         this.description = description;
         this.image = image;
-        this.targetAudienceList = targetAudienceList;
     }
 
     public String getName() {
