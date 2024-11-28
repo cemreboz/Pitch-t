@@ -1,5 +1,6 @@
 package use_case.create_pitch;
 
+import entity.DBUser;
 import entity.Pitch;
 import use_case.dashboard_show_pitch.DashboardOutputData;
 import use_case.new_pitch.NewPitchInputData;
@@ -50,6 +51,10 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
             createNewPitchInputData.getDescription(),
             createNewPitchInputData.getTargetAudienceList()
         );
+
+        if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
+            ((DBUser) userDataAccessObject.getCurrentUser()).addPitch(newPitch);
+        }
 
         final CreateNewPitchOutputData createNewPitchOutputData = new CreateNewPitchOutputData(false,
                 newPitch, userDataAccessObject.getCurrentUser().getName(),
