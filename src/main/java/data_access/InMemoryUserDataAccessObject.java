@@ -9,6 +9,7 @@ import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.new_pitch.NewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
@@ -20,7 +21,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
-        AccountSettingsDataAccessInterface {
+        AccountSettingsDataAccessInterface,
+        NewPitchDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

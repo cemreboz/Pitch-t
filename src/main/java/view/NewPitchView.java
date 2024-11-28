@@ -15,7 +15,7 @@ import interface_adapter.new_pitch.NewPitchState;
  */
 public class NewPitchView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "newPitch";
+    private final String viewName = "new pitch";
     private final NewPitchViewModel newPitchViewModel;
 
     private final JTextField nameField;
@@ -118,7 +118,6 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
         String image = imageField.getText();
 
         // Here you should trigger your ViewModel to save the pitch
-        newPitchViewModel.savePitch(name, description, targetAudience, image);
 
         JOptionPane.showMessageDialog(this, "Pitch saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }

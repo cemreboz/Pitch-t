@@ -3,17 +3,21 @@ package interface_adapter.new_pitch;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.DBUser;
+import entity.User;
+
 /**
  * The state for the New Pitch View Model.
  */
 public class NewPitchState {
+    private User currentUser = new DBUser("", "");
     private String name = "";
     private String description = "";
     private String image = "";
     private List<String> targetAudience = new ArrayList<>();
     private String errorMessage;
-    private boolean isLoading = false;
-    private boolean isSuccess = false;
+    private boolean isLoading;
+    private boolean isSuccess;
 
     // Getters
     public String getName() {
@@ -44,6 +48,10 @@ public class NewPitchState {
         return isSuccess;
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
     // Setters
     public void setName(String name) {
         this.name = name;
@@ -71,5 +79,9 @@ public class NewPitchState {
 
     public void setSuccess(boolean isSuccess) {
         this.isSuccess = isSuccess;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

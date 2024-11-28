@@ -23,6 +23,9 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.NewPitchPresenter;
+import interface_adapter.new_pitch.NewPitchViewModel;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
@@ -33,6 +36,9 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.new_pitch.NewPitchInputBoundary;
+import use_case.new_pitch.NewPitchInteractor;
+import use_case.new_pitch.NewPitchOutputBoundary;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
@@ -48,6 +54,7 @@ import use_case.signup.SignupOutputBoundary;
 import view.AccountSettingsView;
 import view.DashboardView;
 import view.LoginView;
+import view.NewPitchView;
 import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
@@ -84,6 +91,8 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
     private PitchView pitchView;
+    private NewPitchViewModel newPitchViewModel;
+    private NewPitchView newPitchView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -141,6 +150,17 @@ public class AppBuilder {
         pitchViewModel = new PitchViewModel();
         pitchView = new PitchView(pitchViewModel);
         cardPanel.add(pitchView, pitchView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the New Pitch View to the application.
+     * @return this builder
+     */
+    public AppBuilder addNewPitchView() {
+        newPitchViewModel = new NewPitchViewModel();
+        newPitchView = new NewPitchView(newPitchViewModel);
+        cardPanel.add(newPitchView, newPitchView.getViewName());
         return this;
     }
 
@@ -255,6 +275,22 @@ public class AppBuilder {
         final DashboardController dashboardController = new DashboardController(
                 dashboardInteractor);
         dashboardView.setDashboardController(dashboardController);
+        return this;
+    }
+
+    /**
+     * Adds the new pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addNewPitchUseCase() {
+        final NewPitchOutputBoundary newPitchOutputBoundary = new NewPitchPresenter(
+                newPitchViewModel, dashboardViewModel, viewManagerModel);
+        final NewPitchInputBoundary newPitchInteractor = new NewPitchInteractor(
+                userDataAccessObject, newPitchOutputBoundary);
+
+        final NewPitchController newPitchController = new NewPitchController(
+                newPitchInteractor);
+        dashboardView.setNewPitchController(newPitchController);
         return this;
     }
 

@@ -6,14 +6,14 @@ import java.util.List;
  * Input data for the Create Pitch use case.
  * Contains the necessary information to create a pitch.
  */
-public class NewPitchInputData {
+public class CreateNewPitchInputData {
 
     private final String name;
     private final String description;
     private final String image;
     private final List<String> targetAudienceList;
 
-    public NewPitchInputData(String name, String description, String image, List<String> targetAudienceList) {
+    public CreateNewPitchInputData(String name, String description, String image, List<String> targetAudienceList) {
         this.name = name;
         this.description = description;
         this.image = image;

@@ -1,4 +1,4 @@
-package use_case.create_pitch;
+package use_case.new_pitch;
 
 /**
  * Input boundary for the Create Pitch use case.
@@ -7,7 +7,7 @@ package use_case.create_pitch;
 public interface NewPitchInputBoundary {
 
     /**
-     * Executes the Create Pitch use case with the given input data.
+     * Executes the New Pitch use case with the given input data.
      * @param inputData the data needed to create the pitch.
      */
     void execute(NewPitchInputData inputData);

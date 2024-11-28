@@ -20,7 +20,4 @@ public class NewPitchViewModel extends ViewModel<NewPitchState> {
         setState(state);
     }
 
-    public void savePitch(String name, String description, String targetAudience, String image) {
-        // Todo implement this
-    }
 }

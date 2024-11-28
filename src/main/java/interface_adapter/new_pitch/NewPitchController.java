@@ -1,33 +1,26 @@
 package interface_adapter.new_pitch;
 
-import use_case.create_pitch.NewPitchInputBoundary;
-import use_case.create_pitch.NewPitchInputData;
+import use_case.new_pitch.NewPitchInputBoundary;
+import use_case.new_pitch.NewPitchInputData;
 
 import java.util.List;
 
 public class NewPitchController {
 
     private final NewPitchInputBoundary newPitchUseCaseInteractor;
-    private final NewPitchPresenter newPitchPresenter;
 
-    public NewPitchController(NewPitchInputBoundary newPitchUseCaseInteractor, NewPitchPresenter newPitchPresenter) {
+    public NewPitchController(NewPitchInputBoundary newPitchUseCaseInteractor) {
         this.newPitchUseCaseInteractor = newPitchUseCaseInteractor;
-        this.newPitchPresenter = newPitchPresenter;
     }
 
     /**
      * Executes the Create New Pitch Use Case.
      *
-     * @param name           the name of the pitch
-     * @param description    the description of the pitch
-     * @param image          the image URL/path associated with the pitch
-     * @param targetAudience the list of target audiences for the pitch
+     * @param username is the current username
      */
-    public void execute(String name, String description, String image, List<String> targetAudience) {
+    public void execute(String username) {
         // Creating an input data object for the use case
-        final NewPitchInputData newPitchInputData = new NewPitchInputData(
-                name, description, image, targetAudience
-        );
+        final NewPitchInputData newPitchInputData = new NewPitchInputData(username);
 
         // Execute the use case to create the pitch
         newPitchUseCaseInteractor.execute(newPitchInputData);
