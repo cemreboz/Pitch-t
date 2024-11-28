@@ -1,5 +1,6 @@
 package use_case.create_pitch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entity.DBUser;
@@ -38,23 +39,21 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         if (createNewPitchInputData.getDescription().isEmpty()) {
             userPresenter.prepareFailView("Pitch description cannot be empty");
         }
-        List<String> targetAudienceList = createNewPitchInputData.getTargetAudienceList();
-        if (targetAudienceList == null || targetAudienceList.isEmpty()) {
-            try {
-                final Pitch tempPitch = new Pitch(
-                        null,
-                        createNewPitchInputData.getName(),
-                        null,
-                        createNewPitchInputData.getDescription(),
-                        null
-                );
-                final String generatedAudience = targetAudienceController.execute(tempPitch);
-                targetAudienceList = List.of(generatedAudience.split(";"));
-            }
-            catch (Exception exception) {
-                userPresenter.prepareFailView("Failed to generate target audience: "
-                                              + exception.getMessage());
-            }
+        List<String> targetAudienceList = new ArrayList<>();
+        try {
+            final Pitch tempPitch = new Pitch(
+                    null,
+                    createNewPitchInputData.getName(),
+                    null,
+                    createNewPitchInputData.getDescription(),
+                    null
+            );
+            final String generatedAudience = targetAudienceController.execute(tempPitch);
+            targetAudienceList = List.of(generatedAudience.split(";"));
+        }
+        catch (Exception exception) {
+            userPresenter.prepareFailView("Failed to generate target audience: "
+                                          + exception.getMessage());
         }
 
         // Image is nice but not mandatory.

@@ -1,7 +1,5 @@
 package use_case.create_pitch;
 
-import java.util.List;
-
 /**
  * Input data for the Create Pitch use case.
  * Contains the necessary information to create a pitch.
@@ -30,7 +28,4 @@ public class CreateNewPitchInputData {
         return image;
     }
 
-    public List<String> getTargetAudienceList() {
-        return targetAudienceList;
-    }
 }
