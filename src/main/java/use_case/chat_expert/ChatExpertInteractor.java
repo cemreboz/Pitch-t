@@ -47,6 +47,9 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
         final String expertResponse = simulateExpertResponse(
                 inputData.getUserMessage(), expert);
 
+        // TODO This needs to load the chat history from the DAO currentUser object,
+        //  experts stores with id 1 2 3 4 and chat histories string arrays
+
         // Update chat history
         expert.addChatMessage("User: " + inputData.getUserMessage());
         expert.addChatMessage("Expert: " + expertResponse);
