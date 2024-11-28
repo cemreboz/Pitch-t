@@ -45,7 +45,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
         // JSON request body with system and user messages
         final String body = """ 
             {
-                "model": "gpt-4",
+                "model": "gpt-4-turbo",
                 "messages": [
                     {
                         "role": "system",
