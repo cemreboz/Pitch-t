@@ -20,7 +20,6 @@ public class NewPitchInteractor implements NewPitchInputBoundary {
     @Override
     public void execute(NewPitchInputData inputData) {
         final User currentUser = userDataAccessObject.getCurrentUser();
-        System.out.println(currentUser.getName());
         final NewPitchOutputData newPitchOutputData = new NewPitchOutputData(false, currentUser);
         newPitchPresenter.prepareSuccessView(newPitchOutputData);
     }
