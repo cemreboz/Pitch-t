@@ -180,7 +180,7 @@ public class AppBuilder {
     public AppBuilder addExpertChatView() {
         expertViewModel = new ExpertViewModel();
         expertChatView = new ExpertChatView(expertViewModel, viewManagerModel);
-        cardPanel.add(expertChatView, "ExpertChatView");
+        cardPanel.add(expertChatView, expertChatView.getViewName());
 
         return this;
     }

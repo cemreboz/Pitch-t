@@ -24,6 +24,7 @@ import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
 
@@ -46,7 +47,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private DashboardController dashboardController;
     private NewPitchController newPitchController;
-    // private ExpertController expertController;
+    private ExpertController expertController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
@@ -119,7 +120,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         );
 
         experts.addActionListener(event -> {
-            // Experts controller
+            expertController.execute();
         });
 
         return buttons;
@@ -157,11 +158,14 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         this.newPitchController = newPitchController;
     }
 
-    /*
+    /**
+     * Method to set the expert controller.
+     * @param expertController expert controller
+     */
     public void setExpertController(ExpertController expertController) {
         this.expertController = expertController;
     }
-    */
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
@@ -174,7 +178,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             }
         }
     }
-
 
     private void updatePitchHistory(List<Pitch> pitches) {
         pitchHistoryPanel.removeAll();

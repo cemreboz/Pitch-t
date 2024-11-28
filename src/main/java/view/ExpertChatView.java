@@ -165,4 +165,8 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
     public void setChatExpertController(ChatExpertController chatExpertController) {
         this.chatExpertController = chatExpertController;
     }
+
+    public String getViewName() {
+        return viewName;
+    }
 }
