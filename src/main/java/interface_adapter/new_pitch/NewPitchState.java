@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.DBUser;
+import entity.Pitch;
 import entity.User;
+import use_case.set_targetaudience.TargetAudienceInteractor;
 
 /**
  * The state for the New Pitch View Model.
  */
 public class NewPitchState {
+    private final TargetAudienceInteractor targetAudienceInteractor;
     private User currentUser = new DBUser("", "");
     private String name = "";
     private String description = "";
@@ -18,6 +21,10 @@ public class NewPitchState {
     private String errorMessage;
     private boolean isLoading;
     private boolean isSuccess;
+
+    public NewPitchState(TargetAudienceInteractor targetAudienceInteractor) {
+        this.targetAudienceInteractor = targetAudienceInteractor;
+    }
 
     // Getters
     public String getName() {
@@ -65,8 +72,34 @@ public class NewPitchState {
         this.image = image;
     }
 
-    public void setTargetAudience(List<String> targetAudience) {
-        this.targetAudience = targetAudience;
+    /**
+     * Sets the TargetAudience using the interactor.
+     * @throws IllegalArgumentException if the Pitch is empty.
+     */
+    public void setTargetAudience() {
+        if (description.isEmpty() || name.isEmpty()) {
+            throw new IllegalArgumentException("Pitch name and description cannot be empty when generating target audience.");
+        }
+
+        try {
+            final Pitch pitch = new Pitch(
+                    "temp-id",
+                    name,
+                    image,
+                    description,
+                    targetAudience
+            );
+
+            // Generate target audience using the interactor
+            final String generatedAudience = targetAudienceInteractor.generateTargetAudience(pitch);
+
+            // Convert generated audience into a list and set it
+            this.targetAudience = List.of(generatedAudience.split(";"));
+        }
+        catch (Exception exception) {
+            // Handle errors in generation
+            this.errorMessage = "Failed to generate target audience: " + exception.getMessage();
+        }
     }
 
     public void setErrorMessage(String errorMessage) {

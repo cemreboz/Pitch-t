@@ -30,6 +30,7 @@ public class NewPitchPresenter implements NewPitchOutputBoundary {
         // Update the ViewModel to reflect changes in the state
         newPitchViewModel.setState(state);
         newPitchViewModel.firePropertyChanged();
+        state.setTargetAudience(outputData.getPitch().getTargetAudience());
 
         viewManagerModel.setState(newPitchViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
