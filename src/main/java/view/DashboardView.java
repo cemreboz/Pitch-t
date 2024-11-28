@@ -114,7 +114,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         final DashboardState state = dashboardViewModel.getState();
-                        newPitchController.execute(state.getUsername());
+                        newPitchController.execute(state.getUsername(), state.getPassword());
                     }
                 }
         );
@@ -161,6 +161,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(NewPitchController newPitchController) {
         this.newPitchController = newPitchController;
+        hamburgerMenu.setNewPitchController(newPitchController);
     }
 
     /**
@@ -169,6 +170,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
      */
     public void setExpertController(ExpertController expertController) {
         this.expertController = expertController;
+        hamburgerMenu.setExpertController(expertController);
     }
 
     @Override

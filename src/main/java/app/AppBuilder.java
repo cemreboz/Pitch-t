@@ -324,6 +324,9 @@ public class AppBuilder {
         final NewPitchController newPitchController = new NewPitchController(
                 newPitchInteractor);
         dashboardView.setNewPitchController(newPitchController);
+        accountSettingsView.setNewPitchController(newPitchController);
+        pitchView.setNewPitchController(newPitchController);
+        expertChatView.setNewPitchController(newPitchController);
         return this;
     }
 
@@ -344,7 +347,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the expert view use case.
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu..
      * @return this builder
      */
     public AppBuilder addExpertUseCase() {
@@ -356,6 +359,9 @@ public class AppBuilder {
         final ExpertController expertController = new ExpertController(
                 expertInteractor);
         dashboardView.setExpertController(expertController);
+        accountSettingsView.setExpertController(expertController);
+        pitchView.setExpertController(expertController);
+        expertChatView.setExpertController(expertController);
         return this;
     }
 

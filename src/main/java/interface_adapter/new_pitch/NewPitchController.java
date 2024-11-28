@@ -17,10 +17,11 @@ public class NewPitchController {
      * Executes the Create New Pitch Use Case.
      *
      * @param username is the current username
+     * @param password is the current password
      */
-    public void execute(String username) {
+    public void execute(String username, String password) {
         // Creating an input data object for the use case
-        final NewPitchInputData newPitchInputData = new NewPitchInputData(username);
+        final NewPitchInputData newPitchInputData = new NewPitchInputData(username, password);
 
         // Execute the use case to create the pitch
         newPitchUseCaseInteractor.execute(newPitchInputData);
