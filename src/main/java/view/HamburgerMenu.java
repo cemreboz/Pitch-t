@@ -107,6 +107,10 @@ public class HamburgerMenu extends JPanel {
                     final PitchState currentState = (PitchState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(accountSettingsItem, "error");
                 }

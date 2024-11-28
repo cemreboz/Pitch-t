@@ -1,9 +1,11 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.expert.ExpertState;
 import interface_adapter.expert.ExpertViewModel;
+import interface_adapter.login.LoginController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -168,5 +170,21 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     public String getViewName() {
         return viewName;
+    }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
 }

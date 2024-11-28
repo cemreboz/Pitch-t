@@ -37,6 +37,9 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
         final Expert expert = expertRepository.getExpertById(
                 inputData.getExpertId());
 
+        // TODO This currently loads any chat histories associated with use.
+        // Load chat histories and put into the view first by using Expert getChatHistory method
+
         if (expert == null) {
             // Handle expert not found scenario
             // For now, we can throw an exception or handle it gracefully
@@ -46,9 +49,6 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
         // Simulate expert response (to be replaced with GPT-4 API call)
         final String expertResponse = simulateExpertResponse(
                 inputData.getUserMessage(), expert);
-
-        // TODO This needs to load the chat history from the DAO currentUser object,
-        //  experts stores with id 1 2 3 4 and chat histories string arrays
 
         // Update chat history
         expert.addChatMessage("User: " + inputData.getUserMessage());

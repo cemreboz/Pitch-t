@@ -272,6 +272,7 @@ public class AppBuilder {
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
+        expertChatView.setLoginController(loginController);
         return this;
     }
 
@@ -290,6 +291,7 @@ public class AppBuilder {
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
+        expertChatView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
