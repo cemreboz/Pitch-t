@@ -24,6 +24,7 @@ import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.NewPitchController;
 
 /**
  * The view for when the user is logged in and at the dashboard page.
@@ -43,7 +44,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
 
     private DashboardController dashboardController;
-    // private NewPitchController newPitchController;
+    private NewPitchController newPitchController;
     // private ExpertController expertController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
@@ -110,7 +111,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         newPitch.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        JOptionPane.showMessageDialog(newPitch, "go to new pitch");
+                        final DashboardState state = dashboardViewModel.getState();
+                        newPitchController.execute(state.getUsername());
                     }
                 }
         );
@@ -149,11 +151,16 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
-    /*
+
+    /**
+     * Method to set the new pitch view controller.
+     * @param newPitchController new pitch controller
+     */
     public void setNewPitchController(NewPitchController newPitchController) {
         this.newPitchController = newPitchController;
     }
 
+    /*
     public void setExpertController(ExpertController expertController) {
         this.expertController = expertController;
     }

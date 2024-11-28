@@ -18,6 +18,7 @@ public class Main {
                                             .addAccountSettingsView()
                                             .addDashboardView()
                                             .addPitchView()
+                                            .addNewPitchView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()
@@ -25,6 +26,8 @@ public class Main {
                                             .addDashboardUseCase()
                                             .addAccountSettingsUseCase()
                                             .addPitchUseCase()
+                                            .addNewPitchUseCase()
+                                            .addCreateNewPitchUseCase()
                                             .build();
 
         application.pack();
