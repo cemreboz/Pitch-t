@@ -34,7 +34,6 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
     private HamburgerMenu hamburgerMenu;
-    private final ViewManagerModel viewManagerModel;
 
     private JButton newPitch;
     private JButton experts;
@@ -50,11 +49,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
-    public DashboardView(DashboardViewModel dashboardViewModel, ViewManagerModel viewManagerModel) {
+    public DashboardView(DashboardViewModel dashboardViewModel) {
 
         this.dashboardViewModel = dashboardViewModel;
         this.dashboardViewModel.addPropertyChangeListener(this);
-        this.viewManagerModel = viewManagerModel;
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
@@ -119,8 +117,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         );
 
         experts.addActionListener(event -> {
-            viewManagerModel.setState("ExpertChatView");
-            viewManagerModel.firePropertyChanged();
+            // Experts controller
         });
 
         return buttons;
