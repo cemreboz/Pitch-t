@@ -17,6 +17,7 @@ public class LogoutInteractor implements LogoutInputBoundary {
     public void execute(LogoutInputData logoutInputData) {
         final String username = logoutInputData.getUsername();
         System.out.println("Executing save before log out...");
+        userDataAccessObject.save(userDataAccessObject.getCurrentUser());
         userDataAccessObject.setCurrentUsername(null);
         userDataAccessObject.setCurrentUser(null);
         final LogoutOutputData outputData = new LogoutOutputData(username, false);
