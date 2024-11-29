@@ -22,8 +22,8 @@ public class NewPitchState {
     private boolean isLoading;
     private boolean isSuccess;
 
-    public NewPitchState(TargetAudienceInteractor targetAudienceInteractor) {
-        this.targetAudienceInteractor = targetAudienceInteractor;
+    public NewPitchState() {
+        this.targetAudienceInteractor = null;
     }
 
     // Getters

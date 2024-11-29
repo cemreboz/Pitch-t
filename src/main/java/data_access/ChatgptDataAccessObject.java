@@ -19,8 +19,8 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
-    private ChatgptDataAccessObject() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    public ChatgptDataAccessObject() {
+
     }
 
     /**

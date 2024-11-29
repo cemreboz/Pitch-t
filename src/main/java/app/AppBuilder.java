@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.ChatgptDataAccessObject;
+import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -32,6 +34,7 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.targetaudience.TargetAudienceController;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -53,6 +56,7 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.set_targetaudience.TargetAudienceInteractor;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -306,8 +310,16 @@ public class AppBuilder {
     public AppBuilder addCreateNewPitchUseCase() {
         final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
                 newPitchViewModel, pitchViewModel, viewManagerModel);
+
+        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final TargetAudienceInteractor targetAudienceInteractor = new TargetAudienceInteractor(chatgptDataAccessObject);
+
+        final TargetAudienceController targetAudienceController = new TargetAudienceController(
+                targetAudienceInteractor);
+
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
-                userDataAccessObject, createNewPitchOutputBoundary);
+                userDataAccessObject, createNewPitchOutputBoundary, targetAudienceController);
 
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
