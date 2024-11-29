@@ -1,5 +1,6 @@
 package view;
 
+import entity.ChatMessage;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.chat_expert.ChatExpertController;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Unified view for selecting an expert and chatting.
@@ -30,6 +32,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
     private final JLabel headerAvatarLabel;
     private final JTextArea chatArea;
     private final JTextField messageInput;
+    private String selectedExpertId;
 
     private JButton selectedButton;
 
@@ -81,6 +84,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             selectButton.addActionListener(event -> {
                 headerNameLabel.setText(name);
                 headerAvatarLabel.setIcon(loadAvatar(expert[3]));
+                selectedExpertId = expertId;
                 chatExpertController.startChat(expertId, "Hi! I'd like to discuss my idea.");
                 updateChatArea();
             });
@@ -104,12 +108,18 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         messageInput = new JTextField();
         final JButton sendButton = new JButton("Send");
 
-        sendButton.addActionListener(e -> {
+        sendButton.addActionListener(event -> {
             final String userMessage = messageInput.getText().trim();
             if (!userMessage.isEmpty()) {
-                chatExpertController.startChat(headerNameLabel.getText(), userMessage);
-                updateChatArea();
-                messageInput.setText("");
+                if (selectedExpertId != null) {
+                    chatExpertController.startChat(selectedExpertId, userMessage);
+                    updateChatArea();
+                    messageInput.setText("");
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
+                            "No Expert Selected", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 
@@ -153,8 +163,22 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      */
     private void updateChatArea() {
         final StringBuilder chatContent = new StringBuilder();
-        for (String message : expertViewModel.getState().getChatHistory()) {
-            chatContent.append(message).append("\n");
+        for (ChatMessage message : expertViewModel.getState().getChatHistory()) {
+            final String sender;
+            if ("user".equals(message.getRole())) {
+                sender = "You";
+            }
+            else if ("assistant".equals(message.getRole())) {
+                sender = headerNameLabel.getText();
+            }
+            else {
+                sender = "System";
+            }
+            final String time = message.getTimestamp().format(DateTimeFormatter.ofPattern("hh:mm a"));
+            chatContent.append(sender)
+                    .append(" [").append(time).append("]: ")
+                    .append(message.getContent())
+                    .append("\n");
         }
         chatArea.setText(chatContent.toString());
     }

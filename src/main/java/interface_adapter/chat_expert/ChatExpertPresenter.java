@@ -20,6 +20,7 @@ public class ChatExpertPresenter implements ChatExpertOutputBoundary {
      * Constructs a ChatExpertPresenter object.
      *
      * @param viewModel The view model to update with output data.
+     * @param viewManagerModel all good.
      */
     public ChatExpertPresenter(ExpertViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;

@@ -11,7 +11,7 @@ public class Expert {
     private String name;
     private String description;
     private String avatar;
-    private List<String> chatHistory;
+    private List<ChatMessage> chatHistory;
 
     /**
      * Constructs an expert with only an ID.
@@ -128,11 +128,11 @@ public class Expert {
         this.description = description;
     }
 
-    public List<String> getChatHistory() {
+    public List<ChatMessage> getChatHistory() {
         return chatHistory;
     }
 
-    public void setChatHistory(List<String> chatHistory) {
+    public void setChatHistory(List<ChatMessage> chatHistory) {
         this.chatHistory = chatHistory;
     }
 
@@ -141,7 +141,7 @@ public class Expert {
      *
      * @param message The message to be added.
      */
-    public void addChatMessage(String message) {
+    public void addChatMessage(ChatMessage message) {
         this.chatHistory.add(message);
     }
 

@@ -1,7 +1,11 @@
 package use_case.chat_expert;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import data_access.DetailedDataAccessObjectInterface;
+import entity.ChatMessage;
+import entity.DetailedTargetAudience;
 import entity.Expert;
 
 /**
@@ -11,18 +15,21 @@ import entity.Expert;
 public class ChatExpertInteractor implements ChatExpertInputBoundary {
 
     private final ChatExpertDataAccessInterface expertRepository;
+    private final DetailedDataAccessObjectInterface chatgptDataAccessObject;
     private final ChatExpertOutputBoundary outputBoundary;
 
     /**
      * Constructs a ChatExpertInteractor object.
      *
      * @param expertRepository The data access interface for experts.
+     * @param chatgptDataAccessObject  the DAO for the api.
      * @param outputBoundary   The output boundary interface.
      */
     public ChatExpertInteractor(
-            ChatExpertDataAccessInterface expertRepository,
+            ChatExpertDataAccessInterface expertRepository, DetailedDataAccessObjectInterface chatgptDataAccessObject,
             ChatExpertOutputBoundary outputBoundary) {
         this.expertRepository = expertRepository;
+        this.chatgptDataAccessObject = chatgptDataAccessObject;
         this.outputBoundary = outputBoundary;
     }
 
@@ -34,44 +41,52 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
      */
     @Override
     public void initiateChat(ChatExpertInputData inputData) {
-        final Expert expert = expertRepository.getExpertById(
-                inputData.getExpertId());
-
-        // TODO This currently loads any chat histories associated with use.
-        // Load chat histories and put into the view first by using Expert getChatHistory method
+        final Expert expert = expertRepository.getExpertById(inputData.getExpertId());
 
         if (expert == null) {
-            // Handle expert not found scenario
-            // For now, we can throw an exception or handle it gracefully
             throw new IllegalArgumentException("Expert not found.");
         }
 
-        // Simulate expert response (to be replaced with GPT-4 API call)
-        final String expertResponse = simulateExpertResponse(
-                inputData.getUserMessage(), expert);
+        // Add user's message to chat history
+        final ChatMessage userMessage = new ChatMessage("user", inputData.getUserMessage());
+        expert.addChatMessage(userMessage);
 
-        // Update chat history
-        expert.addChatMessage("User: " + inputData.getUserMessage());
-        expert.addChatMessage("Expert: " + expertResponse);
+        // Prepare messages for API call
+        final List<ChatMessage> messagesForApi = new ArrayList<>();
+
+        // Add system message (expert's description)
+        messagesForApi.add(new ChatMessage("system", expert.getDescription()));
+
+        // Add previous conversation messages
+        List<ChatMessage> chatHistory = expert.getChatHistory();
+
+        // Limit the number of messages (e.g., last 10 messages)
+        final int maxMessages = 10;
+        final int startIndex = Math.max(chatHistory.size() - maxMessages, 0);
+        for (int i = startIndex; i < chatHistory.size(); i++) {
+            messagesForApi.add(chatHistory.get(i));
+        }
+
+        // Call the GPT API to get expert's response
+        String expertResponse;
+        try {
+            expertResponse = chatgptDataAccessObject.utilizeApi(messagesForApi);
+        }
+        catch (Exception event) {
+            expertResponse = "I'm sorry, but I'm having trouble responding right now.";
+            event.printStackTrace();
+        }
+
+        // Add expert's response to chat history
+        final ChatMessage assistantMessage = new ChatMessage("assistant", expertResponse);
+        expert.addChatMessage(assistantMessage);
 
         // Prepare output data
-        final List<String> chatHistory = expert.getChatHistory();
-        final ChatExpertOutputData outputData = new ChatExpertOutputData(
-                expertResponse, chatHistory);
+        chatHistory = expert.getChatHistory();
+        final ChatExpertOutputData outputData = new ChatExpertOutputData(expertResponse, chatHistory);
 
         // Present the data
         outputBoundary.presentChat(outputData);
     }
 
-    /**
-     * Simulates an expert's response to the user's message.
-     *
-     * @param userMessage The user's message.
-     * @param expert      The expert entity.
-     * @return A simulated response from the expert.
-     */
-    private String simulateExpertResponse(String userMessage, Expert expert) {
-        // Placeholder for actual AI response
-        return "Thank you for sharing your idea. Let's discuss it further!";
-    }
 }

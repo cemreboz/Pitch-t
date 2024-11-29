@@ -1,5 +1,7 @@
 package use_case.chat_expert;
 
+import entity.ChatMessage;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
 public class ChatExpertOutputData {
 
     private final String expertResponse;
-    private final List<String> chatHistory;
+    private final List<ChatMessage> chatHistory;
 
     /**
      * Constructs a ChatExpertOutputData object.
@@ -18,7 +20,7 @@ public class ChatExpertOutputData {
      * @param chatHistory    The updated chat history.
      */
     public ChatExpertOutputData(String expertResponse,
-                                List<String> chatHistory) {
+                                List<ChatMessage> chatHistory) {
         this.expertResponse = expertResponse;
         this.chatHistory = chatHistory;
     }
@@ -37,7 +39,7 @@ public class ChatExpertOutputData {
      *
      * @return The chat history.
      */
-    public List<String> getChatHistory() {
+    public List<ChatMessage> getChatHistory() {
         return chatHistory;
     }
 }

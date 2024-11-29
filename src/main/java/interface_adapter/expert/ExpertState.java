@@ -1,5 +1,7 @@
 package interface_adapter.expert;
 
+import entity.ChatMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class ExpertState {
     private String username = "";
     private String password = "";
     private String expertResponse = "";
-    private List<String> chatHistory = new ArrayList<>();
+    private List<ChatMessage> chatHistory = new ArrayList<>();
     private List<String[]> experts = List.of(
             new String[]{"1", "Mark Cuban", "Mark Cuban is a billionaire entrepreneur and Dallas "
                     + "Mavericks owner known for his bold style on Shark Tank. After selling "
@@ -64,7 +66,7 @@ public class ExpertState {
      *
      * @return The chat history.
      */
-    public List<String> getChatHistory() {
+    public List<ChatMessage> getChatHistory() {
         return chatHistory;
     }
 
@@ -73,7 +75,7 @@ public class ExpertState {
      *
      * @param chatHistory The updated chat history.
      */
-    public void setChatHistory(List<String> chatHistory) {
+    public void setChatHistory(List<ChatMessage> chatHistory) {
         this.chatHistory = chatHistory;
     }
 
