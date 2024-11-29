@@ -19,7 +19,7 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
         // Successfully generated image, update the ViewModel
         viewModel.setImagePath(outputData.getImagePath());
         viewModel.setErrorMessage(null);
-        viewModel.notifyView();
+        viewModel.notifyListeners();
     }
 
     @Override
@@ -27,6 +27,6 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
         // Error occurred while generating the image
         viewModel.setImagePath(null);
         viewModel.setErrorMessage(errorMessage);
-        viewModel.notifyView();
+        viewModel.notifyListeners();
     }
 }

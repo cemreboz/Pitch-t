@@ -16,19 +16,21 @@ public class VisionController {
     /**
      * Generate image method.
      */
-    public void generateImage(String pitchName, String personaName, javax.swing.JLabel adLabel) {
-        final String prompt = "Generate an advertisement for the pitch '" + pitchName + "' based on persona '" + personaName + "'.";
+    public void generateImage(String pitchName, String personaName) {
+        final String prompt = "Generate an advertisement for the pitch '" + pitchName + "' based on persona '"
+                + personaName + "'.";
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, personaName, pitchName);
 
+        // Execute the use case
         generateVisualInteractor.execute(inputData);
     }
 
     /**
      * Regenerate image method.
      */
-    public void regenerateImage(String pitchName, String personaName, javax.swing.JLabel adLabel) {
+    public void regenerateImage(String pitchName, String personaName) {
         // Simply call generateImage with the same inputs
-        generateImage(pitchName, personaName, adLabel);
+        generateImage(pitchName, personaName);
     }
 
 }
