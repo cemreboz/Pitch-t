@@ -15,8 +15,13 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.chat_expert.ChatExpertController;
+import interface_adapter.chat_expert.ChatExpertPresenter;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertPresenter;
+import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -38,9 +43,15 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.chat_expert.ChatExpertInputBoundary;
+import use_case.chat_expert.ChatExpertInteractor;
+import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
 import use_case.new_pitch.NewPitchInputBoundary;
 import use_case.new_pitch.NewPitchInteractor;
 import use_case.new_pitch.NewPitchOutputBoundary;
@@ -58,6 +69,7 @@ import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
 import view.AccountSettingsView;
 import view.DashboardView;
+import view.ExpertChatView;
 import view.LoginView;
 import view.NewPitchView;
 import view.PitchView;
@@ -98,6 +110,8 @@ public class AppBuilder {
     private PitchView pitchView;
     private NewPitchViewModel newPitchViewModel;
     private NewPitchView newPitchView;
+    private ExpertChatView expertChatView;
+    private ExpertViewModel expertViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -166,6 +180,18 @@ public class AppBuilder {
         newPitchViewModel = new NewPitchViewModel();
         newPitchView = new NewPitchView(newPitchViewModel);
         cardPanel.add(newPitchView, newPitchView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the expert chat view to the application.
+     * @return this builder
+     */
+    public AppBuilder addExpertChatView() {
+        expertViewModel = new ExpertViewModel();
+        expertChatView = new ExpertChatView(expertViewModel, viewManagerModel);
+        cardPanel.add(expertChatView, expertChatView.getViewName());
+
         return this;
     }
 
@@ -246,6 +272,7 @@ public class AppBuilder {
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
+        expertChatView.setLoginController(loginController);
         return this;
     }
 
@@ -264,6 +291,7 @@ public class AppBuilder {
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
+        expertChatView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -296,6 +324,9 @@ public class AppBuilder {
         final NewPitchController newPitchController = new NewPitchController(
                 newPitchInteractor);
         dashboardView.setNewPitchController(newPitchController);
+        accountSettingsView.setNewPitchController(newPitchController);
+        pitchView.setNewPitchController(newPitchController);
+        expertChatView.setNewPitchController(newPitchController);
         return this;
     }
 
@@ -312,6 +343,41 @@ public class AppBuilder {
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
         newPitchView.setCreateNewPitchController(createNewPitchController);
+        return this;
+    }
+
+    /**
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu..
+     * @return this builder
+     */
+    public AppBuilder addExpertUseCase() {
+        final ExpertOutputBoundary expertOutputBoundary = new ExpertPresenter(
+                expertViewModel, viewManagerModel);
+        final ExpertInputBoundary expertInteractor = new ExpertInteractor(
+                userDataAccessObject, expertOutputBoundary);
+
+        final ExpertController expertController = new ExpertController(
+                expertInteractor);
+        dashboardView.setExpertController(expertController);
+        accountSettingsView.setExpertController(expertController);
+        pitchView.setExpertController(expertController);
+        expertChatView.setExpertController(expertController);
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual expert use case.
+     * @return this builder
+     */
+    public AppBuilder addChatExpertUseCase() {
+        final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
+                expertViewModel, viewManagerModel);
+        final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
+                userDataAccessObject, chatExpertOutputBoundary);
+
+        final ChatExpertController chatExpertController = new ChatExpertController(
+                chatExpertInteractor);
+        expertChatView.setChatExpertController(chatExpertController);
         return this;
     }
 
