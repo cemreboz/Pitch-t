@@ -60,6 +60,10 @@ public class PitchState {
         this.targetaudience = targetAudience;
     }
 
+    public List<String> getTargetAudience() {
+        return targetaudience;
+    }
+
     /**
      * To determine whether the target audience is loading.
      * @param loading return whether it's loading or not.

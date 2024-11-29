@@ -48,7 +48,7 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
                     createNewPitchInputData.getDescription(),
                     null
             );
-            final String generatedAudience = targetAudienceController.execute(tempPitch);
+            final String generatedAudience = targetAudienceController.fetchAndUpdateTargetAudience(tempPitch);
             targetAudienceList = List.of(generatedAudience.split(";"));
         }
         catch (Exception exception) {

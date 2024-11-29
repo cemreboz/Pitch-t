@@ -35,6 +35,7 @@ import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.targetaudience.TargetAudienceController;
+import interface_adapter.targetaudience.TargetAudiencePresenter;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -315,8 +316,11 @@ public class AppBuilder {
 
         final TargetAudienceInteractor targetAudienceInteractor = new TargetAudienceInteractor(chatgptDataAccessObject);
 
-        final TargetAudienceController targetAudienceController = new TargetAudienceController(
+        final TargetAudiencePresenter targetAudiencePresenter = new TargetAudiencePresenter(pitchViewModel,
                 targetAudienceInteractor);
+
+        final TargetAudienceController targetAudienceController = new TargetAudienceController(
+                targetAudiencePresenter);
 
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary, targetAudienceController);

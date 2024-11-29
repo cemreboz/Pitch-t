@@ -20,9 +20,8 @@ public class TargetAudiencePresenter {
     }
 
     /**
-     * Fetches the target audience for a given pitch and updates the PitchViewModel.
-     *
-     * @param pitch The pitch for which to generate the target audience.
+     * Method for getting the Target Audience.
+     * @param pitch the pitch itself.
      */
     public void fetchTargetAudience(Pitch pitch) {
         final PitchState pitchState = viewModel.getState();
@@ -31,7 +30,6 @@ public class TargetAudiencePresenter {
         try {
             final String targetAudienceResponse = interactor.generateTargetAudience(pitch);
             final List<String> targetAudience = List.of(targetAudienceResponse.split(";"));
-
             pitchState.setTargetAudience(targetAudience);
         }
         catch (Exception exception) {
