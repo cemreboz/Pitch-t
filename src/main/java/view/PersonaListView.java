@@ -3,8 +3,9 @@ package view;
 import entity.Persona;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
+import use_case.compare_personas.ComparePersonasInputData;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -67,6 +68,6 @@ public class PersonaListView extends JPanel {
 
         // Trigger comparison
         ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas[0], selectedPersonas[1]);
-        compareController.execute(inputData);
+        compareController.compare(inputData);
     }
 }

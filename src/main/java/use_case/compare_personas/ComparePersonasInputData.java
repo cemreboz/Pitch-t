@@ -1,8 +1,9 @@
 package use_case.compare_personas;
 
-import entity.Persona;
 import java.util.Arrays;
 import java.util.List;
+
+import entity.Persona;
 
 /**
  * The Input Data for the Compare Personas Use Case.
