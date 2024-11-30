@@ -1,6 +1,8 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 /**
  * Represents a chat message with role, content, and timestamp.
@@ -46,5 +48,24 @@ public class ChatMessage {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChatMessage)) return false;
+        ChatMessage that = (ChatMessage) o;
+        return Objects.equals(role, that.role) &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(truncateTimestamp(timestamp), truncateTimestamp(that.timestamp));
+    }
+
+    private LocalDateTime truncateTimestamp(LocalDateTime timestamp) {
+        return timestamp != null ? timestamp.truncatedTo(ChronoUnit.SECONDS) : null;
+    }
+
+    // Override hashCode method
+    @Override
+    public int hashCode() {
+        return Objects.hash(role, content, timestamp);
     }
 }

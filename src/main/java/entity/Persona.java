@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a user persona that can be generated based on target audience analysis.
@@ -142,6 +143,36 @@ public class Persona {
      */
     public void clearChatHistory() {
         this.chatHistory.clear();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Persona persona = (Persona) o;
+
+        return personaID == persona.personaID &&
+                age == persona.age &&
+                Objects.equals(name, persona.name) &&
+                Objects.equals(gender, persona.gender) &&
+                Objects.equals(occupation, persona.occupation) &&
+                Objects.equals(location, persona.location) &&
+                Objects.equals(education, persona.education) &&
+                Objects.equals(salaryRange, persona.salaryRange) &&
+                Objects.equals(about, persona.about) &&
+                Objects.equals(stats, persona.stats) &&
+                Objects.equals(avatar, persona.avatar) &&
+                Objects.equals(interests, persona.interests) &&
+                Objects.equals(chatHistory, persona.chatHistory);
+    }
+
+    // Override hashCode method
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                personaID, name, age, gender, occupation, location, education,
+                salaryRange, about, stats, avatar, interests, chatHistory
+        );
     }
 }
 

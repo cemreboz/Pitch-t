@@ -295,7 +295,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return name;
     }
 
-    private String expertsToJson(List<Expert> experts) {
+    String expertsToJson(List<Expert> experts) {
         final JSONArray expertsArray = new JSONArray();
         for (Expert expert : experts) {
             final JSONObject expertJson = new JSONObject();
@@ -314,19 +314,24 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return expertsArray.toString();
     }
 
-    private List<Expert> expertsFromJson(String expertsJson) {
+    List<Expert> expertsFromJson(String expertsJson) {
         final List<Expert> experts = new ArrayList<>();
         final JSONArray expertsArray = new JSONArray(expertsJson);
 
         for (int i = 0; i < expertsArray.length(); i++) {
             final JSONObject expertJson = expertsArray.getJSONObject(i);
 
+            // Create Expert object
+            final String expertId = expertJson.getString(ID_FIELD);
+            final Expert expert = new Expert(expertId);
+
+            // Parse chatHistory
             final List<ChatMessage> chatHistory = new ArrayList<>();
             final JSONArray chatHistoryArray = expertJson.getJSONArray(CHATHISTORY_FIELD);
             for (int j = 0; j < chatHistoryArray.length(); j++) {
                 final Object chatItem = chatHistoryArray.get(j);
                 if (chatItem instanceof JSONObject) {
-                    // The chat item is a JSONObject, parse it as ChatMessage
+                    // Parse as ChatMessage
                     final JSONObject chatMessageJson = (JSONObject) chatItem;
                     final String role = chatMessageJson.optString("role", "unknown");
                     final String content = chatMessageJson.optString("content", "");
@@ -336,17 +341,23 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                     chatHistory.add(chatMessage);
                 }
                 else if (chatItem instanceof String) {
-                    // The chat item is a String, create ChatMessage with default values
+                    // Create ChatMessage with default values
                     final String content = (String) chatItem;
                     final ChatMessage chatMessage = new ChatMessage("unknown", content, LocalDateTime.now());
                     chatHistory.add(chatMessage);
                 }
             }
+
+            // Set chatHistory to expert
+            expert.setChatHistory(chatHistory);
+
+            // Add expert to the list
+            experts.add(expert);
         }
         return experts;
     }
 
-    private String pitchesToJson(List<Pitch> pitches) {
+    String pitchesToJson(List<Pitch> pitches) {
         final JSONArray pitchesArray = new JSONArray();
         for (Pitch pitch : pitches) {
             final JSONObject pitchJson = new JSONObject();
@@ -369,7 +380,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitchesArray.toString();
     }
 
-    private List<Pitch> pitchesFromJson(String pitchesJson) {
+    List<Pitch> pitchesFromJson(String pitchesJson) {
         final List<Pitch> pitches = new ArrayList<>();
         final JSONArray pitchesArray = new JSONArray(pitchesJson);
 

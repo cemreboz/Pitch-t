@@ -1,9 +1,6 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A pitch of the product.
@@ -57,5 +54,29 @@ public class Pitch {
 
     public void setDetailedTargetAudienceMap(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
         this.detailedTargetAudienceMap = detailedTargetAudienceMap;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pitch pitch = (Pitch) o;
+
+        return Objects.equals(pitchID, pitch.pitchID) &&
+                Objects.equals(name, pitch.name) &&
+                Objects.equals(image, pitch.image) &&
+                Objects.equals(description, pitch.description) &&
+                Objects.equals(targetAudienceList, pitch.targetAudienceList) &&
+                Objects.equals(personas, pitch.personas) &&
+                Objects.equals(detailedTargetAudienceMap, pitch.detailedTargetAudienceMap);
+    }
+
+    // Override hashCode method
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                pitchID, name, image, description,
+                targetAudienceList, personas, detailedTargetAudienceMap
+        );
     }
 }

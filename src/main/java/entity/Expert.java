@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents an expert with an ID and a chat history.
@@ -150,5 +151,21 @@ public class Expert {
      */
     public void clearChatHistory() {
         this.chatHistory.clear();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Expert expert = (Expert) o;
+
+        return Objects.equals(id, expert.id) &&
+                Objects.equals(chatHistory, expert.chatHistory);
+    }
+
+    // Override hashCode method
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, chatHistory);
     }
 }
