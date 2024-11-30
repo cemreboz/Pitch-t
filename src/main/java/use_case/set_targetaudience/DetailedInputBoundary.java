@@ -10,5 +10,5 @@ public interface DetailedInputBoundary {
      * Method for executing the DetailedTA based on the input Data.
      * @param inputData from the input data class.
      */
-    void execute(DetailedInputData inputData);
+    void execute(DetailedInputData inputData) throws Exception;
 }

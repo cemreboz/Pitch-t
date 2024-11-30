@@ -1,4 +1,4 @@
-package data_access;
+package use_case.set_targetaudience;
 
 /**
  * Interface for the Detailed Target Audience Data Access Object.

@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import data_access.DetailedDataAccessObjectInterface;
 import entity.DetailedTargetAudience;
 
 /**
@@ -16,16 +15,20 @@ import entity.DetailedTargetAudience;
 public class DetailedInteractor implements DetailedInputBoundary {
 
     private final DetailedDataAccessObjectInterface dataAccess;
+    private final DetailedOutputBoundary outputBoundary;
 
-    public DetailedInteractor(DetailedDataAccessObjectInterface dataAccess) {
-        if (dataAccess == null) {
-            throw new IllegalArgumentException("Data access object cannot be null.");
-        }
+    public DetailedInteractor(DetailedDataAccessObjectInterface dataAccess, DetailedOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
+        this.outputBoundary = outputBoundary;
     }
 
+    /**
+     * Method for executing the DetailedTA based on the input Data.
+     *
+     * @param inputData from the input data class.
+     */
     @Override
-    public List<DetailedTargetAudience> fetchDetailedTargetAudience(String audienceCategory) throws Exception {
+    public void execute(DetailedInputData inputData) throws Exception {
         final String systemMessage = """
                 Provide a detailed analysis of the target audience category "%s".\s
                 Structure your response in JSON format with the following fields:
@@ -62,11 +65,10 @@ public class DetailedInteractor implements DetailedInputBoundary {
                     "GlobalPerspective": false,
                     "MultilingualAbilities": false
                   }
-                }""".formatted(audienceCategory);
+                }""".formatted(inputData.getAudiencecategory());
 
-        final String response = dataAccess.utilizeApi(systemMessage, audienceCategory);
+        final String response = dataAccess.utilizeApi(systemMessage, inputData.getAudiencecategory());
 
-        return parseDetailedTargetAudience(response);
     }
 
     private List<DetailedTargetAudience> parseDetailedTargetAudience(String response) {
@@ -148,5 +150,4 @@ public class DetailedInteractor implements DetailedInputBoundary {
         }
         return list;
     }
-
 }
