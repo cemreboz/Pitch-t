@@ -22,24 +22,23 @@ import java.time.format.DateTimeFormatter;
  */
 public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName =  "chat expert";
+    private final String viewName = "chat expert";
     private final ExpertViewModel expertViewModel;
     private HamburgerMenu hamburgerMenu;
     private final ViewManagerModel viewManagerModel;
     private ChatExpertController chatExpertController;
 
-    private final JLabel headerNameLabel;
-    private final JLabel headerAvatarLabel;
-    private final JTextArea chatArea;
-    private final JTextField messageInput;
+    private JLabel headerNameLabel;
+    private JLabel headerAvatarLabel;
+    private JTextArea chatArea;
+    private JTextField messageInput;
     private String selectedExpertId;
-
-    private JButton selectedButton;
 
     /**
      * Constructs an ExpertChatView object.
-     * @param expertViewModel expert view model
-     * @param viewManagerModel view maanger model
+     *
+     * @param expertViewModel  expert view model
+     * @param viewManagerModel view manager model
      */
     public ExpertChatView(ExpertViewModel expertViewModel, ViewManagerModel viewManagerModel) {
         this.expertViewModel = expertViewModel;
@@ -48,34 +47,71 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
         setLayout(new BorderLayout());
 
+        // Build the header
+        buildHeader();
+
+        // Build the expert list panel
+        buildExpertListPanel();
+
+        // Build the chat area
+        buildChatArea();
+
+        // Build the message input area
+        buildMessageInputArea();
+    }
+
+    /**
+     * Builds the header panel with logo, hamburger menu, and expert info.
+     */
+    private void buildHeader() {
         // Header Panel with Hamburger Menu and Logo
         final JPanel headerPanel = new JPanel(new BorderLayout());
+
+        // Left side: Hamburger menu and logo
         hamburgerMenu = createHamburgerMenu();
-        final JLabel logo = new JLabel("Pitch!t", SwingConstants.CENTER);
+        final JLabel logo = new JLabel("Pitch!t");
         logo.setFont(new Font("Arial", Font.BOLD, 24));
-        headerAvatarLabel = new JLabel(); // Placeholder for expert avatar
-        headerNameLabel = new JLabel("Select an Expert", SwingConstants.LEFT);
-        headerNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
         final JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         logoPanel.add(hamburgerMenu);
         logoPanel.add(logo);
 
         headerPanel.add(logoPanel, BorderLayout.WEST);
-        headerPanel.add(headerAvatarLabel, BorderLayout.CENTER);
-        headerPanel.add(headerNameLabel, BorderLayout.EAST);
-        add(headerPanel, BorderLayout.NORTH);
 
+        // Right side: Expert info (avatar and name)
+        final JPanel expertInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        headerNameLabel = new JLabel("Select an Expert");
+        headerNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerAvatarLabel = new JLabel();
+        headerAvatarLabel.setPreferredSize(new Dimension(50, 50));
+
+        expertInfoPanel.add(headerNameLabel);
+        expertInfoPanel.add(headerAvatarLabel);
+
+        headerPanel.add(expertInfoPanel, BorderLayout.EAST);
+
+        add(headerPanel, BorderLayout.NORTH);
+    }
+
+    /**
+     * Builds the expert list panel on the left.
+     */
+    private void buildExpertListPanel() {
         // Left Panel: Expert List
         final JPanel expertListPanel = new JPanel();
         expertListPanel.setLayout(new BoxLayout(expertListPanel, BoxLayout.Y_AXIS));
+
         for (String[] expert : expertViewModel.getState().getExperts()) {
             final String expertId = expert[0];
             final String name = expert[1];
             final String description = expert[2];
 
             final JPanel expertPanel = new JPanel(new BorderLayout());
+            expertPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
             final JLabel nameLabel = new JLabel(name);
+            nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+
             final JButton infoButton = new JButton("Info");
             infoButton.addActionListener(event -> JOptionPane.showMessageDialog(
                     this, description, name + " Info", JOptionPane.INFORMATION_MESSAGE));
@@ -89,43 +125,74 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
                 updateChatArea();
             });
 
-            expertPanel.add(nameLabel, BorderLayout.WEST);
-            expertPanel.add(infoButton, BorderLayout.CENTER);
-            expertPanel.add(selectButton, BorderLayout.EAST);
+            // Buttons Panel
+            final JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            buttonsPanel.add(infoButton);
+            buttonsPanel.add(selectButton);
+
+            expertPanel.add(nameLabel, BorderLayout.CENTER);
+            expertPanel.add(buttonsPanel, BorderLayout.EAST);
+
             expertListPanel.add(expertPanel);
+            expertListPanel.add(new JSeparator());
         }
 
         final JScrollPane expertScrollPane = new JScrollPane(expertListPanel);
+        expertScrollPane.setPreferredSize(new Dimension(200, 0));
         add(expertScrollPane, BorderLayout.WEST);
+    }
 
+    /**
+     * Builds the main chat area.
+     */
+    private void buildChatArea() {
         // Main Chat Area
         chatArea = new JTextArea();
         chatArea.setEditable(false);
-        add(new JScrollPane(chatArea), BorderLayout.CENTER);
+        chatArea.setLineWrap(true);
+        chatArea.setWrapStyleWord(true);
+        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
 
+        final JScrollPane chatScrollPane = new JScrollPane(chatArea);
+        add(chatScrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Builds the message input area at the bottom.
+     */
+    private void buildMessageInputArea() {
         // Footer Panel: Chat Bar
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        final JButton sendButton = new JButton("Send");
+        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        sendButton.addActionListener(event -> {
-            final String userMessage = messageInput.getText().trim();
-            if (!userMessage.isEmpty()) {
-                if (selectedExpertId != null) {
-                    chatExpertController.startChat(selectedExpertId, userMessage);
-                    updateChatArea();
-                    messageInput.setText("");
-                }
-                else {
-                    JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
-                            "No Expert Selected", JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
+        // Allow sending message with Enter key
+        messageInput.addActionListener(event -> sendMessage());
+
+        final JButton sendButton = new JButton("Send");
+        sendButton.addActionListener(event -> sendMessage());
 
         footerPanel.add(messageInput, BorderLayout.CENTER);
         footerPanel.add(sendButton, BorderLayout.EAST);
         add(footerPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Sends the user's message to the expert.
+     */
+    private void sendMessage() {
+        final String userMessage = messageInput.getText().trim();
+        if (!userMessage.isEmpty()) {
+            if (selectedExpertId != null) {
+                chatExpertController.startChat(selectedExpertId, userMessage);
+                updateChatArea();
+                messageInput.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
+                        "No Expert Selected", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        messageInput.requestFocusInWindow(); // Set focus back to the input field
     }
 
     /**
@@ -135,23 +202,39 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      * @return An ImageIcon representing the avatar, or null if not found.
      */
     private ImageIcon loadAvatar(String avatarFileName) {
-        final String path = "main/resources/avatar_experts/" + avatarFileName;
+        final String path = "/" + avatarFileName;
+        System.err.println("Loading avatar: " + path);
         final java.net.URL resource = getClass().getResource(path);
 
         if (resource != null) {
-            return new ImageIcon(resource);
+            final ImageIcon originalIcon = new ImageIcon(resource);
+            // Scale the image to desired size, e.g., 50x50 pixels
+            final Image image = originalIcon.getImage();
+            final Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
         }
         else {
             System.err.println("Avatar not found: " + path);
-            return new ImageIcon("src/main/resources/images/avatars/default.png"); // Use a default placeholder
+            // Load the default avatar image from the classpath
+            final java.net.URL defaultResource = getClass().getResource("/images/avatars/default.png");
+            if (defaultResource != null) {
+                final ImageIcon defaultIcon = new ImageIcon(defaultResource);
+                final Image image = defaultIcon.getImage();
+                final Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                return new ImageIcon(scaledImage);
+            }
+            else {
+                System.err.println("Default avatar not found.");
+                return null;
+            }
         }
     }
+
     /**
      * Creates a hamburger menu button.
      *
      * @return The hamburger menu button.
      */
-
     private HamburgerMenu createHamburgerMenu() {
         hamburgerMenu = new HamburgerMenu(expertViewModel);
         hamburgerMenu.setBackground(Color.WHITE);
@@ -185,8 +268,6 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final ExpertState state = (ExpertState) evt.getNewValue();
-
         updateChatArea();
     }
 
@@ -200,6 +281,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     /**
      * Method to set hamburger menu login controller.
+     *
      * @param loginController login controller
      */
     public void setLoginController(LoginController loginController) {
@@ -208,6 +290,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     /**
      * Method to set hamburger menu account settings controller.
+     *
      * @param accountSettingsController account settings.
      */
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
@@ -216,6 +299,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     /**
      * Method to set hamburger menu expert controller.
+     *
      * @param expertController expert controller
      */
     public void setExpertController(ExpertController expertController) {
@@ -224,6 +308,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
     /**
      * Method to set hamburger menu new pitch controller.
+     *
      * @param newPitchController new pitch controller
      */
     public void setNewPitchController(NewPitchController newPitchController) {
