@@ -3,11 +3,15 @@ package data_access;
 import java.util.HashMap;
 import java.util.Map;
 
+import entity.DBUser;
+import entity.Expert;
 import entity.User;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
+import use_case.expert.ExpertDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.new_pitch.NewPitchDataAccessInterface;
@@ -24,7 +28,9 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
         NewPitchDataAccessInterface,
-        CreateNewPitchDataAccessInterface {
+        CreateNewPitchDataAccessInterface,
+        ChatExpertDataAccessInterface,
+        ExpertDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 
@@ -39,6 +45,12 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
     @Override
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    @Override
+    public Expert getExpertById(String expertId) {
+        final DBUser castedCurrentUser = (DBUser) this.currentUser;
+        return castedCurrentUser.getExpertById(expertId);
     }
 
     @Override

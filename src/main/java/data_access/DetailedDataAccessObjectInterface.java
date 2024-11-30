@@ -1,5 +1,9 @@
 package data_access;
 
+import entity.ChatMessage;
+
+import java.util.List;
+
 /**
  * Interface for the Detailed Target Audience Data Access Object.
  */
@@ -14,4 +18,7 @@ public interface DetailedDataAccessObjectInterface {
      * @throws Exception If any issue occurs during the API call.
      */
     String utilizeApi(String systemMessage, String userMessage) throws Exception;
+}
+
+    String utilizeApi(List<ChatMessage> messages) throws Exception;
 }
