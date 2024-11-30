@@ -74,8 +74,7 @@ public class DetailedInteractor implements DetailedInputBoundary {
             outputBoundary.prepareSuccessView(outputData);
         }
         catch (JSONException exception) {
-            throw new IllegalArgumentException("Error with getting the Detailed Target Audience");
-            outputBoundary.prepareFailView("");
+            outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
         }
 
     }
