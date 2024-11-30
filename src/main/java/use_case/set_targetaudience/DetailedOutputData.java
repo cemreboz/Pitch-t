@@ -1,5 +1,7 @@
 package use_case.set_targetaudience;
 
+import java.util.List;
+
 import entity.DetailedTargetAudience;
 
 /**
@@ -7,13 +9,13 @@ import entity.DetailedTargetAudience;
  */
 public class DetailedOutputData {
 
-    private final DetailedTargetAudience detailedTargetAudience;
+    private final List<DetailedTargetAudience> detailedTargetAudience;
 
-    public DetailedOutputData(DetailedTargetAudience detailedTargetAudience) {
+    public DetailedOutputData(List<DetailedTargetAudience> detailedTargetAudience) {
         this.detailedTargetAudience = detailedTargetAudience;
     }
 
-    public DetailedTargetAudience getDetailedTargetAudience() {
+    public List<DetailedTargetAudience> getDetailedTargetAudience() {
         return detailedTargetAudience;
     }
 

@@ -67,7 +67,16 @@ public class DetailedInteractor implements DetailedInputBoundary {
                   }
                 }""".formatted(inputData.getAudiencecategory());
 
-        final String response = dataAccess.utilizeApi(systemMessage, inputData.getAudiencecategory());
+        try {
+            final String response = dataAccess.utilizeApi(systemMessage, inputData.getAudiencecategory());
+            final List<DetailedTargetAudience> parseDetailedTargetAudience = parseDetailedTargetAudience(response);
+            final DetailedOutputData outputData = new DetailedOutputData(parseDetailedTargetAudience);
+            outputBoundary.prepareSuccessView(outputData);
+        }
+        catch (JSONException exception) {
+            throw new IllegalArgumentException("Error with getting the Detailed Target Audience");
+            outputBoundary.prepareFailView("");
+        }
 
     }
 
