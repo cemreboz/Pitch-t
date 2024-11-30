@@ -24,40 +24,42 @@ public class ImageGenerator {
      * @throws Exception If an error occurs during the API call.
      */
     public static String generateImage(String prompt, String model, int n, String size) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String payload = objectMapper.writeValueAsString(new ImageGenerationRequest(model, prompt, n, size));
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String payload = objectMapper.writeValueAsString(new ImageGenerationRequest(model, prompt, n, size));
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
+        final HttpClient client = HttpClient.newHttpClient();
+        final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .header("Authorization", "Bearer " + API_KEY)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(payload))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             return response.body();
-        } else {
+        }
+        else {
             throw new RuntimeException("Error generating image: " + response.body());
         }
     }
 
     public static void main(String[] args) {
         try {
-            String prompt = "Create a vibrant and motivational advertisement for 'FitFuel' energy bars targeting health-conscious professionals.";
-            String model = "dall-e-3";
+            final String prompt = "Create a vibrant and motivational advertisement for 'FitFuel' energy bars targeting health-conscious professionals.";
+            final String model = "dall-e-3";
             int n = 1;
-            String size = "1024x1024";
+            final String size = "1024x1024";
 
-            String jsonResponse = generateImage(prompt, model, n, size);
+            final String jsonResponse = generateImage(prompt, model, n, size);
 
             // Parse the response to extract the image URL
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonResponseNode = objectMapper.readTree(jsonResponse);
-            String imageUrl = jsonResponseNode.get("data").get(0).get("url").asText();
+            final ObjectMapper objectMapper = new ObjectMapper();
+            final JsonNode jsonResponseNode = objectMapper.readTree(jsonResponse);
+            final String imageUrl = jsonResponseNode.get("data").get(0).get("url").asText();
             System.out.println("Generated Image URL: " + imageUrl);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
