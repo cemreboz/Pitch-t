@@ -4,11 +4,12 @@ import entity.*;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DBUserDataAccessObjectTest {
-
+    private static final Logger logger = Logger.getLogger(DBUserDataAccessObjectTest.class.getName());
     @Test
     public void testPitchesSerializationDeserialization() {
         // Instantiate the DAO
@@ -23,11 +24,48 @@ public class DBUserDataAccessObjectTest {
         // Deserialize JSON back to pitches
         List<Pitch> deserializedPitches = dao.pitchesFromJson(pitchesJson);
 
-        // Compare original and deserialized pitches
-        assertEquals(originalPitches, deserializedPitches, "Pitches did not deserialize correctly");
-
+        // Print or log the pitches for debugging
         System.out.println("Original Pitch: " + originalPitches.get(0));
         System.out.println("Deserialized Pitch: " + deserializedPitches.get(0));
+
+        // Compare original and deserialized pitches
+        assertEquals(originalPitches.size(), deserializedPitches.size(), "Number of pitches mismatch");
+
+        for (int i = 0; i < originalPitches.size(); i++) {
+            Pitch originalPitch = originalPitches.get(i);
+            Pitch deserializedPitch = deserializedPitches.get(i);
+
+            // Compare fields individually to identify discrepancies
+            assertEquals(originalPitch.getPitchID(), deserializedPitch.getPitchID(), "Pitch IDs do not match at index " + i);
+            assertEquals(originalPitch.getName(), deserializedPitch.getName(), "Pitch names do not match at index " + i);
+            assertEquals(originalPitch.getImage(), deserializedPitch.getImage(), "Pitch images do not match at index " + i);
+            assertEquals(originalPitch.getDescription(), deserializedPitch.getDescription(), "Pitch descriptions do not match at index " + i);
+            assertEquals(originalPitch.getTargetAudienceList(), deserializedPitch.getTargetAudienceList(), "Target audience lists do not match at index " + i);
+
+            // Compare personas
+            List<Persona> originalPersonas = originalPitch.getPersonas();
+            List<Persona> deserializedPersonas = deserializedPitch.getPersonas();
+            assertEquals(originalPersonas.size(), deserializedPersonas.size(), "Number of personas does not match at index " + i);
+
+            for (int j = 0; j < originalPersonas.size(); j++) {
+                Persona originalPersona = originalPersonas.get(j);
+                Persona deserializedPersona = deserializedPersonas.get(j);
+
+                assertEquals(originalPersona, deserializedPersona, "Persona at index " + j + " does not match in pitch at index " + i);
+            }
+
+            // Compare detailed target audience map
+            Map<String, DetailedTargetAudience> originalAudienceMap = originalPitch.getDetailedTargetAudienceMap();
+            Map<String, DetailedTargetAudience> deserializedAudienceMap = deserializedPitch.getDetailedTargetAudienceMap();
+            assertEquals(originalAudienceMap.size(), deserializedAudienceMap.size(), "Detailed target audience map sizes do not match at index " + i);
+
+            for (String key : originalAudienceMap.keySet()) {
+                DetailedTargetAudience originalAudience = originalAudienceMap.get(key);
+                DetailedTargetAudience deserializedAudience = deserializedAudienceMap.get(key);
+
+                assertEquals(originalAudience, deserializedAudience, "DetailedTargetAudience with key '" + key + "' does not match in pitch at index " + i);
+            }
+        }
     }
 
 

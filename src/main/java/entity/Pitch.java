@@ -79,4 +79,17 @@ public class Pitch {
                 targetAudienceList, personas, detailedTargetAudienceMap
         );
     }
+
+    @Override
+    public String toString() {
+        return "Pitch{" +
+                "pitchID='" + pitchID + '\'' +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", description='" + description + '\'' +
+                ", targetAudienceList=" + targetAudienceList +
+                ", personas=" + personas +
+                ", detailedTargetAudienceMap=" + detailedTargetAudienceMap +
+                '}';
+    }
 }

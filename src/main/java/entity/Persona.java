@@ -144,13 +144,31 @@ public class Persona {
     public void clearChatHistory() {
         this.chatHistory.clear();
     }
+
+    @Override
+    public String toString() {
+        return "Persona{" +
+                "personaID=" + personaID +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", location='" + location + '\'' +
+                ", education='" + education + '\'' +
+                ", salaryRange='" + salaryRange + '\'' +
+                ", about='" + about + '\'' +
+                ", stats='" + stats + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", interests=" + interests +
+                ", chatHistory=" + chatHistory +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof Persona)) return false;
         Persona persona = (Persona) o;
-
         return personaID == persona.personaID &&
                 age == persona.age &&
                 Objects.equals(name, persona.name) &&
@@ -166,13 +184,10 @@ public class Persona {
                 Objects.equals(chatHistory, persona.chatHistory);
     }
 
-    // Override hashCode method
     @Override
     public int hashCode() {
-        return Objects.hash(
-                personaID, name, age, gender, occupation, location, education,
-                salaryRange, about, stats, avatar, interests, chatHistory
-        );
+        return Objects.hash(personaID, name, age, gender, occupation, location, education, salaryRange,
+                about, stats, avatar, interests, chatHistory);
     }
 }
 

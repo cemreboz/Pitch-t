@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -49,6 +50,16 @@ public class ChatMessage {
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "role='" + role + '\'' +
+                ", content='" + content + '\'' +
+                ", timestamp=" + (timestamp != null ? timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : null) +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
