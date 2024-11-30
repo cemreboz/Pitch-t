@@ -1,75 +1,78 @@
 package use_case.compare_personas;
 
+import data_access.ChatgptDataAccessInterface;
+import entity.ChatMessage;
 import entity.Persona;
-import java.util.HashMap;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
- * The Interactor for the Compare Personas Use Case.
+ * Interactor class for the Compare Personas use case.
+ * Implements the business logic of comparing two personas.
  */
 public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
-    private final ComparePersonasOutputBoundary outputBoundary;
 
-    public ComparePersonasInteractor(ComparePersonasOutputBoundary outputBoundary) {
+    private final ComparePersonasOutputBoundary outputBoundary;
+    private final ChatgptDataAccessInterface chatgptDataAccessObject;
+
+    /**
+     * Constructs a ComparePersonasInteractor object.
+     *
+     * @param chatgptDataAccessObject The ChatGPT DAO interface.
+     * @param outputBoundary          The output boundary interface.
+     */
+    public ComparePersonasInteractor(ChatgptDataAccessInterface chatgptDataAccessObject,
+                                     ComparePersonasOutputBoundary outputBoundary) {
+        this.chatgptDataAccessObject = chatgptDataAccessObject;
         this.outputBoundary = outputBoundary;
     }
 
+    /**
+     * Executes the compare personas use case.
+     *
+     * @param inputData The input data containing the personas to be compared.
+     */
     @Override
     public void execute(ComparePersonasInputData inputData) {
         List<Persona> personas = inputData.getPersonas();
-        Map<String, String> comparisonResults = new HashMap<>();
-
-        if (personas.size() < 2) {
-            outputBoundary.prepareFailView("Not enough personas to compare.");
-            return;
-        }
-        else if (personas.size() > 2) {
-            outputBoundary.prepareFailView("Too many personas to compare.");
-            return;
+        if (personas.size() != 2) {
+            throw new IllegalArgumentException("Exactly two personas must be selected for comparison.");
         }
 
-        // Comparison logic between chat histories of two personas
         Persona persona1 = personas.get(0);
         Persona persona2 = personas.get(1);
 
-        StringBuilder persona1Chats = new StringBuilder();
-        for (String chat : persona1.getChatHistory()) {
-            persona1Chats.append(chat).append("\n");
+        // Prepare messages for API call
+        List<ChatMessage> messagesForApi = new ArrayList<>();
+        String systemMessage = "You are tasked with analyzing and comparing two user personas and their opinions about a product pitch. Please provide concise responses.";
+        messagesForApi.add(new ChatMessage("system", systemMessage));
+
+        // Add user messages for both personas
+        messagesForApi.add(new ChatMessage("user", String.format(
+                "Persona 1 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'like' or 'dislike'.",
+                persona1.getName(), persona1.getAbout())));
+
+        messagesForApi.add(new ChatMessage("user", String.format(
+                "Persona 2 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'like' or 'dislike'.",
+                persona2.getName(), persona2.getAbout())));
+
+        // Add final prompt to compare both personas
+        messagesForApi.add(new ChatMessage("user",
+                "Based on the above responses, compare the two personas. What are their similarities and differences regarding their opinions on the pitch?"));
+
+        String comparisonResponse;
+        try {
+            // Using getOpinion to call the API
+            comparisonResponse = chatgptDataAccessObject.getOpinion(messagesForApi);
+        }
+        catch (Exception e) {
+            comparisonResponse = "Unable to retrieve data";
+            e.printStackTrace();
         }
 
-        StringBuilder persona2Chats = new StringBuilder();
-        for (String chat : persona2.getChatHistory()) {
-            persona2Chats.append(chat).append("\n");
-        }
-
-        comparisonResults.put("Persona 1 Chat History", persona1Chats.toString());
-        comparisonResults.put("Persona 2 Chat History", persona2Chats.toString());
-
-        // Similarity logic
-        // Todo: think of a better way to compare chat history
-        String similarity = findSimilarities(persona1.getChatHistory(), persona2.getChatHistory());
-        comparisonResults.put("Similarities", similarity);
-
-        ComparePersonasOutputData outputData = new ComparePersonasOutputData(comparisonResults);
-        outputBoundary.prepareSuccessView(outputData);
-    }
-
-    private String findSimilarities(List<String> chatHistory1, List<String> chatHistory2) {
-        StringBuilder similarities = new StringBuilder();
-        for (String chat1 : chatHistory1) {
-            for (String chat2 : chatHistory2) {
-                if (chat1.equalsIgnoreCase(chat2)) {
-                    similarities.append(chat1).append("\n");
-                }
-            }
-        }
-
-        if (similarities.length() > 0) {
-            return similarities.toString();
-        }
-        else {
-            return "No similarities found.";
-        }
+        // Create output data and pass it to output boundary
+        ComparePersonasOutputData outputData = new ComparePersonasOutputData(comparisonResponse);
+        outputBoundary.presentComparison(outputData);
     }
 }
