@@ -5,23 +5,27 @@ import use_case.compare_personas.ComparePersonasOutputData;
 
 /**
  * Presenter for the Compare Personas Use Case.
+ * Prepares the comparison result for the view.
  */
 public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
-    private String comparisonResult;
 
-    @Override
-    public void prepareSuccessView(ComparePersonasOutputData outputData) {
-        comparisonResult = "Comparison Results: \n" + outputData.getComparisonResults().toString();
-        // Additional logic to update the view can be added here.
+    private final ComparePersonasViewModel comparePersonasViewModel;
+
+    public ComparePersonasPresenter(ComparePersonasViewModel comparePersonasViewModel) {
+        this.comparePersonasViewModel = comparePersonasViewModel;
     }
 
     @Override
-    public void prepareFailView(String errorMessage) {
-        comparisonResult = "Error: " + errorMessage;
-        // Additional logic to handle failure in the view can be added here.
-    }
+    public void presentComparison(ComparePersonasOutputData outputData) {
+        // Set the comparison results in the ViewModel
+        ComparePersonasState state = comparePersonasViewModel.getState();
+        state.setPersona1Opinion(outputData.getPersona1Opinion());
+        state.setPersona2Opinion(outputData.getPersona2Opinion());
+        state.setSimilarities(outputData.getSimilarities());
+        state.setDifferences(outputData.getDifferences());
 
-    public String getComparisonResult() {
-        return comparisonResult;
+        // Update the ViewModel with the new state
+        comparePersonasViewModel.setState(state);
+        comparePersonasViewModel.firePropertyChanged();
     }
 }
