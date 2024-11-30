@@ -1,22 +1,17 @@
 package data_access;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entity.DBUser;
-import entity.DetailedTargetAudience;
-import entity.Expert;
-import entity.Persona;
-import entity.Pitch;
-import entity.User;
-import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -24,8 +19,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
+import use_case.expert.ExpertDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.new_pitch.NewPitchDataAccessInterface;
@@ -41,7 +38,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
         NewPitchDataAccessInterface,
-        CreateNewPitchDataAccessInterface {
+        CreateNewPitchDataAccessInterface,
+        ChatExpertDataAccessInterface,
+        ExpertDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -86,6 +85,12 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public User getCurrentUser() {
         return this.currentUser;
+    }
+
+    @Override
+    public Expert getExpertById(String expertId) {
+        final DBUser castedCurrentUser = (DBUser) this.currentUser;
+        return castedCurrentUser.getExpertById(expertId);
     }
 
     @Override
@@ -295,7 +300,15 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         for (Expert expert : experts) {
             final JSONObject expertJson = new JSONObject();
             expertJson.put(ID_FIELD, expert.getId());
-            expertJson.put(CHATHISTORY_FIELD, new JSONArray(expert.getChatHistory()));
+            final JSONArray chatHistoryArray = new JSONArray();
+            for (ChatMessage message : expert.getChatHistory()) {
+                final JSONObject messageJson = new JSONObject();
+                messageJson.put("role", message.getRole());
+                messageJson.put("content", message.getContent());
+                messageJson.put("timestamp", message.getTimestamp().toString());
+                chatHistoryArray.put(messageJson);
+            }
+            expertJson.put(CHATHISTORY_FIELD, chatHistoryArray);
             expertsArray.put(expertJson);
         }
         return expertsArray.toString();
@@ -308,15 +321,27 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         for (int i = 0; i < expertsArray.length(); i++) {
             final JSONObject expertJson = expertsArray.getJSONObject(i);
 
-            final List<String> chatHistory = new ArrayList<>();
+            final List<ChatMessage> chatHistory = new ArrayList<>();
             final JSONArray chatHistoryArray = expertJson.getJSONArray(CHATHISTORY_FIELD);
             for (int j = 0; j < chatHistoryArray.length(); j++) {
-                chatHistory.add(chatHistoryArray.getString(j));
+                final Object chatItem = chatHistoryArray.get(j);
+                if (chatItem instanceof JSONObject) {
+                    // The chat item is a JSONObject, parse it as ChatMessage
+                    final JSONObject chatMessageJson = (JSONObject) chatItem;
+                    final String role = chatMessageJson.optString("role", "unknown");
+                    final String content = chatMessageJson.optString("content", "");
+                    final String timestampStr = chatMessageJson.optString("timestamp", null);
+                    final LocalDateTime timestamp = timestampStr != null ? LocalDateTime.parse(timestampStr) : LocalDateTime.now();
+                    final ChatMessage chatMessage = new ChatMessage(role, content, timestamp);
+                    chatHistory.add(chatMessage);
+                }
+                else if (chatItem instanceof String) {
+                    // The chat item is a String, create ChatMessage with default values
+                    final String content = (String) chatItem;
+                    final ChatMessage chatMessage = new ChatMessage("unknown", content, LocalDateTime.now());
+                    chatHistory.add(chatMessage);
+                }
             }
-
-            final Expert expert = new Expert(expertJson.getString(ID_FIELD));
-            expert.setChatHistory(chatHistory);
-            experts.add(expert);
         }
         return experts;
     }
@@ -487,7 +512,15 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         personaJson.put("stats", persona.getStats());
         personaJson.put("avatar", persona.getAvatar());
         personaJson.put("interests", new JSONArray(persona.getInterests()));
-        personaJson.put(CHATHISTORY_FIELD, new JSONArray(persona.getChatHistory()));
+        final JSONArray chatHistoryArray = new JSONArray();
+        for (ChatMessage message : persona.getChatHistory()) {
+            final JSONObject messageJson = new JSONObject();
+            messageJson.put("role", message.getRole());
+            messageJson.put("content", message.getContent());
+            messageJson.put("timestamp", message.getTimestamp().toString());
+            chatHistoryArray.put(messageJson);
+        }
+        personaJson.put(CHATHISTORY_FIELD, chatHistoryArray);
         return personaJson;
     }
 
@@ -514,15 +547,28 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
         persona.setInterests(interests);
 
-        final List<String> chatHistory = new ArrayList<>();
+        final List<ChatMessage> chatHistory = new ArrayList<>();
         final JSONArray chatHistoryArray = personaJson.optJSONArray(CHATHISTORY_FIELD);
         if (chatHistoryArray != null) {
             for (int i = 0; i < chatHistoryArray.length(); i++) {
-                chatHistory.add(chatHistoryArray.getString(i));
+                final Object chatItem = chatHistoryArray.get(i);
+                if (chatItem instanceof JSONObject) {
+                    final JSONObject chatMessageJson = (JSONObject) chatItem;
+                    final String role = chatMessageJson.optString("role", "unknown");
+                    final String content = chatMessageJson.optString("content", "");
+                    final String timestampStr = chatMessageJson.optString("timestamp", null);
+                    final LocalDateTime timestamp = timestampStr != null ? LocalDateTime.parse(timestampStr) : LocalDateTime.now();
+                    final ChatMessage chatMessage = new ChatMessage(role, content, timestamp);
+                    chatHistory.add(chatMessage);
+                }
+                else if (chatItem instanceof String) {
+                    final String content = (String) chatItem;
+                    final ChatMessage chatMessage = new ChatMessage("unknown", content, LocalDateTime.now());
+                    chatHistory.add(chatMessage);
+                }
             }
         }
         persona.setChatHistory(chatHistory);
-
         return persona;
     }
 }

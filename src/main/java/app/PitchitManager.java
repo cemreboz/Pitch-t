@@ -22,10 +22,44 @@ public class PitchitManager {
     private static final String API_TOKEN_KEY = "apiToken";
     private static final String CONTENT_TYPE_JSON = "application/json";
 
-    private final OkHttpClient client;
+    private static final OkHttpClient CLIENT = new OkHttpClient().newBuilder().build();
 
-    public PitchitManager() {
-        this.client = new OkHttpClient().newBuilder().build();
+    /**
+     * Static method to retrieve the API key for the "pitchit" user.
+     *
+     * @return the API key as a string, empty string if not found
+     */
+    public static String getApiKey() {
+        String key = "";
+        try {
+            // Create a GET request to fetch the user info
+            final Request request = new Request.Builder()
+                    .url(API_URL + "/user?username=" + "pitchit" + "&password=" + "multiculturalism")
+                    .get()
+                    .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                    .build();
+
+            try (Response response = CLIENT.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    System.err.println("Failed to fetch user info: " + response.body().string());
+                }
+
+                final JSONObject responseBody = new JSONObject(response.body().string());
+                final JSONObject userInfo = responseBody.getJSONObject("user").getJSONObject("info");
+
+                if (userInfo.has(API_TOKEN_KEY)) {
+                    key = userInfo.getString(API_TOKEN_KEY);
+                }
+                else {
+                    System.err.println("API Token not set.");
+                }
+            }
+
+        }
+        catch (IOException | JSONException ex) {
+            System.err.println("Error retrieving API key: " + ex.getMessage());
+        }
+        return key;
     }
 
     /**
@@ -76,7 +110,7 @@ public class PitchitManager {
                     .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                     .build();
 
-            try (Response response = client.newCall(request).execute()) {
+            try (Response response = CLIENT.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
                     throw new RuntimeException("Failed to update API token: " + response.body().string());
                 }
@@ -102,7 +136,7 @@ public class PitchitManager {
                     .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                     .build();
 
-            try (Response response = client.newCall(request).execute()) {
+            try (Response response = CLIENT.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
                     throw new RuntimeException("Failed to fetch user info: " + response.body().string());
                 }

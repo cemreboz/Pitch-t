@@ -18,8 +18,11 @@ import javax.swing.JPopupMenu;
 import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.pitch.PitchState;
 
 /**
@@ -29,6 +32,8 @@ public class HamburgerMenu extends JPanel {
 
     private LoginController loginController;
     private AccountSettingsController accountSettingsController;
+    private ExpertController expertController;
+    private NewPitchController newPitchController;
     private ViewModel viewModel;
 
     private final int hamburgerSize = 24;
@@ -69,6 +74,10 @@ public class HamburgerMenu extends JPanel {
                     final PitchState currentState = (PitchState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, "error");
                 }
@@ -77,14 +86,54 @@ public class HamburgerMenu extends JPanel {
         menu.add(dashboardItem);
 
         final JMenuItem newPitchItem = new JMenuItem("New Pitch");
-        newPitchItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+        newPitchItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (viewModel.getState() instanceof DashboardState) {
+                    final DashboardState currentState = (DashboardState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof AccountSettingsState) {
+                    final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else {
+                    JOptionPane.showMessageDialog(newPitchItem, "error");
+                }
+            }
         });
         menu.add(newPitchItem);
 
         final JMenuItem expertsItem = new JMenuItem("Experts");
-        expertsItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+        expertsItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (viewModel.getState() instanceof DashboardState) {
+                    final DashboardState currentState = (DashboardState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof AccountSettingsState) {
+                    final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else {
+                    JOptionPane.showMessageDialog(expertsItem, "error");
+                }
+            }
         });
         menu.add(expertsItem);
 
@@ -101,6 +150,10 @@ public class HamburgerMenu extends JPanel {
                 }
                 else if (viewModel.getState() instanceof PitchState) {
                     final PitchState currentState = (PitchState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
@@ -120,6 +173,14 @@ public class HamburgerMenu extends JPanel {
 
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         this.accountSettingsController = accountSettingsController;
+    }
+
+    public void setExpertController(ExpertController expertController) {
+        this.expertController = expertController;
+    }
+
+    public void setNewPitchController(NewPitchController newPitchController) {
+        this.newPitchController = newPitchController;
     }
 
 }

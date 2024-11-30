@@ -1,20 +1,13 @@
-package use_case.new_pitch;
-
-import java.util.List;
-
-import entity.User;
-
+package use_case.expert;
 
 /**
- * Input data for the Create Pitch use case.
- * Contains the necessary information to create a pitch.
+ * The input data for the Expert use case.
  */
-public class NewPitchInputData {
-
+public class ExpertInputData {
     private final String username;
     private final String password;
 
-    public NewPitchInputData(String username, String password) {
+    public ExpertInputData(String username, String password) {
         this.username = username;
         this.password = password;
     }

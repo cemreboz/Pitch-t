@@ -59,6 +59,18 @@ public class DBUser implements User {
         return experts;
     }
 
+    /**
+     * Method to get single expert by ID.
+     * @param expertId expertID to be gotten
+     * @return the expert if found; creates new expert with preset data.
+     */
+    public Expert getExpertById(String expertId) {
+        return getExperts().stream()
+                .filter(expert -> expert.getId().equals(expertId))
+                .findFirst()
+                .orElseGet(() -> Expert.createNewExpert(expertId));
+    }
+
     public void setExperts(List<Expert> experts) {
         this.experts = experts;
     }
