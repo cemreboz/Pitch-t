@@ -1,26 +1,29 @@
 package use_case.set_targetaudience;
 
-import data_access.DetailedDataAccessObjectInterface;
-import entity.Pitch;
+import org.json.JSONException;
 
 /**
  * Public class for the Target Audience Interactor.
  */
-public class TargetAudienceInteractor implements TargetAudienceDataAccessInterface {
+public class TargetAudienceInteractor implements TargetAudienceInputBoundary {
 
-    private final DetailedDataAccessObjectInterface dataAccessObject;
+    private final TargetAudienceDataAccessInterface dataAccessObject;
+    private final TargetAudienceOutputBoundary outputBoundary;
 
-    public TargetAudienceInteractor(DetailedDataAccessObjectInterface dataAccessObject) {
-        if (dataAccessObject == null) {
-            throw new IllegalArgumentException("Data access object cannot be null.");
-        }
+    public TargetAudienceInteractor(TargetAudienceDataAccessInterface dataAccessObject,
+                                    TargetAudienceOutputBoundary outputBoundary) {
+        this.outputBoundary = outputBoundary;
         this.dataAccessObject = dataAccessObject;
     }
 
+    /**
+     * Method for executing the DetailedTA based on the input Data.
+     *
+     * @param inputData from the input data class.
+     * @throws Exception If it cannot get the Detailed Target Audience.
+     */
     @Override
-    public String generateTargetAudience(Pitch pitch) throws Exception {
-        validatePitch(pitch);
-
+    public void execute(TargetAudienceInputData inputData) throws Exception {
         final String systemMessage = """
                 Based on the name and description of this project, I want you to give me a list of five \
                 categories of people that would be interested in this project. Here is an example and how to structure:
@@ -30,16 +33,14 @@ public class TargetAudienceInteractor implements TargetAudienceDataAccessInterfa
                 - Health-Conscious;
                 - Construction workers;
                 Your output must only contain the list, nothing else.""";
-
-        final String userMessage = pitch.getName() + " " + pitch.getDescription();
-
-        // Use the injected instance of the DAO
-        return dataAccessObject.utilizeApi(systemMessage, userMessage);
-    }
-
-    private void validatePitch(Pitch pitch) {
-        if (pitch == null || pitch.getName() == null || pitch.getDescription() == null) {
-            throw new IllegalArgumentException("Pitch, its name, or its description cannot be null.");
+        final String userMessage = inputData.getPitchname() + " " + inputData.getPitchdescription();
+        try {
+            final String response = dataAccessObject.generateTargetAudience(systemMessage, userMessage);
+            final TargetAudienceOuputData outputData = new TargetAudienceOuputData(response);
+            outputBoundary.prepareSuccessView(outputData);
+        }
+        catch (JSONException exception) {
+            outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
         }
     }
 }
