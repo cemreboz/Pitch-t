@@ -18,6 +18,4 @@ public interface DetailedDataAccessObjectInterface {
      * @throws Exception If any issue occurs during the API call.
      */
     String utilizeApi(String systemMessage, String userMessage) throws Exception;
-
-    String utilizeApi(List<ChatMessage> messages) throws Exception;
 }

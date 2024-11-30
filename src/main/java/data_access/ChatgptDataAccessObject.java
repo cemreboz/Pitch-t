@@ -14,11 +14,12 @@ import entity.ChatMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface {
+public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface, ChatExpertGptAccessInterface, data_access.ComparePersonasGptAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -49,7 +50,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
     }
 
     @Override
-    public String utilizeApi(List<ChatMessage> messages)
+    public String getInteraction(List<ChatMessage> messages)
             throws IOException, InterruptedException {
         final String apiKey = System.getenv("OPENAI_API_KEY");
 

@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
-import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -47,6 +46,7 @@ import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
@@ -378,7 +378,7 @@ public class AppBuilder {
                 expertViewModel, viewManagerModel);
 
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final DetailedDataAccessObjectInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);

@@ -1,6 +1,6 @@
 package use_case.compare_personas;
 
-import data_access.ChatgptDataAccessInterface;
+import data_access.ComparePersonasGptAccessInterface;
 import entity.ChatMessage;
 import entity.Persona;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
     private final ComparePersonasOutputBoundary outputBoundary;
-    private final ChatgptDataAccessInterface chatgptDataAccessObject;
+    private final ComparePersonasGptAccessInterface chatgptDataAccessObject;
 
     /**
      * Constructs a ComparePersonasInteractor object.
@@ -22,7 +22,7 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
      * @param chatgptDataAccessObject The ChatGPT DAO interface.
      * @param outputBoundary          The output boundary interface.
      */
-    public ComparePersonasInteractor(ChatgptDataAccessInterface chatgptDataAccessObject,
+    public ComparePersonasInteractor(ComparePersonasGptAccessInterface chatgptDataAccessObject,
                                      ComparePersonasOutputBoundary outputBoundary) {
         this.chatgptDataAccessObject = chatgptDataAccessObject;
         this.outputBoundary = outputBoundary;
@@ -64,7 +64,7 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
         try {
             // Using getOpinion to call the API
-            String comparisonResponse = chatgptDataAccessObject.getOpinion(messagesForApi);
+            String comparisonResponse = chatgptDataAccessObject.getInteraction(messagesForApi);
 
             // Parse the response into opinions and comparison
             String[] responseParts = comparisonResponse.split("\n\n");
