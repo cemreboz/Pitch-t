@@ -70,4 +70,8 @@ public class PersonaListView extends JPanel {
         ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas[0], selectedPersonas[1]);
         compareController.compare(inputData);
     }
+
+    public void setComparePersonasController(ComparePersonasController comparePersonasController) {
+    // Todos: implement from the pitch -> personas
+    }
 }

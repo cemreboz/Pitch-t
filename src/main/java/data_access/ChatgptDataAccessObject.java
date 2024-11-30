@@ -15,11 +15,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.chat_expert.ChatExpertGptAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface, ChatExpertGptAccessInterface, data_access.ComparePersonasGptAccessInterface {
+public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface, ChatExpertGptAccessInterface, ComparePersonasGptAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 

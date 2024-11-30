@@ -1,6 +1,6 @@
 package use_case.compare_personas;
 
-import data_access.ComparePersonasGptAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import entity.ChatMessage;
 import entity.Persona;
 

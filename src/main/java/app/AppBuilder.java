@@ -19,6 +19,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.compare_personas.ComparePersonasController;
+import interface_adapter.compare_personas.ComparePersonasPresenter;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.expert.ExpertController;
@@ -50,6 +53,10 @@ import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.compare_personas.ComparePersonasInputBoundary;
+import use_case.compare_personas.ComparePersonasInteractor;
+import use_case.compare_personas.ComparePersonasOutputBoundary;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
@@ -76,6 +83,7 @@ import view.DashboardView;
 import view.ExpertChatView;
 import view.LoginView;
 import view.NewPitchView;
+import view.PersonaListView;
 import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
@@ -116,6 +124,8 @@ public class AppBuilder {
     private NewPitchView newPitchView;
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
+    private ComparePersonasViewModel comparePersonasViewModel;
+    private PersonaListView personaListView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -351,7 +361,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the expert view use case and as part of the hamburger menu to each view with the menu..
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addExpertUseCase() {
@@ -386,6 +396,32 @@ public class AppBuilder {
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);
         expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the compare personas use case.
+     * @return this builder
+     */
+    public AppBuilder addComparePersonasUseCase() {
+        // Instantiate Output Boundary
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel);
+
+        // Instantiate GPT Data Access Interface
+        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        // Create the Interactor, providing it the GPT data access object and output boundary
+        final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
+                chatgptDataAccessObject, comparePersonasOutputBoundary);
+
+        // Create the controller using the Interactor
+        final ComparePersonasController comparePersonasController = new ComparePersonasController(
+                comparePersonasInteractor);
+
+        // Set the controller for the Persona List View
+        personaListView.setComparePersonasController(comparePersonasController);
+
         return this;
     }
 
