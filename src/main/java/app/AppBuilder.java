@@ -6,6 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.ChatExpertDataAccessObject;
+import data_access.ChatgptDataAccessObject;
+import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -43,6 +46,7 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
@@ -372,8 +376,12 @@ public class AppBuilder {
     public AppBuilder addChatExpertUseCase() {
         final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
                 expertViewModel, viewManagerModel);
+
+        final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
+        final DetailedDataAccessObjectInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
-                userDataAccessObject, chatExpertOutputBoundary);
+                chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
 
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);

@@ -19,7 +19,7 @@ public class Persona {
     private String occupation;
     private String avatar;
     private List<String> interests;
-    private List<String> chatHistory;
+    private List<ChatMessage> chatHistory;
 
     public Persona() {
         this.chatHistory = new ArrayList<>();
@@ -121,11 +121,11 @@ public class Persona {
         this.interests = interests;
     }
 
-    public List<String> getChatHistory() {
+    public List<ChatMessage> getChatHistory() {
         return chatHistory;
     }
 
-    public void setChatHistory(List<String> chatHistory) {
+    public void setChatHistory(List<ChatMessage> chatHistory) {
         this.chatHistory = chatHistory;
     }
 
@@ -133,7 +133,7 @@ public class Persona {
      * Adds message to chat history.
      * @param message to add
      */
-    public void addChatMessage(String message) {
+    public void addChatMessage(ChatMessage message) {
         this.chatHistory.add(message);
     }
 
