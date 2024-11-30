@@ -1,7 +1,5 @@
 package interface_adapter.targetaudience;
 
-import entity.Pitch;
-import interface_adapter.pitch.PitchState;
 import use_case.set_targetaudience.TargetAudienceInputBoundary;
 import use_case.set_targetaudience.TargetAudienceInputData;
 
@@ -9,13 +7,18 @@ import use_case.set_targetaudience.TargetAudienceInputData;
  * Controller class that generates the target audience.
  */
 public class TargetAudienceController {
-    private final TargetAudienceInputBoundary inputBoundary = null;
+    private final TargetAudienceInputBoundary inputBoundary;
     
     public TargetAudienceController(TargetAudienceInputBoundary inputBoundary) {
         this.inputBoundary = inputBoundary;
     }
-    
-    public generate(TargetAudienceInputData inputdata) {
-        inputBoundary.execute(inputdata);
+
+    /**
+     * Generates the Target Audience.
+     * @param inputData The Input data for the general Target Audience.
+     * @throws Exception if there is an error with generating the target audience.
+     */
+    public void generate(TargetAudienceInputData inputData) throws Exception {
+        inputBoundary.execute(inputData);
     }
 }
