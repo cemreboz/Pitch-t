@@ -113,4 +113,8 @@ public class PersonaListView extends JPanel {
         parentFrame.revalidate();
         parentFrame.repaint();
     }
+
+    public void setComparePersonasController(ComparePersonasController comparePersonasController) {
+        // Implement for the view personas list
+    }
 }
