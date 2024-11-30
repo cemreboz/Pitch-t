@@ -18,6 +18,7 @@ public class PersonaListView extends JPanel {
     private final ComparePersonasViewModel compareViewModel;
     private final List<Persona> personas;
     private final JButton compareButton;
+    private final JButton visionButton;
     private final JCheckBox[] personaCheckBoxes;
 
     public PersonaListView(List<Persona> personas, ComparePersonasController compareController, ComparePersonasViewModel compareViewModel) {
@@ -47,6 +48,17 @@ public class PersonaListView extends JPanel {
                 handleCompareButton();
             }
         });
+
+        visionButton = new JButton("Go to Vision");
+        visionButton.setAlignmentX(CENTER_ALIGNMENT);
+        add(visionButton);
+
+        visionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleVisionButton();
+            }
+        });
     }
 
     private void handleCompareButton() {
@@ -69,5 +81,36 @@ public class PersonaListView extends JPanel {
         // Trigger comparison
         ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas[0], selectedPersonas[1]);
         compareController.compare(inputData);
+    }
+
+    private void handleVisionButton() {
+        // Collect the selected persona
+        Persona selectedPersona = null;
+        for (int i = 0; i < personaCheckBoxes.length; i++) {
+            if (personaCheckBoxes[i].isSelected()) {
+                selectedPersona = personas.get(i);
+                break;
+            }
+        }
+
+        if (selectedPersona == null) {
+            JOptionPane.showMessageDialog(this, "Please select a persona to generate a vision.");
+            return;
+        }
+
+        VisionViewModel visionViewModel = new VisionViewModel();
+        VisionController visionController = new VisionController(new GenerateVisualInteractor(
+                new VisualDataAccessObject() {
+                    @Override
+                    public void saveVisual(Visual visual) {
+                    }
+                }, new ImageAnalyzer()));
+
+        VisionView visionView = new VisionView(selectedPersona, null, visionController, visionViewModel);
+
+        final JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        parentFrame.setContentPane(visionView);
+        parentFrame.revalidate();
+        parentFrame.repaint();
     }
 }
