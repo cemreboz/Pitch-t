@@ -5,18 +5,17 @@ import java.util.List;
 import entity.Pitch;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
-import use_case.set_targetaudience.TargetAudienceInteractor;
+import use_case.set_targetaudience.TargetAudienceOuputData;
+import use_case.set_targetaudience.TargetAudienceOutputBoundary;
 
 /**
  * Presenter for the General Target Audience Use Case.
  */
-public class TargetAudiencePresenter {
+public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
     private final PitchViewModel viewModel;
-    private final TargetAudienceInteractor interactor;
 
-    public TargetAudiencePresenter(PitchViewModel viewModel, TargetAudienceInteractor interactor) {
+    public TargetAudiencePresenter(PitchViewModel viewModel) {
         this.viewModel = viewModel;
-        this.interactor = interactor;
     }
 
     /**
@@ -38,5 +37,29 @@ public class TargetAudiencePresenter {
         finally {
             pitchState.setLoading(false);
         }
+    }
+
+    /**
+     * Success view.
+     *
+     * @param outputData the outputdata for General Target Audience.
+     */
+    @Override
+    public void prepareSuccessView(TargetAudienceOuputData outputData) {
+        final PitchState pitchState = viewModel.getState();
+        pitchState.setLoading(false);
+
+        pi
+
+    }
+
+    /**
+     * Failure View.
+     *
+     * @param errorMessage the error message.
+     */
+    @Override
+    public void prepareFailView(String errorMessage) {
+
     }
 }
