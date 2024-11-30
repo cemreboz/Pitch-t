@@ -1,9 +1,5 @@
 package use_case.set_targetaudience;
 
-import java.util.List;
-
-import entity.DetailedTargetAudience;
-
 /**
  * Input boundary for the Detailed Interactor.
  * Defines the contract for fetching detailed target audiences based on a category.
@@ -11,11 +7,8 @@ import entity.DetailedTargetAudience;
 public interface DetailedInputBoundary {
 
     /**
-     * Fetches a list of detailed target audiences for the given category.
-     *
-     * @param audienceCategory The category for which detailed target audiences are required.
-     * @return A list of {@link DetailedTargetAudience} objects containing detailed information.
-     * @throws Exception If there is an error fetching or processing the data.
+     * Method for executing the DetailedTA based on the input Data.
+     * @param inputData from the input data class.
      */
-    List<DetailedTargetAudience> fetchDetailedTargetAudience(String audienceCategory) throws Exception;
+    void execute(DetailedInputData inputData);
 }
