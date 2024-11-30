@@ -2,30 +2,32 @@ package interface_adapter.compare_personas;
 
 import use_case.compare_personas.ComparePersonasOutputBoundary;
 import use_case.compare_personas.ComparePersonasOutputData;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
 
 /**
- * Presenter for the Compare Personas Use Case.
- * Prepares the comparison result for the view.
+ * The Presenter for the Compare Personas use case.
+ * This class takes output data and transforms it into a format suitable for the view model.
  */
 public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
 
-    private final ComparePersonasViewModel comparePersonasViewModel;
+    private final ComparePersonasViewModel viewModel;
 
-    public ComparePersonasPresenter(ComparePersonasViewModel comparePersonasViewModel) {
-        this.comparePersonasViewModel = comparePersonasViewModel;
+    public ComparePersonasPresenter(ComparePersonasViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
     @Override
-    public void presentComparison(ComparePersonasOutputData outputData) {
-        // Set the comparison results in the ViewModel
-        ComparePersonasState state = comparePersonasViewModel.getState();
-        state.setPersona1Opinion(outputData.getPersona1Opinion());
-        state.setPersona2Opinion(outputData.getPersona2Opinion());
-        state.setSimilarities(outputData.getSimilarities());
-        state.setDifferences(outputData.getDifferences());
+    public void prepareSuccessView(ComparePersonasOutputData outputData) {
+        // Update the view model with the result of the comparison
+        viewModel.setSimilarities(outputData.getSimilarities());
+        viewModel.setDifferences(outputData.getDifferences());
+        viewModel.firePropertyChanged(); // Notify view that data has been updated
+    }
 
-        // Update the ViewModel with the new state
-        comparePersonasViewModel.setState(state);
-        comparePersonasViewModel.firePropertyChanged();
+    @Override
+    public void prepareFailView(String errorMessage) {
+        // Update the view model with an error message
+        viewModel.setErrorMessage(errorMessage);
+        viewModel.firePropertyChanged(); // Notify view that data has been updated
     }
 }

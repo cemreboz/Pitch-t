@@ -1,22 +1,17 @@
 package use_case.compare_personas;
 
-import use_case.compare_personas.ComparePersonasOutputData;
-
-/**
- * Output Boundary for the Compare Personas Use Case.
- */
 public interface ComparePersonasOutputBoundary {
     /**
-     * Prepares the view for a successful comparison of personas.
+     * Prepares the success view by passing the output data.
      *
-     * @param outputData the output data containing comparison details
+     * @param outputData the result of the personas comparison
      */
     void prepareSuccessView(ComparePersonasOutputData outputData);
 
     /**
-     * Prepares the view for a failed comparison attempt.
+     * Prepares the failure view if the comparison fails.
      *
-     * @param errorMessage the reason for the failure
+     * @param errorMessage the error message to display
      */
     void prepareFailView(String errorMessage);
 }
