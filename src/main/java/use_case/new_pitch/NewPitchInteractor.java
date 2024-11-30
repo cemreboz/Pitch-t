@@ -1,8 +1,7 @@
 package use_case.new_pitch;
 
-import entity.Pitch;
 import entity.User;
-// Todo: currently db user, should add pitch method be in interface user?
+// Todo: currently db user, should add pitch method to be an interface user?
 
 /**
  * Interactor for loading new pitch view.
