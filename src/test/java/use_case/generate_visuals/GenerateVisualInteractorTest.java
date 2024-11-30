@@ -35,9 +35,19 @@ class GenerateVisualInteractorTest {
         };
 
         // Step 3: Create an Interactor and inject the Presenter
-        VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // You can use an in-memory DAO
-        ImageAnalyzer imageAnalyzer = new ImageAnalyzer();
-        GenerateVisualInteractor interactor = new GenerateVisualInteractor(visualDataAccessObject, imageAnalyzer);
+        VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
+        ImageAnalyzer mockedImageAnalyzer = new ImageAnalyzer() {
+            @Override
+            public String generateAndDownloadImage(String prompt, String outputFilePath) {
+                // Return a mocked image path to simulate success
+                return "mocked_generated_visual.png";
+            }
+        };
+        GenerateVisualInteractor interactor = new GenerateVisualInteractor(
+                visualDataAccessObject,
+                mockedImageAnalyzer,
+                successPresenter // Pass the mock presenter here
+        );
 
         // Step 4: Execute the Interactor
         interactor.execute(inputData);
@@ -63,17 +73,20 @@ class GenerateVisualInteractorTest {
             @Override
             public void prepareFailView(String error) {
                 // Validate the error message
-                assertEquals("Error generating visual.", error);
+                assertTrue(error.startsWith("Error generating visual:"));
             }
         };
 
         // Step 3: Create an Interactor and inject the Presenter
         VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
         ImageAnalyzer imageAnalyzer = new ImageAnalyzer(); // Mocked ImageAnalyzer
-        GenerateVisualInteractor interactor = new GenerateVisualInteractor(visualDataAccessObject, imageAnalyzer);
+        GenerateVisualInteractor interactor = new GenerateVisualInteractor(
+                visualDataAccessObject,
+                imageAnalyzer,
+                failurePresenter // Pass the mock presenter here
+        );
 
         // Step 4: Execute the Interactor (this should call the failure presenter)
         interactor.execute(inputData);
     }
-
 }

@@ -1,5 +1,7 @@
 package app;
 
+import use_case.generate_visuals.ImageGeneratorInterface;
+
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -8,7 +10,13 @@ import java.net.URI;
 /**
  * Handles image generation and downloading.
  */
-public class ImageAnalyzer {
+public class ImageAnalyzer implements ImageGeneratorInterface {
+
+    @Override
+    public String generateImage(String prompt, String filePath) throws Exception {
+        // Use OpenAI API to generate and download the image
+        return generateAndDownloadImage(prompt, filePath);
+    }
 
     /**
      * Generates and downloads an image using OpenAI's DALL-E.
@@ -18,6 +26,7 @@ public class ImageAnalyzer {
      * @return The path to the saved image file.
      * @throws Exception If the process fails.
      */
+
     public String generateAndDownloadImage(String userInput, String outputFilePath) throws Exception {
         // Use ImageGenerator to get the image URL
         String imageUrl = ImageGenerator.generateImage(userInput, "dall-e-3", 1, "1024x1024");

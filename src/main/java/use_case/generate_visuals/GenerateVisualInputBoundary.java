@@ -7,7 +7,8 @@ package use_case.generate_visuals;
 public interface GenerateVisualInputBoundary {
     /**
      * Execute the Generate Visuals Use Case.
-     *  @param visualInputData the input data for this use case
+     *
+     * @param visualInputData the input data for this use case
      */
-    GenerateVisualOutputData execute(GenerateVisualInputData visualInputData);
+    void execute(GenerateVisualInputData visualInputData);
 }

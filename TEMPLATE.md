@@ -43,6 +43,7 @@ This project was created by Team Pitch!t as part of Group #159.
 >>> mypackage.do_stuff()
 'Oh yeah!'
 ```
+**This will be completed after the whole program is implemented.**
 
 
 ## ⬇️ Installation
@@ -60,6 +61,7 @@ And be sure to specify any other minimum requirements like Python versions or op
 
 ## 💭 Feedback and Contributing
 
-Add a link to the Discussions tab in your repo and invite users to open issues for bugs/feature requests.
+Here's the link to our repository: https://github.com/cemreboz/Pitch-t 
 
-This is also a great place to invite others to contribute in any ways that make sense for your project. Point people to your DEVELOPMENT and/or CONTRIBUTING guides if you have them.
+You can take a look at the commits, pull requests, and code reviews done by our team members. 
+

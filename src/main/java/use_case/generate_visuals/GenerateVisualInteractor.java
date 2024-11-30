@@ -5,36 +5,53 @@ import data_access.VisualDataAccessObject;
 import entity.Visual;
 
 /**
- * The interactor for the Generate Visual Use Case.
+ * The Generate Visual Interactor for handling the visual generation use case.
  */
 public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
 
     private final VisualDataAccessObject visualDataAccessObject;
-    private final ImageAnalyzer imageAnalyzer;
+    private final ImageGeneratorInterface imageGenerator;
+    private final GenerateVisualOutputBoundary presenter;
 
-    public GenerateVisualInteractor(VisualDataAccessObject visualDataAccessObject, ImageAnalyzer imageAnalyzer) {
+    public GenerateVisualInteractor(VisualDataAccessObject visualDataAccessObject,
+                                    ImageGeneratorInterface imageGenerator,
+                                    GenerateVisualOutputBoundary presenter) {
         this.visualDataAccessObject = visualDataAccessObject;
-        this.imageAnalyzer = imageAnalyzer;
+        this.imageGenerator = imageGenerator;
+        this.presenter = presenter;
     }
 
     /**
      * Executes the Generate Visuals Use Case.
+     *
      * @param inputData the input data for this use case
-     * @return output data with generated image information
-     * @throws RuntimeException if visual is not generated
      */
-    public GenerateVisualOutputData execute(GenerateVisualInputData inputData) {
-        try {
-            final String fullPrompt = inputData.getPrompt() + " tailored to persona " + inputData.getPersonaName();
-            final String imagePath = imageAnalyzer.generateAndDownloadImage(fullPrompt, "generated_visual.png");
 
+    public void execute(GenerateVisualInputData inputData) {
+        try {
+            // Generate the visual prompt
+            final String fullPrompt = inputData.getPrompt() + " tailored to persona " + inputData.getPersonaName();
+
+            // Generate and download the image
+            final String imagePath = imageGenerator.generateImage(fullPrompt, "generated_visual.png");
+
+            // Save the generated visual to the database (or file system)
             final Visual visual = new Visual(imagePath, fullPrompt);
             visualDataAccessObject.saveVisual(visual);
 
-            return new GenerateVisualOutputData(imagePath, "Visual generated successfully!");
+            // Prepare the output data (successful case)
+            final GenerateVisualOutputData outputData = new GenerateVisualOutputData(imagePath, "Visual generated successfully!");
+
+            // Call the presenter to update the view
+            presenter.prepareSuccessView(outputData);
+
         }
         catch (Exception e) {
-            throw new RuntimeException("Error generating visual: " + e.getMessage());
+            // In case of failure, prepare an error message
+            final String errorMessage = "Error generating visual: " + e.getMessage();
+
+            // Call the presenter to notify the failure
+            presenter.prepareFailView(errorMessage);
         }
     }
 }

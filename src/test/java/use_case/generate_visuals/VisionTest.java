@@ -3,6 +3,7 @@ package use_case.generate_visuals;
 import entity.Persona;
 import entity.Pitch;
 import entity.Visual;
+import interface_adapter.vision.VisionPresenter;
 import view.VisionView;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionViewModel;
@@ -29,16 +30,22 @@ public class VisionTest {
                 List.of("User-Friendly", "AI-Driven", "Scalable")
         );
 
-        // Set up VisionController and VisionViewModel
-        VisionController visionController = new VisionController(
-                new GenerateVisualInteractor(new VisualDataAccessObject() {
+        VisionViewModel visionViewModel = new VisionViewModel();
+        VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
+        GenerateVisualInteractor generateVisualInteractor = new GenerateVisualInteractor(
+                new VisualDataAccessObject() {
                     @Override
                     public void saveVisual(Visual visual) {
-
+                        // Mock saving visual
+                        System.out.println("Visual saved: " + visual.getImagePath());
                     }
-                }, new ImageAnalyzer())
+                },
+                new ImageAnalyzer(),
+                visionPresenter // Pass the presenter here
         );
-        VisionViewModel visionViewModel = new VisionViewModel();
+
+        VisionController visionController = new VisionController(generateVisualInteractor);
+
 
         // Print persona details to ensure getters are working
         System.out.println("Testing Persona:");
