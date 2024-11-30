@@ -1,21 +1,22 @@
 package view;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import entity.Persona;
 import entity.Pitch;
 import interface_adapter.vision.VisionController;
+import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
 
-import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.*;
 
 /**
- * VisionView is the user interface for generating and viewing AI-generated visuals
- * for a pitch and interacting with a persona.
+ * The View for the Vision Page.
  */
 public class VisionView extends JFrame implements PropertyChangeListener {
+
     private final Persona persona;
     private final Pitch pitch;
     private final VisionController controller;
@@ -36,11 +37,8 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         attachViewModelListeners();
     }
 
-    /**
-     * Initializes the VisionView UI components.
-     */
     private void initializeUserInterface() {
-        setTitle("Vision Feature for " + pitch.getName());
+        setTitle("Vision Feature for " + persona.getName());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLayout(new BorderLayout());
@@ -96,62 +94,52 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         generateInitialVisual();
     }
 
-    /**
-     * Attaches listeners to the ViewModel to update the UI on changes.
-     */
     private void attachViewModelListeners() {
-        viewModel.addImagePathListener(this::updateImageDisplay);
-        viewModel.addErrorMessageListener(this::updateErrorMessage);
+        viewModel.addPropertyChangeListener(this);
     }
 
-    /**
-     * Generates the initial visual based on the persona and pitch.
-     */
     private void generateInitialVisual() {
-        controller.generateImage(persona.getName(), pitch.getName());
+        // Set loading state and trigger the image generation process
+        final VisionState state = viewModel.getState();
+        state.setLoading(true);
+        viewModel.updateView(state);
+
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch"
+                + pitch.getName();
+        controller.generateImage(prompt, persona.getName());
     }
 
-    /**
-     * Regenerates the visual with the same inputs.
-     */
     private void regenerateVisual() {
-        controller.generateImage(persona.getName(), pitch.getName());
+        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName()
+                + "for the pitch" + pitch.getName();
+        controller.generateImage(prompt, persona.getName());
     }
 
-    /**
-     * Updates the UI to display the generated image.
-     * @param event the new image path.
-     */
-    private void updateImageDisplay(PropertyChangeEvent event) {
-        final String newImagePath = (String) event.getNewValue();
-        if (newImagePath != null) {
-            final ImageIcon imageIcon = new ImageIcon(newImagePath);
-            final Image scaledImage = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-            adLabel.setIcon(new ImageIcon(scaledImage));
-            adLabel.setText(null);
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("imagePath".equals(evt.getPropertyName())) {
+            // Update the UI with the generated image
+            updateImageDisplay((String) evt.getNewValue());
         }
-        else {
+        else if ("errorMessage".equals(evt.getPropertyName())) {
+            // Handle errors
+            updateErrorMessage((String) evt.getNewValue());
+        }
+    }
+
+    private void updateImageDisplay(String imagePath) {
+        if (imagePath != null) {
+            final ImageIcon imageIcon = new ImageIcon(imagePath);
+            final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+            adLabel.setIcon(new ImageIcon(image));
+            adLabel.setText(null);
+        } else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }
     }
 
-    /**
-     * Updates the UI to display an error message.
-     * @param event The error message to display.
-     */
-    private void updateErrorMessage(PropertyChangeEvent event) {
-        final String errorMessage = (String) event.getNewValue();
+    private void updateErrorMessage(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        // Handle updates from the ViewModel (imagePath and errorMessage)
-        if (evt.getPropertyName().equals("imagePath")) {
-            updateImageDisplay(evt);
-        } else if (evt.getPropertyName().equals("errorMessage")) {
-            updateErrorMessage(evt);
-        }
     }
 }

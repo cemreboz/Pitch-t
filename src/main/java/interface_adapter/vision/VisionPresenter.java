@@ -16,17 +16,23 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
 
     @Override
     public void prepareSuccessView(GenerateVisualOutputData outputData) {
-        // Successfully generated image, update the ViewModel
-        viewModel.setImagePath(outputData.getImagePath());
-        viewModel.setErrorMessage(null);
-        viewModel.notifyListeners();
+        // Update the VisionState in the ViewModel
+        final VisionState currentState = viewModel.getState();
+        currentState.setGeneratedImageUrl(outputData.getImagePath());
+        currentState.setErrorMessage(null);
+
+        // Notify listeners that the state has been updated
+        viewModel.updateView(currentState);
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
-        // Error occurred while generating the image
-        viewModel.setImagePath(null);
-        viewModel.setErrorMessage(errorMessage);
-        viewModel.notifyListeners();
+        // Update the VisionState in the ViewModel with the error message
+        final VisionState currentState = viewModel.getState();
+        currentState.setGeneratedImageUrl(null);
+        currentState.setErrorMessage(errorMessage);
+
+        // Notify listeners that the state has been updated
+        viewModel.updateView(currentState);
     }
 }
