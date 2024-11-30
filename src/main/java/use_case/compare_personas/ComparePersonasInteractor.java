@@ -37,7 +37,8 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
     public void execute(ComparePersonasInputData inputData) {
         List<Persona> personas = inputData.getPersonas();
         if (personas.size() != 2) {
-            throw new IllegalArgumentException("Exactly two personas must be selected for comparison.");
+            outputBoundary.prepareFailView("Exactly two personas must be selected for comparison.");
+            return;
         }
 
         Persona persona1 = personas.get(0);
@@ -50,29 +51,70 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
         // Add user messages for both personas
         messagesForApi.add(new ChatMessage("user", String.format(
-                "Persona 1 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'like' or 'dislike'.",
+                "Persona 1 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'likes' or 'dislikes'.",
                 persona1.getName(), persona1.getAbout())));
 
         messagesForApi.add(new ChatMessage("user", String.format(
-                "Persona 2 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'like' or 'dislike'.",
+                "Persona 2 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'likes' or 'dislikes'.",
                 persona2.getName(), persona2.getAbout())));
 
         // Add final prompt to compare both personas
         messagesForApi.add(new ChatMessage("user",
-                "Based on the above responses, compare the two personas. What are their similarities and differences regarding their opinions on the pitch?"));
+                "Based on the above responses, compare the two personas. What are their similarities and differences regarding their opinions on the pitch? Start each with 'similar' or 'different'"));
 
-        String comparisonResponse;
         try {
             // Using getOpinion to call the API
-            comparisonResponse = chatgptDataAccessObject.getOpinion(messagesForApi);
-        }
-        catch (Exception e) {
-            comparisonResponse = "Unable to retrieve data";
+            String comparisonResponse = chatgptDataAccessObject.getOpinion(messagesForApi);
+
+            // Parse the response into opinions and comparison
+            String[] responseParts = comparisonResponse.split("\n\n");
+            if (responseParts.length < 3) {
+                outputBoundary.prepareFailView("Unexpected response format from API.");
+                return;
+            }
+
+            String persona1Opinion = responseParts[0];
+            String persona2Opinion = responseParts[1];
+            String comparison = responseParts[2];
+
+            // Create output data and pass it to output boundary
+            ComparePersonasOutputData outputData = new ComparePersonasOutputData(persona1, persona2, persona1Opinion, persona2Opinion, extractSimilarities(comparison), extractDifferences(comparison));
+            outputBoundary.presentComparison(outputData);
+        } catch (Exception e) {
+            outputBoundary.prepareFailView("Unable to retrieve data: " + e.getMessage());
             e.printStackTrace();
         }
+    }
 
-        // Create output data and pass it to output boundary
-        ComparePersonasOutputData outputData = new ComparePersonasOutputData(comparisonResponse);
-        outputBoundary.presentComparison(outputData);
+    /**
+     * Extracts similarities from the comparison text.
+     *
+     * @param comparison The comparison text from ChatGPT.
+     * @return A list of similarities.
+     */
+    private List<String> extractSimilarities(String comparison) {
+        List<String> similarities = new ArrayList<>();
+        for (String line : comparison.split("\n")) {
+            if (line.toLowerCase().startsWith("similar")) {
+                similarities.add(line);
+            }
+        }
+        return similarities;
+    }
+
+    /**
+     * Extracts differences from the comparison text.
+     *
+     * @param comparison The comparison text from ChatGPT.
+     * @return A list of differences.
+     */
+    private List<String> extractDifferences(String comparison) {
+        List<String> differences = new ArrayList<>();
+        for (String line : comparison.split("\n")) {
+            if (line.toLowerCase().startsWith("different")) {
+                differences.add(line);
+            }
+        }
+        return differences;
     }
 }
