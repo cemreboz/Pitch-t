@@ -1,8 +1,7 @@
 package use_case.chat_expert;
 
-import data_access.DetailedDataAccessObjectInterface;
+import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 import entity.ChatMessage;
-import entity.DetailedTargetAudience;
 import entity.Expert;
 import org.junit.jupiter.api.Test;
 
@@ -35,13 +34,13 @@ public class ChatExpertInteractorTest {
         // Create a mock ChatGPT data access object
         DetailedDataAccessObjectInterface chatgptDataAccessObject = new DetailedDataAccessObjectInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
+            public String utilizeApi(String systemMessage, String userMessage) {
                 // Return a mock response
                 return "Sure, I'd be happy to help!";
             }
 
             @Override
-            public String utilizeApi(List<ChatMessage> messages) throws Exception {
+            public String utilizeApi(List<ChatMessage> messages) {
                 // Return the expected mock response
                 return "Sure, I'd be happy to help!";
             }
@@ -90,14 +89,9 @@ public class ChatExpertInteractorTest {
         };
 
         // Create a mock ChatGPT data access object (methods not used in this test)
-        DetailedDataAccessObjectInterface chatgptDataAccessObject = new DetailedDataAccessObjectInterface() {
+        ExpertChatDataAccessInterface chatgptDataAccessObject = new ExpertChatDataAccessInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
-                return null;
-            }
-
-            @Override
-            public String utilizeApi(List<ChatMessage> messages) throws Exception {
+            public String utilizeApi(List<ChatMessage> messages) {
                 return null;
             }
         };
@@ -142,16 +136,11 @@ public class ChatExpertInteractorTest {
         };
 
         // Create a mock ChatGPT data access object that throws an exception
-        DetailedDataAccessObjectInterface chatgptDataAccessObject = new DetailedDataAccessObjectInterface() {
+        ExpertChatDataAccessInterface chatgptDataAccessObject = new ExpertChatDataAccessInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
-                throw new Exception("API error");
-            }
-
-            @Override
-            public String utilizeApi(List<ChatMessage> messages) throws Exception {
+            public String utilizeApi(List<ChatMessage> messages) {
                 // Simulate an exception being thrown
-                throw new Exception("API error");
+                throw new RuntimeException("API error");
             }
         };
 

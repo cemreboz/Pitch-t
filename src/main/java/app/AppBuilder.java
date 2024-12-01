@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
-import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -22,12 +21,12 @@ import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
-import interface_adapter.expert.ExpertController;
-import interface_adapter.expert.ExpertPresenter;
-import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertPresenter;
+import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -53,31 +52,40 @@ import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.chat_expert.ExpertChatDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
-import use_case.expert.ExpertInputBoundary;
-import use_case.expert.ExpertInteractor;
-import use_case.expert.ExpertOutputBoundary;
-import use_case.new_pitch.NewPitchInputBoundary;
-import use_case.new_pitch.NewPitchInteractor;
-import use_case.new_pitch.NewPitchOutputBoundary;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.new_pitch.NewPitchInputBoundary;
+import use_case.new_pitch.NewPitchInteractor;
+import use_case.new_pitch.NewPitchOutputBoundary;
 import use_case.persona.PersonaInputBoundary;
 import use_case.persona.PersonaInteractor;
 import use_case.persona.PersonaOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.*;
+import view.AccountSettingsView;
+import view.DashboardView;
+import view.ExpertChatView;
+import view.LoginView;
+import view.NewPitchView;
+import view.PersonaChatView;
+import view.PitchView;
+import view.SignupView;
+import view.ViewManager;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -393,9 +401,8 @@ public class AppBuilder {
     public AppBuilder addChatExpertUseCase() {
         final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
                 expertViewModel, viewManagerModel);
-
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final DetailedDataAccessObjectInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ExpertChatDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);

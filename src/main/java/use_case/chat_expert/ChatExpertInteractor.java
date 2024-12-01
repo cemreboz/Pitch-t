@@ -3,9 +3,8 @@ package use_case.chat_expert;
 import java.util.ArrayList;
 import java.util.List;
 
-import data_access.DetailedDataAccessObjectInterface;
+import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 import entity.ChatMessage;
-import entity.DetailedTargetAudience;
 import entity.Expert;
 
 /**
@@ -15,7 +14,7 @@ import entity.Expert;
 public class ChatExpertInteractor implements ChatExpertInputBoundary {
 
     private final ChatExpertDataAccessInterface expertRepository;
-    private final DetailedDataAccessObjectInterface chatgptDataAccessObject;
+    private final ExpertChatDataAccessInterface chatgptDataAccessObject;
     private final ChatExpertOutputBoundary outputBoundary;
 
     /**
@@ -26,7 +25,7 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
      * @param outputBoundary   The output boundary interface.
      */
     public ChatExpertInteractor(
-            ChatExpertDataAccessInterface expertRepository, DetailedDataAccessObjectInterface chatgptDataAccessObject,
+            ChatExpertDataAccessInterface expertRepository, ExpertChatDataAccessInterface chatgptDataAccessObject,
             ChatExpertOutputBoundary outputBoundary) {
         this.expertRepository = expertRepository;
         this.chatgptDataAccessObject = chatgptDataAccessObject;
