@@ -1,6 +1,8 @@
 package app;
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +12,7 @@ import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
+import entity.Persona;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
@@ -78,6 +81,11 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import interface_adapter.view_personas.ViewPersonasController;
+import interface_adapter.view_personas.ViewPersonasPresenter;
+import interface_adapter.view_personas.ViewPersonasViewModel;
+import use_case.view_personas.*;
+import view.PersonaListView;
 import view.AccountSettingsView;
 import view.DashboardView;
 import view.ExpertChatView;
@@ -126,6 +134,8 @@ public class AppBuilder {
     private ExpertViewModel expertViewModel;
     private ComparePersonasViewModel comparePersonasViewModel;
     private PersonaListView personaListView;
+    private ViewPersonasViewModel viewPersonasViewModel;
+    private ComparePersonasController comparePersonasController;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -421,6 +431,42 @@ public class AppBuilder {
 
         // Set the controller for the Persona List View
         personaListView.setComparePersonasController(comparePersonasController);
+
+        return this;
+    }
+
+    /**
+     * Adds the View Personas View to the application.
+     * @return this builder
+     */
+    public AppBuilder addViewPersonasView() {
+        final List<Persona> token = new ArrayList<>();
+        viewPersonasViewModel = new ViewPersonasViewModel();
+        personaListView = new PersonaListView(token,
+                comparePersonasController,
+                comparePersonasViewModel);
+        cardPanel.add(personaListView, personaListView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the View Personas Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addViewPersonasUseCase() {
+        // Instantiate Output Boundary (Presenter)
+        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel);
+
+        // Instantiate Interactor
+        // Todo: for some reason unable to plug in the chatgptdataAccessInterface
+        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
+
+        // Instantiate Controller
+        ViewPersonasController controller = new ViewPersonasController(interactor);
+
+        // Set Controller in View
+        personaListView.setViewPersonasController(controller);
 
         return this;
     }

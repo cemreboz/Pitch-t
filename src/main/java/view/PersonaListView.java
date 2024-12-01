@@ -3,6 +3,7 @@ package view;
 import entity.Persona;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
+import interface_adapter.view_personas.ViewPersonasController;
 import interface_adapter.view_personas.ViewPersonasViewModel;
 import use_case.compare_personas.ComparePersonasInputData;
 
@@ -22,6 +23,8 @@ public class PersonaListView extends JPanel {
     private final JButton visionButton;
     private final JButton chatButton;
     private final JCheckBox[] personaCheckBoxes;
+    private ViewPersonasController viewController;
+    private final String viewname = "Personas List";
 
     public PersonaListView(List<Persona> personas, ComparePersonasController compareController, ComparePersonasViewModel compareViewModel) {
         this.personas = personas;
@@ -137,4 +140,13 @@ public class PersonaListView extends JPanel {
     public void setComparePersonasController(ComparePersonasController comparePersonasController) {
         // Implement for the view personas list
     }
+
+    public void setViewPersonasController(ViewPersonasController viewPersonasController) {
+        this.viewController = viewPersonasController;
+    }
+
+    public String getViewName() {
+        return viewname;
+    }
+
 }
