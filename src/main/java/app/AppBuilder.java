@@ -42,8 +42,7 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
-import interface_adapter.targetaudience.TargetAudienceController;
-import interface_adapter.targetaudience.TargetAudiencePresenter;
+import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -77,19 +76,11 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
-import use_case.set_targetaudience.TargetAudienceInteractor;
+import use_case.set_targetaudience.*;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.AccountSettingsView;
-import view.DashboardView;
-import view.ExpertChatView;
-import view.LoginView;
-import view.NewPitchView;
-import view.PersonaListView;
-import view.PitchView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -129,6 +120,8 @@ public class AppBuilder {
     private ExpertViewModel expertViewModel;
     private ComparePersonasViewModel comparePersonasViewModel;
     private PersonaListView personaListView;
+    private DetailedTargetAudiencePageViewModel detailedTargetAudiencePageViewModel;
+    private DetailedView detailedView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -404,6 +397,23 @@ public class AppBuilder {
         expertChatView.setChatExpertController(chatExpertController);
         return this;
     }
+
+    /**
+     *
+     * @return this builder.
+     */
+//    public AppBuilder addDetailedTargetAudienceUseCase() {
+//        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
+//                detailedTargetAudiencePageViewModel);
+//
+//        final DetailedtaDataAccessInterface detailedDataAccessInterface = new DetailedtaDataAccessInterface();
+//        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+//                detailedOutputBoundary);
+//        final DetailedController detailedController = new DetailedController(detailedInteractor);
+//
+//        detailedView;
+//        return this;
+//    }
 
     /**
      * Adds the compare personas use case.
