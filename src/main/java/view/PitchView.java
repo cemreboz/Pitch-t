@@ -1,5 +1,22 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import entity.Pitch;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
@@ -7,11 +24,6 @@ import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
-
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -21,7 +33,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     private final String viewName = "pitch";
     private final PitchViewModel pitchViewModel;
     private HamburgerMenu hamburgerMenu;
-    private ViewPersonasController viewPersonasController;
 
     private final int fifty = 50;
     private final int hundred = 100;
@@ -29,7 +40,9 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
-    private JButton viewPersonasButton;
+
+    // Add reference to the ViewPersonasController
+    private ViewPersonasController viewPersonasController;
 
     public PitchView(PitchViewModel pitchViewModel) {
         this.pitchViewModel = pitchViewModel;
@@ -49,10 +62,15 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         this.add(headerPanel);
         this.add(namePanel);
 
-        // Add "View Personas" button
-        viewPersonasButton = new JButton("View Personas");
-        viewPersonasButton.setAlignmentX(CENTER_ALIGNMENT);
-        viewPersonasButton.addActionListener(e -> handleViewPersonasButton());
+        // Add the "View Personas" button
+        JButton viewPersonasButton = new JButton("View Personas");
+        viewPersonasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleViewPersonasButton();
+            }
+        });
+
         this.add(viewPersonasButton);
     }
 
@@ -83,13 +101,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         return headerPanel;
     }
 
-    private void handleViewPersonasButton() {
-        if (viewPersonasController != null) {
-            PitchState state = pitchViewModel.getState();
-            viewPersonasController.execute(state.getPitch());
-        }
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final PitchState state = (PitchState) evt.getNewValue();
@@ -111,47 +122,45 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         }
     }
 
-    public String getViewName() {
-        return viewName;
+    // Start of View Personas user flow
+    private void handleViewPersonasButton() {
+        // Assuming you have an instance of PitchState
+        PitchState pitchState = pitchViewModel.getState();
+        Pitch pitch = pitchState.getPitch();
+
+        if (pitch == null) {
+            // Handle error scenario - pitch not loaded properly
+            String error = pitchState.getPitchLoadError();
+            JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Pass this to the ViewPersonasController to initiate the use case
+        viewPersonasController.execute(pitch);
     }
 
-    /**
-     * Method to set hamburger menu login controller.
-     * @param loginController login controller
-     */
+    // Setters for controllers
     public void setLoginController(LoginController loginController) {
         hamburgerMenu.setLoginController(loginController);
     }
 
-    /**
-     * Method to set hamburger menu account settings controller.
-     * @param accountSettingsController account settings.
-     */
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
 
-    /**
-     * Method to set hamburger menu expert controller.
-     * @param expertController expert controller
-     */
     public void setExpertController(ExpertController expertController) {
         hamburgerMenu.setExpertController(expertController);
     }
 
-    /**
-     * Method to set hamburger menu new pitch controller.
-     * @param newPitchController new pitch controller
-     */
     public void setNewPitchController(NewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 
-    /**
-     * Method to set view personas controller.
-     * @param viewPersonasController view personas controller
-     */
     public void setViewPersonasController(ViewPersonasController viewPersonasController) {
         this.viewPersonasController = viewPersonasController;
+    }
+
+    public String getViewName() {
+        return viewName;
     }
 }

@@ -1,6 +1,5 @@
 package use_case.view_personas;
 
-import entity.DetailedTargetAudience;
 import entity.Pitch;
 
 /**
@@ -8,7 +7,6 @@ import entity.Pitch;
  */
 public class ViewPersonasInputData {
     private final Pitch currentPitch;
-  /**/ /* private final DetailedTargetAudience currentAudience;*/
 
     /**
      * Constructs the input data with the specified pitch ID.
@@ -17,7 +15,6 @@ public class ViewPersonasInputData {
      */
     public ViewPersonasInputData(Pitch currentPitch) {
         this.currentPitch = currentPitch;
-    /*    this.currentAudience = currentAudience;*/
     }
 
     /**
