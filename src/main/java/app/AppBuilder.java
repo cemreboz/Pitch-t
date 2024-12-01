@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
+import data_access.InMemoryVisualDataAccessObject;
+import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -24,12 +26,19 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.vision.VisionController;
+import interface_adapter.vision.VisionPresenter;
+import interface_adapter.vision.VisionViewModel;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.generate_visuals.GenerateVisualInputBoundary;
+import use_case.generate_visuals.GenerateVisualInteractor;
+import use_case.generate_visuals.GenerateVisualOutputBoundary;
+import use_case.generate_visuals.ImageGeneratorInterface;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -39,11 +48,7 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.AccountSettingsView;
-import view.DashboardView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -66,15 +71,18 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
+    private final InMemoryVisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject();
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
     private AccountSettingsViewModel accountSettingsViewModel;
+    private VisionViewModel visionViewModel;
     private AccountSettingsView accountSettingsView;
     private LoginView loginView;
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
+    private VisionView visionView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -121,6 +129,17 @@ public class AppBuilder {
         accountSettingsViewModel = new AccountSettingsViewModel();
         accountSettingsView = new AccountSettingsView(accountSettingsViewModel);
         cardPanel.add(accountSettingsView, accountSettingsView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds Vision to the application.
+     * @return this builder
+     */
+    public AppBuilder addVisionView() {
+        visionViewModel = new VisionViewModel();
+        visionView = new VisionView(visionViewModel);
+        cardPanel.add(visionView, visionView.getViewName());
         return this;
     }
 
@@ -217,6 +236,21 @@ public class AppBuilder {
                 accountSettingsInteractor);
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
+        return this;
+    }
+
+    /**
+     * Adds the Vision Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addVisionUseCase() {
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
+
+        final GenerateVisualInputBoundary visionInteractor =
+                new GenerateVisualInteractor(visualDataAccessObject, imageGenerator, generateVisualOutputBoundary);
+
+        final VisionController visionController = new LogoutController(visionInteractor);
+        visionView.setVisionController(visionController);
         return this;
     }
 

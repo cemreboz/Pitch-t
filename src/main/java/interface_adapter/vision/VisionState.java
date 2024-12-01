@@ -63,4 +63,4 @@ public class VisionState {
         this.isSuccess = isSuccess;
     }
 }
-}
+

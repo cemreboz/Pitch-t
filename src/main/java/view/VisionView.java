@@ -2,6 +2,7 @@ package view;
 
 import entity.Persona;
 import entity.Pitch;
+import interface_adapter.login.LoginController;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
@@ -16,11 +17,12 @@ import javax.swing.*;
  * The View for the Vision Page.
  */
 public class VisionView extends JFrame implements PropertyChangeListener {
+    private final String viewName = "vision";
 
     private final Persona persona;
     private final Pitch pitch;
-    private final VisionController controller;
-    private final VisionViewModel viewModel;
+    private VisionController controller;
+    private final VisionViewModel visionViewModel;
 
     // UI Components
     private JLabel adLabel;
@@ -31,7 +33,7 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         this.persona = persona;
         this.pitch = pitch;
         this.controller = controller;
-        this.viewModel = viewModel;
+        this.visionViewModel = viewModel;
 
         initializeUserInterface();
         attachViewModelListeners();
@@ -95,14 +97,14 @@ public class VisionView extends JFrame implements PropertyChangeListener {
     }
 
     private void attachViewModelListeners() {
-        viewModel.addPropertyChangeListener(this);
+        visionViewModel.addPropertyChangeListener(this);
     }
 
     private void generateInitialVisual() {
         // Set loading state and trigger the image generation process
-        final VisionState state = viewModel.getState();
+        final VisionState state = visionViewModel.getState();
         state.setLoading(true);
-        viewModel.updateView(state);
+        visionViewModel.updateView(state);
 
         final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch"
                 + pitch.getName();
@@ -141,5 +143,13 @@ public class VisionView extends JFrame implements PropertyChangeListener {
 
     private void updateErrorMessage(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setVisionController(VisionController visionController) {
+        this.controller = visionController;
     }
 }

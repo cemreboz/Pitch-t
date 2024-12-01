@@ -23,6 +23,7 @@ public class Main {
                                             .addLogoutUseCase()
                                             .addDashboardUseCase()
                                             .addAccountSettingsUseCase()
+                                            .addVisionView()
                                             .build();
 
         application.pack();
