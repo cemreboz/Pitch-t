@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
 /**
  * The view for when a user wants to view the details of a specific pitch.
  */
-public class PitchView extends JPanel implements PropertyChangeListener {
+public class PitchViewTest extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "pitch";
     private final PitchViewModel pitchViewModel;

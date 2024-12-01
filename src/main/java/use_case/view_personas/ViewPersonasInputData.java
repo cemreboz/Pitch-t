@@ -8,16 +8,16 @@ import entity.Pitch;
  */
 public class ViewPersonasInputData {
     private final Pitch currentPitch;
-    private final DetailedTargetAudience currentAudience;
+  /**/ /* private final DetailedTargetAudience currentAudience;*/
 
     /**
      * Constructs the input data with the specified pitch ID.
      *
      * @param currentPitch the pitch.
      */
-    public ViewPersonasInputData(Pitch currentPitch, DetailedTargetAudience currentAudience) {
+    public ViewPersonasInputData(Pitch currentPitch) {
         this.currentPitch = currentPitch;
-        this.currentAudience = currentAudience;
+    /*    this.currentAudience = currentAudience;*/
     }
 
     /**
@@ -28,15 +28,5 @@ public class ViewPersonasInputData {
     public Pitch getPitch() {
         return currentPitch;
     }
-
-    /**
-     * Retrieves the Target audience.
-     *
-     * @return the pitch ID.
-     */
-    public DetailedTargetAudience getCurrentAudience() {
-        return currentAudience;
-    }
-
 }
 
