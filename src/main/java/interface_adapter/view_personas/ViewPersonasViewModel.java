@@ -1,16 +1,16 @@
 package interface_adapter.view_personas;
 
-import entity.Persona;
 import interface_adapter.ViewModel;
 
-import java.util.List;
+import java.util.ArrayList;
 
-/**
- * The ViewModel for the View Personas page.
- */
 public class ViewPersonasViewModel extends ViewModel<ViewPersonasState> {
     public ViewPersonasViewModel() {
         super("personas list");
-        setState(null);
+
+        // Initialize with an empty state to prevent null pointer issues
+        ViewPersonasState initialState = new ViewPersonasState();
+        initialState.setPersonas(new ArrayList<>()); // Setting an empty list initially
+        setState(initialState);
     }
 }

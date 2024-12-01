@@ -20,6 +20,8 @@ public class Main {
                                             .addDashboardView()
                                             .addPitchView()
                                             .addNewPitchView()
+                                            .addViewPersonasView()
+                                            .addViewPersonasUseCase()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()

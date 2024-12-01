@@ -10,15 +10,17 @@ import use_case.compare_personas.ComparePersonasInputData;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 /**
  * The View for listing personas and comparing them.
  */
-public class PersonaListView extends JPanel {
+public class PersonaListView extends JPanel implements PropertyChangeListener {
     private final ComparePersonasController compareController;
     private final ComparePersonasViewModel compareViewModel;
-    private final List<Persona> personas;
+    private final ViewPersonasViewModel viewModel;
     private final JButton compareButton;
     private final JButton visionButton;
     private final JButton chatButton;
@@ -26,10 +28,14 @@ public class PersonaListView extends JPanel {
     private ViewPersonasController viewController;
     private final String viewname = "Personas List";
 
-    public PersonaListView(List<Persona> personas, ComparePersonasController compareController, ComparePersonasViewModel compareViewModel) {
-        this.personas = personas;
+    public PersonaListView(ViewPersonasViewModel viewModel,
+                           ComparePersonasController compareController,
+                           ComparePersonasViewModel compareViewModel) {
+        this.viewModel = viewModel;
         this.compareController = compareController;
         this.compareViewModel = compareViewModel;
+
+        this.viewModel.addPropertyChangeListener(this);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -37,6 +43,7 @@ public class PersonaListView extends JPanel {
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(titleLabel);
 
+        List<Persona> personas = viewModel.getState().getPersonas();
         personaCheckBoxes = new JCheckBox[personas.size()];
         for (int i = 0; i < personas.size(); i++) {
             personaCheckBoxes[i] = new JCheckBox(personas.get(i).getName());
@@ -83,7 +90,7 @@ public class PersonaListView extends JPanel {
         int count = 0;
         for (int i = 0; i < personaCheckBoxes.length; i++) {
             if (personaCheckBoxes[i].isSelected()) {
-                selectedPersonas[count++] = personas.get(i);
+                selectedPersonas[count++] = viewModel.getState().getPersonas().get(i);
                 if (count == 2) break;
             }
         }
@@ -104,7 +111,7 @@ public class PersonaListView extends JPanel {
         Persona selectedPersona = null;
         for (int i = 0; i < personaCheckBoxes.length; i++) {
             if (personaCheckBoxes[i].isSelected()) {
-                selectedPersona = personas.get(i);
+                selectedPersona = viewModel.getState().getPersonas().get(i);
                 break;
             }
         }
@@ -123,7 +130,7 @@ public class PersonaListView extends JPanel {
         Persona selectedPersona = null;
         for (int i = 0; i < personaCheckBoxes.length; i++) {
             if (personaCheckBoxes[i].isSelected()) {
-                selectedPersona = personas.get(i);
+                selectedPersona = viewModel.getState().getPersonas().get(i);
                 break;
             }
         }
@@ -138,7 +145,7 @@ public class PersonaListView extends JPanel {
     }
 
     public void setComparePersonasController(ComparePersonasController comparePersonasController) {
-        // Implement for the view personas list
+        // Set the compare personas controller
     }
 
     public void setViewPersonasController(ViewPersonasController viewPersonasController) {
@@ -149,4 +156,28 @@ public class PersonaListView extends JPanel {
         return viewname;
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if ("state".equals(evt.getPropertyName())) {
+            // Update the list of personas
+            removeAll();
+
+            JLabel titleLabel = new JLabel("Select Personas to Compare, Chat, or Generate Vision");
+            titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+            add(titleLabel);
+
+            List<Persona> personas = viewModel.getState().getPersonas();
+            for (int i = 0; i < personas.size(); i++) {
+                personaCheckBoxes[i] = new JCheckBox(personas.get(i).getName());
+                add(personaCheckBoxes[i]);
+            }
+
+            add(compareButton);
+            add(visionButton);
+            add(chatButton);
+
+            revalidate();
+            repaint();
+        }
+    }
 }

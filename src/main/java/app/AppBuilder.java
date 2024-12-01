@@ -192,6 +192,14 @@ public class AppBuilder {
     public AppBuilder addPitchView() {
         pitchViewModel = new PitchViewModel();
         pitchView = new PitchView(pitchViewModel);
+
+        // Block for the ViewPersonasController
+        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel);
+        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
+        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
+        pitchView.setViewPersonasController(viewPersonasController);
+
         cardPanel.add(pitchView, pitchView.getViewName());
         return this;
     }
@@ -440,9 +448,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addViewPersonasView() {
-        final List<Persona> token = new ArrayList<>();
         viewPersonasViewModel = new ViewPersonasViewModel();
-        personaListView = new PersonaListView(token,
+        personaListView = new PersonaListView(viewPersonasViewModel,
                 comparePersonasController,
                 comparePersonasViewModel);
         cardPanel.add(personaListView, personaListView.getViewName());
@@ -454,11 +461,15 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addViewPersonasUseCase() {
+        // Initialize ViewModel before using it
+        if (viewPersonasViewModel == null) {
+            viewPersonasViewModel = new ViewPersonasViewModel();
+        }
+
         // Instantiate Output Boundary (Presenter)
         ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel);
 
         // Instantiate Interactor
-        // Todo: for some reason unable to plug in the chatgptdataAccessInterface
         ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
         ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
 
