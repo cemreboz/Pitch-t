@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,6 +12,8 @@ import data_access.ChatgptDataAccessObject;
 import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
+import entity.Persona;
+import entity.Pitch;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
@@ -20,6 +23,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.chat_persona.ChatPersonaController;
+import interface_adapter.chat_persona.ChatPersonaPresenter;
+import interface_adapter.chat_persona.ChatPersonaViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.expert.ExpertController;
@@ -53,6 +59,7 @@ import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.chat_persona.ChatPersonaInteractor;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
@@ -205,9 +212,49 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addPersonaChatView() {
-        personaViewModel = new PersonaViewModel();
-        personaChatView = new PersonaChatView(personaViewModel, viewManagerModel);
-        cardPanel.add(personaChatView, personaChatView.getViewName());
+        // Create ViewModel and State
+        ChatPersonaViewModel chatPersonaViewModel = new ChatPersonaViewModel();
+
+        // Setup mock Persona and Pitch for testing purposes
+        Persona testPersona = new Persona();
+        testPersona.setName("John Doe");
+        testPersona.setAge(35);
+        testPersona.setOccupation("Product Manager");
+        testPersona.setLocation("San Francisco");
+
+        Pitch testPitch = new Pitch(
+                "pitch1",
+                "Green Energy Solutions",
+                null,
+                "A sustainable solution for renewable energy.",
+                List.of("Environmentalists", "Tech Enthusiasts")
+        );
+
+        // Set persona and pitch in the state
+        chatPersonaViewModel.getState().setPersona(testPersona);
+        chatPersonaViewModel.getState().setPitch(testPitch);
+
+        // Create the Output Boundary (Presenter)
+        ChatPersonaPresenter chatPersonaPresenter = new ChatPersonaPresenter(chatPersonaViewModel);
+
+        // Create the Data Access Object and Interactor
+        ChatgptDataAccessObject chatgptDao = new ChatgptDataAccessObject();
+        ChatPersonaInteractor chatPersonaInteractor = new ChatPersonaInteractor(chatgptDao, chatPersonaPresenter);
+
+        // Create the Controller
+        ChatPersonaController chatPersonaController = new ChatPersonaController(chatPersonaInteractor);
+
+        // Initialize the PersonaChatView
+        personaChatView = new PersonaChatView(
+                chatPersonaController,
+                chatPersonaViewModel,
+                testPersona,
+                testPitch,
+                viewManagerModel
+        );
+
+        // Add the view to the card panel
+        cardPanel.add(personaChatView, "PersonaChatView");
 
         return this;
     }
