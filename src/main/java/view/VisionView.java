@@ -122,7 +122,8 @@ public class VisionView extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if ("imagePath".equals(evt.getPropertyName())) {
             // Update the UI with the generated image
-            updateImageDisplay((String) evt.getNewValue());
+            final String newImagePath = (String) evt.getNewValue();
+            updateImageDisplay(newImagePath);
         }
         else if ("errorMessage".equals(evt.getPropertyName())) {
             // Handle errors
@@ -134,12 +135,17 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         if (imagePath != null) {
             final ImageIcon imageIcon = new ImageIcon(imagePath);
             final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+
             adLabel.setIcon(new ImageIcon(image));
             adLabel.setText(null);
-        } else {
+        }
+        else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }
+
+        revalidate();
+        repaint();
     }
 
     private void updateErrorMessage(String errorMessage) {
