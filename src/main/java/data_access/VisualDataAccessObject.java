@@ -2,15 +2,20 @@ package data_access;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entity.Visual;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VisualDataAccessObject {
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
     private static final String API_KEY = System.getenv("OPENAI_API_KEY");
+
+    private final Map<String, Visual> imageStorage = new HashMap<>();
 
     /**
      * Generates an image using OpenAI's DALL-E model.
@@ -41,6 +46,17 @@ public class VisualDataAccessObject {
         else {
             throw new RuntimeException("Error generating image: " + response.body());
         }
+    }
+
+    /**
+     * Saves the image URL in the in-memory storage.
+     *
+     * @param filePath The file path (key) where the image is saved.
+     * @param imageUrl The URL of the generated image.
+     */
+    public void saveImage(String filePath, String imageUrl, String prompt) {
+        final Visual visual = new Visual(imageUrl, prompt);
+        imageStorage.put(filePath, visual);
     }
 
     public static void main(String[] args) {

@@ -7,7 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
-import data_access.InMemoryVisualDataAccessObject;
+import data_access.FileVisualDataAccessObject;
+import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -69,7 +70,8 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-    private final InMemoryVisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject();
+    private final VisualDataAccessObject visualDataAccessObject = new VisualDataAccessObject();
+    private final FileVisualDataAccessObject fileVisualDataAccessObject = new FileVisualDataAccessObject();
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
@@ -136,7 +138,7 @@ public class AppBuilder {
      */
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
-        visionView = new VisionView(visionViewModel);
+        visionView = new VisionView(visionViewModel, persona, pitch, controller);
         cardPanel.add(visionView, visionView.getViewName());
         return this;
     }
@@ -245,9 +247,10 @@ public class AppBuilder {
         final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
 
         final GenerateVisualInputBoundary visionInteractor =
-                new GenerateVisualInteractor(visualDataAccessObject, imageGenerator, generateVisualOutputBoundary);
+                new GenerateVisualInteractor(visualDataAccessObject, fileVisualDataAccessObject,
+                        generateVisualOutputBoundary);
 
-        final VisionController visionController = new LogoutController(visionInteractor);
+        final VisionController visionController = new VisionController(visionInteractor);
         visionView.setVisionController(visionController);
         return this;
     }

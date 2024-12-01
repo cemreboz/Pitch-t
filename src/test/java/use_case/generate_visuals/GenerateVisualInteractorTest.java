@@ -1,6 +1,6 @@
 package use_case.generate_visuals;
 
-import app.ImageAnalyzer;
+import data_access.FileVisualDataAccessObject;
 import data_access.InMemoryVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
 
@@ -35,7 +35,7 @@ class GenerateVisualInteractorTest {
 
         // Step 3: Create an Interactor and inject the Presenter
         VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
-        ImageAnalyzer mockedImageAnalyzer = new ImageAnalyzer() {
+        FileVisualDataAccessObject mockedFileVisualDataAccessObject = new FileVisualDataAccessObject() {
             @Override
             public String generateAndDownloadImage(String prompt, String outputFilePath) {
                 // Return a mocked image path to simulate success
@@ -44,7 +44,7 @@ class GenerateVisualInteractorTest {
         };
         GenerateVisualInteractor interactor = new GenerateVisualInteractor(
                 visualDataAccessObject,
-                mockedImageAnalyzer,
+                mockedFileVisualDataAccessObject,
                 successPresenter // Pass the mock presenter here
         );
 
@@ -78,10 +78,10 @@ class GenerateVisualInteractorTest {
 
         // Step 3: Create an Interactor and inject the Presenter
         VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
-        ImageAnalyzer imageAnalyzer = new ImageAnalyzer(); // Mocked ImageAnalyzer
+        FileVisualDataAccessObject fileVisualDataAccessObject = new FileVisualDataAccessObject(); // Mocked ImageAnalyzer
         GenerateVisualInteractor interactor = new GenerateVisualInteractor(
                 visualDataAccessObject,
-                imageAnalyzer,
+                fileVisualDataAccessObject,
                 failurePresenter // Pass the mock presenter here
         );
 

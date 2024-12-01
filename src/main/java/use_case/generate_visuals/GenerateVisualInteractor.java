@@ -36,7 +36,7 @@ public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
 
             // Save the generated visual to the database (or file system)
             final Visual visual = new Visual(imagePath, fullPrompt);
-            visualDataAccessObject.saveVisual(visual);
+            visualDataAccessObject.saveImage(visual);
 
             // Prepare the output data (successful case)
             final GenerateVisualOutputData outputData = new GenerateVisualOutputData(imagePath, "Visual generated successfully!");

@@ -8,7 +8,7 @@ import view.VisionView;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionViewModel;
 import data_access.VisualDataAccessObject;
-import app.ImageAnalyzer;
+import data_access.FileVisualDataAccessObject;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class VisionTest {
                         System.out.println("Visual saved: " + visual.getImagePath());
                     }
                 },
-                new ImageAnalyzer(),
+                new FileVisualDataAccessObject(),
                 visionPresenter // Pass the presenter here
         );
 

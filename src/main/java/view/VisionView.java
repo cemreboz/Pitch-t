@@ -19,10 +19,10 @@ import javax.swing.*;
 public class VisionView extends JFrame implements PropertyChangeListener {
     private final String viewName = "vision";
 
+    private final VisionViewModel visionViewModel;
     private final Persona persona;
     private final Pitch pitch;
     private VisionController controller;
-    private final VisionViewModel visionViewModel;
 
     // UI Components
     private JLabel adLabel;
