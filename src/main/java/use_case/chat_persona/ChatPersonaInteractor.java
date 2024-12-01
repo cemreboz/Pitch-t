@@ -13,16 +13,16 @@ import java.util.List;
  * Interactor for the chat_persona use case.
  */
 public class ChatPersonaInteractor implements ChatPersonaInputBoundary {
-    private final ChatgptDataAccessObject chatgptDao;
+    private final ChatPersonaGptAccessInterface chatgptDao;
     private final ChatPersonaOutputBoundary outputBoundary;
 
-    public ChatPersonaInteractor(ChatgptDataAccessObject chatgptDao, ChatPersonaOutputBoundary outputBoundary) {
+    public ChatPersonaInteractor(ChatPersonaGptAccessInterface chatgptDao, ChatPersonaOutputBoundary outputBoundary) {
         this.chatgptDao = chatgptDao;
         this.outputBoundary = outputBoundary;
     }
 
     @Override
-    public void execute(ChatPersonaInputData inputData) {
+    public void execute(ChatPersonaInputData inputData) throws IOException, InterruptedException {
         final Persona persona = inputData.getPersona();
         final Pitch pitch = inputData.getPitch();
         final String userMessage = inputData.getUserMessage();
@@ -45,17 +45,12 @@ public class ChatPersonaInteractor implements ChatPersonaInputBoundary {
         chatHistory.add(new ChatMessage("user", userMessage));
 
         // Call GPT API
-        try {
-            final String assistantResponse = chatgptDao.utilizeApi(chatHistory);
-            chatHistory.add(new ChatMessage("assistant", assistantResponse));
+        final String assistantResponse = chatgptDao.utilizeApi(chatHistory);
+        chatHistory.add(new ChatMessage("assistant", assistantResponse));
 
-            // Prepare output data
-            final ChatPersonaOutputData outputData = new ChatPersonaOutputData(new ArrayList<>(chatHistory));
-            outputBoundary.prepareSuccessView(outputData);
+        // Prepare output data
+        final ChatPersonaOutputData outputData = new ChatPersonaOutputData(new ArrayList<>(chatHistory));
+        outputBoundary.prepareSuccessView(outputData);
 
-        }
-        catch (IOException | InterruptedException e) {
-            outputBoundary.prepareFailView("Error communicating with GPT API: " + e.getMessage());
-        }
     }
 }

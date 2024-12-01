@@ -1,7 +1,5 @@
 package use_case.chat_persona;
 
-import use_case.chat_persona.ChatPersonaOutputData;
-
 /**
  * Output boundary for the chat_persona use case.
  */

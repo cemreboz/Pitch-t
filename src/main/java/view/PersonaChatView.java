@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
                            ChatPersonaViewModel viewModel,
                            Persona persona,
                            Pitch pitch,
-                           ViewManagerModel viewManagerModel) {
+                           ViewManagerModel viewManagerModel) throws IOException, InterruptedException {
         this.controller = controller;
         this.viewModel = viewModel;
         this.viewModel.addPropertyChangeListener(this);
@@ -105,10 +106,26 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
 
         // Allow sending messages with Enter key
-        messageInput.addActionListener(event -> sendMessage());
+        messageInput.addActionListener(event -> {
+            try {
+                sendMessage();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         final JButton sendButton = new JButton("Send");
-        sendButton.addActionListener(event -> sendMessage());
+        sendButton.addActionListener(event -> {
+            try {
+                sendMessage();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         footerPanel.add(messageInput, BorderLayout.CENTER);
         footerPanel.add(sendButton, BorderLayout.EAST);
@@ -118,7 +135,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     /**
      * Sends the user's message to the persona.
      */
-    private void sendMessage() {
+    private void sendMessage() throws IOException, InterruptedException {
         final String userMessage = messageInput.getText().trim();
         if (!userMessage.isEmpty()) {
             controller.sendMessage(userMessage, viewModel.getState().getPersona(), viewModel.getState().getPitch());

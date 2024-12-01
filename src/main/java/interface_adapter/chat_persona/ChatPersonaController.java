@@ -5,6 +5,8 @@ import entity.Pitch;
 import use_case.chat_persona.ChatPersonaInputBoundary;
 import use_case.chat_persona.ChatPersonaInputData;
 
+import java.io.IOException;
+
 /**
  * Controller for the chat_persona use case.
  */
@@ -21,7 +23,7 @@ public class ChatPersonaController {
      * @param persona The persona for the chat.
      * @param pitch The pitch being discussed.
      */
-    public void sendMessage(String userMessage, Persona persona, Pitch pitch) {
+    public void sendMessage(String userMessage, Persona persona, Pitch pitch) throws IOException, InterruptedException {
         ChatPersonaInputData inputData = new ChatPersonaInputData(userMessage, persona, pitch);
         interactor.execute(inputData);
     }

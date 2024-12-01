@@ -1,8 +1,8 @@
 package use_case.chat_persona;
 
-import entity.ChatMessage;
-
 import java.util.List;
+
+import entity.ChatMessage;
 
 /**
  * Output data for the chat_persona use case.

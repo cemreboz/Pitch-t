@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -211,7 +212,7 @@ public class AppBuilder {
      * Adds the persona chat view to the application.
      * @return this builder
      */
-    public AppBuilder addPersonaChatView() {
+    public AppBuilder addPersonaChatView() throws IOException, InterruptedException {
         // Create ViewModel and State
         ChatPersonaViewModel chatPersonaViewModel = new ChatPersonaViewModel();
 

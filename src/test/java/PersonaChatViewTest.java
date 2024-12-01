@@ -11,13 +11,14 @@ import view.PersonaChatView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Test class for PersonaChatView.
  */
 public class PersonaChatViewTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         // Sample Persona
         Persona testPersona = new Persona();
         testPersona.setName("John Doe");
