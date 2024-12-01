@@ -47,7 +47,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
         messages.add(new ChatMessage("user", userMessage));
 
         // Call the new method
-        return utilizeApi(messages);
+        return getInteraction(messages);
     }
 
     @Override
