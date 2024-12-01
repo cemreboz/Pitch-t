@@ -3,7 +3,7 @@ package use_case.set_targetaudience;
 /**
  * Interface for the Detailed Target Audience Data Access Object.
  */
-public interface DetailedtaDataAccessInterface {
+public interface DetailedDataAccessInterface {
 
     /**
      * Makes an API call to retrieve data for the detailed target audience.

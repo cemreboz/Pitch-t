@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
-import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -20,6 +19,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.compare_personas.ComparePersonasController;
+import interface_adapter.compare_personas.ComparePersonasPresenter;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.expert.ExpertController;
@@ -49,9 +51,14 @@ import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.compare_personas.ComparePersonasInputBoundary;
+import use_case.compare_personas.ComparePersonasInteractor;
+import use_case.compare_personas.ComparePersonasOutputBoundary;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
@@ -79,6 +86,7 @@ import view.DashboardView;
 import view.ExpertChatView;
 import view.LoginView;
 import view.NewPitchView;
+import view.PersonaListView;
 import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
@@ -119,6 +127,8 @@ public class AppBuilder {
     private NewPitchView newPitchView;
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
+    private ComparePersonasViewModel comparePersonasViewModel;
+    private PersonaListView personaListView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -347,16 +357,8 @@ public class AppBuilder {
 
         final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
 
-        final TargetAudienceInteractor targetAudienceInteractor = new TargetAudienceInteractor(chatgptDataAccessObject);
-
-        final TargetAudiencePresenter targetAudiencePresenter = new TargetAudiencePresenter(pitchViewModel,
-                targetAudienceInteractor);
-
-        final TargetAudienceController targetAudienceController = new TargetAudienceController(
-                targetAudiencePresenter);
-
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
-                userDataAccessObject, createNewPitchOutputBoundary, targetAudienceController);
+                userDataAccessObject, createNewPitchOutputBoundary);
 
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
@@ -365,7 +367,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the expert view use case and as part of the hamburger menu to each view with the menu..
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addExpertUseCase() {
@@ -392,7 +394,7 @@ public class AppBuilder {
                 expertViewModel, viewManagerModel);
 
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final DetailedDataAccessObjectInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
@@ -400,6 +402,32 @@ public class AppBuilder {
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);
         expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the compare personas use case.
+     * @return this builder
+     */
+    public AppBuilder addComparePersonasUseCase() {
+        // Instantiate Output Boundary
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel);
+
+        // Instantiate GPT Data Access Interface
+        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        // Create the Interactor, providing it the GPT data access object and output boundary
+        final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
+                chatgptDataAccessObject, comparePersonasOutputBoundary);
+
+        // Create the controller using the Interactor
+        final ComparePersonasController comparePersonasController = new ComparePersonasController(
+                comparePersonasInteractor);
+
+        // Set the controller for the Persona List View
+        personaListView.setComparePersonasController(comparePersonasController);
+
         return this;
     }
 

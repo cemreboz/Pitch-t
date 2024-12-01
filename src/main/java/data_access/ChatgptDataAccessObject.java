@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.set_targetaudience.DetailedDataAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
@@ -48,7 +49,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessInterfac
         messages.add(new ChatMessage("user", userMessage));
 
         // Call the new method
-        return utilizeApi(messages);
+        return getInteraction(messages);
     }
 
     @Override
