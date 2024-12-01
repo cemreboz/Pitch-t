@@ -40,6 +40,7 @@ import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.generate_visuals.GenerateVisualInputBoundary;
 import use_case.generate_visuals.GenerateVisualInteractor;
 import use_case.generate_visuals.GenerateVisualOutputBoundary;
+import use_case.generate_visuals.ImageGeneratorInterface;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -88,9 +89,9 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
     private VisionView visionView;
+    private ImageGeneratorInterface imageGenerator;
     private Persona persona;
     private Pitch pitch;
-    private VisionController visionController;
 
 
     public AppBuilder() {
@@ -148,15 +149,10 @@ public class AppBuilder {
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
 
-        final VisionController controller = new VisionController(
-                new GenerateVisualInteractor(new VisualDataAccessObject(), new FileVisualDataAccessObject(),
-                        new VisionPresenter(visionViewModel))
-        );
-
-        visionView = new VisionView(persona, pitch, controller, visionViewModel);
-
-        // Add VisionView to the card panel with its name as the view name
-        cardPanel.add(visionView, visionView.getViewName());
+        // Add a placeholder JPanel for VisionView
+        final JPanel placeholderPanel = new JPanel();
+        placeholderPanel.setName("vision");
+        cardPanel.add(placeholderPanel, "vision");
 
         return this;
     }
@@ -262,14 +258,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addVisionUseCase() {
-        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
-
-        final GenerateVisualInputBoundary visionInteractor =
-                new GenerateVisualInteractor(visualDataAccessObject, fileVisualDataAccessObject,
-                        generateVisualOutputBoundary);
-
-        final VisionController visionController = new VisionController(visionInteractor);
-        visionView.setVisionController(visionController);
+        visionViewModel = new VisionViewModel();
+        final JPanel placeholderPanel = new JPanel();
+        placeholderPanel.setName("vision");
+        cardPanel.add(placeholderPanel, "vision");
         return this;
     }
 

@@ -108,13 +108,14 @@ public class VisionView extends JFrame implements PropertyChangeListener {
 
         final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch"
                 + pitch.getName();
-        controller.generateImage(prompt, persona.getName());
+
+        controller.generateImage(prompt, persona.getName(), pitch.getName());
     }
 
     private void regenerateVisual() {
         final String prompt = "Regenerate a visual tailored for persona: " + persona.getName()
                 + "for the pitch" + pitch.getName();
-        controller.generateImage(prompt, persona.getName());
+        controller.regenerateImage(prompt, persona.getName(), pitch.getName());
     }
 
     @Override

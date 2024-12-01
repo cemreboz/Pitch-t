@@ -17,6 +17,8 @@ public class VisionViewModel extends ViewModel<VisionState> {
      * @param state the updated state.
      */
     public void updateView(VisionState state) {
+
         setState(state);
+        System.out.println("VisionViewModel: State updated with imagePath = " + state.getGeneratedImageUrl());
     }
 }

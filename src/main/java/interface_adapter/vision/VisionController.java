@@ -16,21 +16,18 @@ public class VisionController {
     /**
      * Generate image method.
      */
-    public void generateImage(String pitchName, String personaName) {
-        final String prompt = "Generate an advertisement for the pitch '" + pitchName + "' based on persona '"
-                + personaName + "'.";
-        final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, personaName, pitchName);
-
-        // Execute the use case
+    public void generateImage(String prompt, String personaName, String pitchName) {
+        System.out.println("VisionController: generateImage() called with prompt: " + prompt);
+        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, personaName, pitchName);
         generateVisualInteractor.execute(inputData);
     }
 
     /**
      * Regenerate image method.
      */
-    public void regenerateImage(String pitchName, String personaName) {
+    public void regenerateImage(String prompt, String personaName, String pitchName) {
         // Simply call generateImage with the same inputs
-        generateImage(pitchName, personaName);
+        generateImage(prompt, personaName, pitchName);
     }
 
 }
