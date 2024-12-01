@@ -33,7 +33,7 @@ public class VisionTest {
         VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
         GenerateVisualInteractor generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject() {
-                    @Override
+
                     public void saveVisual(Visual visual) {
                         // Mock saving visual
                         System.out.println("Visual saved: " + visual.getImagePath());

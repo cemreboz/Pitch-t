@@ -24,6 +24,7 @@ public class Main {
                                             .addDashboardUseCase()
                                             .addAccountSettingsUseCase()
                                             .addVisionView()
+                                            .addVisionUseCase()
                                             .build();
 
         application.pack();

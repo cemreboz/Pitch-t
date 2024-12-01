@@ -10,6 +10,8 @@ import data_access.InMemoryUserDataAccessObject;
 import data_access.FileVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
+import entity.Persona;
+import entity.Pitch;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
@@ -68,6 +70,9 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
+
+
+
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
     private final VisualDataAccessObject visualDataAccessObject = new VisualDataAccessObject();
@@ -83,6 +88,10 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
     private VisionView visionView;
+    private Persona persona;
+    private Pitch pitch;
+    private VisionController visionController;
+
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -138,8 +147,17 @@ public class AppBuilder {
      */
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
-        visionView = new VisionView(visionViewModel, persona, pitch, controller);
+
+        final VisionController controller = new VisionController(
+                new GenerateVisualInteractor(new VisualDataAccessObject(), new FileVisualDataAccessObject(),
+                        new VisionPresenter(visionViewModel))
+        );
+
+        visionView = new VisionView(persona, pitch, controller, visionViewModel);
+
+        // Add VisionView to the card panel with its name as the view name
         cardPanel.add(visionView, visionView.getViewName());
+
         return this;
     }
 

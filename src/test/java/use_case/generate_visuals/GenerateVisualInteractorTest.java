@@ -1,7 +1,6 @@
 package use_case.generate_visuals;
 
 import data_access.FileVisualDataAccessObject;
-import data_access.InMemoryVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,7 @@ class GenerateVisualInteractorTest {
         };
 
         // Step 3: Create an Interactor and inject the Presenter
-        VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
+        VisualDataAccessObject visualDataAccessObject = new VisualDataAccessObject(); // Mocked DAO
         FileVisualDataAccessObject mockedFileVisualDataAccessObject = new FileVisualDataAccessObject() {
             @Override
             public String generateAndDownloadImage(String prompt, String outputFilePath) {
@@ -77,7 +76,7 @@ class GenerateVisualInteractorTest {
         };
 
         // Step 3: Create an Interactor and inject the Presenter
-        VisualDataAccessObject visualDataAccessObject = new InMemoryVisualDataAccessObject(); // Mocked DAO
+        VisualDataAccessObject visualDataAccessObject = new VisualDataAccessObject(); // Mocked DAO
         FileVisualDataAccessObject fileVisualDataAccessObject = new FileVisualDataAccessObject(); // Mocked ImageAnalyzer
         GenerateVisualInteractor interactor = new GenerateVisualInteractor(
                 visualDataAccessObject,
