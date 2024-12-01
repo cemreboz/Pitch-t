@@ -19,6 +19,8 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.chat_persona.ChatPersonaController;
+import interface_adapter.chat_persona.ChatPersonaPresenter;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.dashboard.DashboardController;
@@ -53,6 +55,10 @@ import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
+import use_case.chat_persona.ChatPersonaDataAccessInterface;
+import use_case.chat_persona.ChatPersonaInputBoundary;
+import use_case.chat_persona.ChatPersonaInteractor;
+import use_case.chat_persona.ChatPersonaOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
@@ -429,6 +435,24 @@ public class AppBuilder {
         // dashboardView.setPersonaController(personaController);
         // instead of dashboardView, set it in persona list view, this was for my testing purposes and i have
         // removed any possible way of activating this screen from dashboard view so dont uncomment or it wont work
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual persona use case.
+     * @return this builder
+     */
+    public AppBuilder addChatPersonaUseCase() {
+        final ChatPersonaOutputBoundary chatPersonaOutputBoundary = new ChatPersonaPresenter(
+                personaViewModel, viewManagerModel);
+        final ChatPersonaDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final ChatPersonaInputBoundary chatPersonaInteractor = new ChatPersonaInteractor(
+                chatgptDataAccessObject, chatPersonaOutputBoundary);
+
+        final ChatPersonaController chatPersonaController = new ChatPersonaController(
+                chatPersonaInteractor);
+        personaChatView.setChatPersonaController(chatPersonaController);
         return this;
     }
 

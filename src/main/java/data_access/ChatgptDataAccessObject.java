@@ -17,13 +17,15 @@ import org.json.JSONObject;
 import app.PitchitManager;
 import entity.ChatMessage;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
+import use_case.chat_persona.ChatPersonaDataAccessInterface;
 import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
  */
 public class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface,
-        ExpertChatDataAccessInterface {
+        ExpertChatDataAccessInterface,
+        ChatPersonaDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 

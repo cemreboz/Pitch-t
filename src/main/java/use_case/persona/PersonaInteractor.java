@@ -15,7 +15,7 @@ public class PersonaInteractor implements PersonaInputBoundary {
     @Override
     public void execute(PersonaInputData personaInputData) {
         final PersonaOutputData personaOutputData = new PersonaOutputData(false, personaInputData.getPersona(),
-                personaInputData.getUsername(), personaInputData.getPassword());
+                personaInputData.getPitch(), personaInputData.getUsername(), personaInputData.getPassword());
         personaPresenter.prepareSuccessView(personaOutputData);
     }
 }

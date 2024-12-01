@@ -5,6 +5,7 @@ import java.util.List;
 
 import entity.ChatMessage;
 import entity.Persona;
+import entity.Pitch;
 
 /**
  * Represents the state for persona chat view.
@@ -14,6 +15,7 @@ public class PersonaState {
     private String password = "";
     private String expertResponse = "";
     private Persona persona = new Persona();
+    private Pitch pitch;
     private List<ChatMessage> chatHistory = new ArrayList<>();
 
     public String getUsername() {
@@ -46,6 +48,14 @@ public class PersonaState {
 
     public void setPersona(Persona persona) {
         this.persona = persona;
+    }
+
+    public Pitch getPitch() {
+        return pitch;
+    }
+
+    public void setPitch(Pitch pitch) {
+        this.pitch = pitch;
     }
 
     public List<ChatMessage> getChatHistory() {

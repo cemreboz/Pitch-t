@@ -23,6 +23,7 @@ public class PersonaPresenter implements PersonaOutputBoundary {
         state.setPersona(response.getPersona());
         state.setUsername(response.getUsername());
         state.setPassword(response.getPassword());
+        state.setPitch(response.getPitch());
 
         personaViewModel.setState(state);
         personaViewModel.firePropertyChanged();

@@ -1,6 +1,7 @@
 package interface_adapter.persona;
 
 import entity.Persona;
+import entity.Pitch;
 import use_case.persona.PersonaInputBoundary;
 import use_case.persona.PersonaInputData;
 
@@ -18,11 +19,12 @@ public class PersonaController {
     /**
      * Executes the expert use case.
      * @param persona the persona the chat to
+     * @param pitch the current pitch of the persona
      * @param username username of user
      * @param password password of user
      */
-    public void execute(Persona persona, String username, String password) {
-        final PersonaInputData personaInputData = new PersonaInputData(persona, username, password);
+    public void execute(Persona persona, Pitch pitch, String username, String password) {
+        final PersonaInputData personaInputData = new PersonaInputData(persona, pitch, username, password);
         personaUseCaseInteractor.execute(personaInputData);
     }
 }

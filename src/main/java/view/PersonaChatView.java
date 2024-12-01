@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import entity.ChatMessage;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.chat_persona.ChatPersonaController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
@@ -36,7 +37,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private final String viewName = "chat persona";
     private final ViewManagerModel viewManagerModel;
     private final PersonaViewModel personaViewModel;
-    // private ChatPersonaController chatPersonaController;
+    private ChatPersonaController chatPersonaController;
 
     private JLabel headerNameLabel;
     private JTextArea chatArea;
@@ -64,6 +65,9 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
 
         // Build the message input area
         buildMessageInputArea();
+
+        chatPersonaController.startChat("",
+                personaViewModel.getState().getPersona(), personaViewModel.getState().getPitch());
     }
 
     /**
@@ -137,7 +141,8 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private void sendMessage() {
         final String userMessage = messageInput.getText().trim();
         if (!userMessage.isEmpty()) {
-            // personaChatController.startChat(headerNameLabel.getText(), userMessage);
+            chatPersonaController.startChat("",
+                    personaViewModel.getState().getPersona(), personaViewModel.getState().getPitch());
             updateChatArea();
             messageInput.setText("");
         }
@@ -178,11 +183,9 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         headerNameLabel.revalidate();
     }
 
-    /*
     public void setChatPersonaController(ChatPersonaController chatPersonaController) {
         this.chatPersonaController = chatPersonaController;
     }
-    */
 
     public String getViewName() {
         return viewName;

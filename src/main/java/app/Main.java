@@ -33,6 +33,7 @@ public class Main {
                                             .addExpertUseCase()
                                             .addChatExpertUseCase()
                                             .addPersonaUseCase()
+                                            .addChatPersonaUseCase()
                                             .build();
 
         application.pack();
