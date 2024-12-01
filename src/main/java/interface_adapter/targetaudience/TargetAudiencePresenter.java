@@ -46,10 +46,10 @@ public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
      */
     @Override
     public void prepareSuccessView(TargetAudienceOuputData outputData) {
-        final PitchState pitchState = viewModel.getState();
-        pitchState.setLoading(false);
+        final PitchState state = viewModel.getState();
+        state.setLoading(false);
 
-        pi
+        state.
 
     }
 
