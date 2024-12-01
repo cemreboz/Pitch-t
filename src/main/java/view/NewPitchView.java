@@ -25,6 +25,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
 
     private final JTextField nameField;
     private final JTextArea descriptionArea;
+    private final JTextField targetAudienceField;
     private final JTextField imageField;
     private final JButton saveButton;
     private final JButton cancelButton;
@@ -56,6 +57,11 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
         descriptionArea.setWrapStyleWord(true);
         JScrollPane descriptionScroll = new JScrollPane(descriptionArea);
 
+        // Target Audience Field
+        JLabel targetAudienceLabel = new JLabel("Target Audience:");
+        targetAudienceField = new JTextField();
+        targetAudienceField.setPreferredSize(new Dimension(FIELD_WIDTH, 30));
+
         // Image Field
         JLabel imageLabel = new JLabel("Image URL:");
         imageField = new JTextField();
@@ -80,6 +86,9 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
         add(Box.createVerticalStrut(10));
         add(descriptionLabel);
         add(descriptionScroll);
+        add(Box.createVerticalStrut(10));
+        add(targetAudienceLabel);
+        add(targetAudienceField);
         add(Box.createVerticalStrut(10));
         add(imageLabel);
         add(imageField);
@@ -110,6 +119,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void savePitch() {
         String name = nameField.getText();
         String description = descriptionArea.getText();
+        final String targetAudience = targetAudienceField.getText();
         String image = imageField.getText();
         // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
         // the target audience field should be removed from the view too but its their temporarily for IDk what reason
@@ -125,6 +135,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void cancelPitch() {
         nameField.setText("");
         descriptionArea.setText("");
+        targetAudienceField.setText("");
         imageField.setText("");
 
         // Optionally, close the view or navigate elsewhere
@@ -146,6 +157,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void setViewModelState(NewPitchState state) {
         nameField.setText(state.getName());
         descriptionArea.setText(state.getDescription());
+        targetAudienceField.setText(String.valueOf(state.getTargetAudience()));
         imageField.setText(state.getImage());
     }
 

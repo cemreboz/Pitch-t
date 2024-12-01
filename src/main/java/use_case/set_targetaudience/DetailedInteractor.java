@@ -14,10 +14,10 @@ import entity.DetailedTargetAudience;
  */
 public class DetailedInteractor implements DetailedInputBoundary {
 
-    private final DetailedDataAccessObjectInterface dataAccess;
+    private final DetailedtaDataAccessInterface dataAccess;
     private final DetailedOutputBoundary outputBoundary;
 
-    public DetailedInteractor(DetailedDataAccessObjectInterface dataAccess, DetailedOutputBoundary outputBoundary) {
+    public DetailedInteractor(DetailedtaDataAccessInterface dataAccess, DetailedOutputBoundary outputBoundary) {
         this.dataAccess = dataAccess;
         this.outputBoundary = outputBoundary;
     }

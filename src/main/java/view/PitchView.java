@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -86,15 +85,11 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final PitchState state = (PitchState) evt.getNewValue();
-
         if (state.getPitchLoadError() != null) {
             JOptionPane.showMessageDialog(null, state.getPitchLoadError());
         }
         else if (state.getDetailedTaLoadError() != null) {
             JOptionPane.showMessageDialog(null, state.getDetailedTaLoadError());
-        }
-        else if (state.getTargetAudience() != null) {
-            updateTargetAudience(state.getTargetAudience());
         }
         else {
             final String newPitchName = state.getPitch().getName();
@@ -106,24 +101,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             namePanel.revalidate();
             namePanel.repaint();
         }
-    }
-
-    private void updateTargetAudience(List<String> targetAudience) {
-        namePanel.removeAll();
-
-        if (targetAudience != null && !targetAudience.isEmpty()) {
-            for (String audience : targetAudience) {
-                final JLabel audienceLabel = new JLabel("- " + audience);
-                namePanel.add(audienceLabel);
-            }
-        }
-        else {
-            final JLabel noAudienceLabel = new JLabel("No target audience available.");
-            namePanel.add(noAudienceLabel);
-        }
-
-        namePanel.revalidate();
-        namePanel.repaint();
     }
 
     public String getViewName() {
