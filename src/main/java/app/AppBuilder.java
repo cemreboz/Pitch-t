@@ -36,6 +36,9 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.new_pitch.NewPitchPresenter;
 import interface_adapter.new_pitch.NewPitchViewModel;
+import interface_adapter.persona.PersonaController;
+import interface_adapter.persona.PersonaPresenter;
+import interface_adapter.persona.PersonaViewModel;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
@@ -68,17 +71,13 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.persona.PersonaInputBoundary;
+import use_case.persona.PersonaInteractor;
+import use_case.persona.PersonaOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.AccountSettingsView;
-import view.DashboardView;
-import view.ExpertChatView;
-import view.LoginView;
-import view.NewPitchView;
-import view.PitchView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -116,6 +115,8 @@ public class AppBuilder {
     private NewPitchView newPitchView;
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
+    private PersonaChatView personaChatView;
+    private PersonaViewModel personaViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -200,6 +201,18 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the persona chat view to the application.
+     * @return this builder
+     */
+    public AppBuilder addPersonaChatView() {
+        personaViewModel = new PersonaViewModel();
+        personaChatView = new PersonaChatView(personaViewModel, viewManagerModel);
+        cardPanel.add(personaChatView, personaChatView.getViewName());
+
+        return this;
+    }
+
+    /**
      * Adds the Signup Use Case to the application.
      * @return this builder
      */
@@ -277,6 +290,7 @@ public class AppBuilder {
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
         expertChatView.setLoginController(loginController);
+        personaChatView.setLoginController(loginController);
         return this;
     }
 
@@ -296,6 +310,7 @@ public class AppBuilder {
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
         expertChatView.setAccountSettingsController(accountSettingsController);
+        personaChatView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -331,6 +346,7 @@ public class AppBuilder {
         accountSettingsView.setNewPitchController(newPitchController);
         pitchView.setNewPitchController(newPitchController);
         expertChatView.setNewPitchController(newPitchController);
+        personaChatView.setNewPitchController(newPitchController);
         return this;
     }
 
@@ -366,6 +382,7 @@ public class AppBuilder {
         accountSettingsView.setExpertController(expertController);
         pitchView.setExpertController(expertController);
         expertChatView.setExpertController(expertController);
+        personaChatView.setExpertController(expertController);
         return this;
     }
 
@@ -386,6 +403,25 @@ public class AppBuilder {
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);
         expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the persona view use case.
+     * @return this builder
+     */
+    public AppBuilder addPersonaUseCase() {
+        final PersonaOutputBoundary personaOutputBoundary = new PersonaPresenter(
+                personaViewModel, viewManagerModel);
+        final PersonaInputBoundary personaInteractor = new PersonaInteractor(
+                userDataAccessObject, personaOutputBoundary);
+
+        final PersonaController personaController = new PersonaController(
+                personaInteractor);
+
+        // dashboardView.setPersonaController(personaController);
+        // instead of dashboardView, set it in persona list view, this was for my testing purposes and i have
+        // removed any possible way of activating this screen from dashboard view so dont uncomment or it wont work
         return this;
     }
 
