@@ -13,12 +13,4 @@ public class ViewPersonasViewModel extends ViewModel<ViewPersonasState> {
         super("personas list");
         setState(null);
     }
-
-    public void setPersonas(List<Persona> personas) {
-        setState(personas);
-    }
-
-    public List<Persona> getPersonas() {
-        return getState();
-    }
 }
