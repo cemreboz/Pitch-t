@@ -10,5 +10,5 @@ public interface CreateNewPitchInputBoundary {
      * Executes the Create Pitch use case with the given input data.
      * @param createNewPitchInputData the data needed to create the pitch.
      */
-    void execute(CreateNewPitchInputData createNewPitchInputData);
+    void execute(CreateNewPitchInputData createNewPitchInputData) throws Exception;
 }

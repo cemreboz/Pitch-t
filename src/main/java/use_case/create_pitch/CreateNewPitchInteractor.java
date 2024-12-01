@@ -25,7 +25,7 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
     }
 
     @Override
-    public void execute(CreateNewPitchInputData createNewPitchInputData) {
+    public void execute(CreateNewPitchInputData createNewPitchInputData) throws Exception {
         // Validate input
         if (createNewPitchInputData.getName().isEmpty()) {
             userPresenter.prepareFailView("Pitch name cannot be empty");

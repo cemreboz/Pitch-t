@@ -8,7 +8,7 @@ import entity.Pitch;
  * The state for the pitch view model.
  */
 public class PitchState {
-    private Pitch pitch = new Pitch("", "", "", "", new ArrayList<>());
+    private Pitch pitch = new Pitch("", "", "", "", "");
     private String username = "";
     private String password = "";
     private String pitchLoadError;

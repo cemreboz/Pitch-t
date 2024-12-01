@@ -9,7 +9,8 @@ public interface TargetAudienceInputBoundary {
     /**
      * Method for executing the DetailedTA based on the input Data.
      * @param inputData from the input data class.
+     * @return the Target Audience.
      * @throws Exception If it cannot get the Detailed Target Audience.                 
      */
-    void execute(TargetAudienceInputData inputData) throws Exception;
+    String execute(TargetAudienceInputData inputData) throws Exception;
 }

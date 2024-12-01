@@ -17,12 +17,13 @@ import org.json.JSONObject;
 import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
  */
 public final class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
-        ChatExpertGptAccessInterface, ComparePersonasGptAccessInterface {
+        ChatExpertGptAccessInterface, ComparePersonasGptAccessInterface, TargetAudienceDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -140,5 +141,18 @@ public final class ChatgptDataAccessObject implements DetailedtaDataAccessInterf
         catch (IOException exception) {
             System.out.println("Error logging API call: " + exception.getMessage());
         }
+    }
+
+    /**
+     * Generates a list of target audiences based on a project description.
+     *
+     * @param systemMessage The message sent to the Chatgpt system.
+     * @param userMessage   Dependent on the pitch itself.
+     * @return A list of target audience categories.
+     * @throws Exception If any error occurs during data fetching.
+     */
+    @Override
+    public String generateTargetAudience(String systemMessage, String userMessage) throws Exception {
+        return utilizeApi(systemMessage, userMessage);
     }
 }
