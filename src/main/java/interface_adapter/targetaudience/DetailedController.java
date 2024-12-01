@@ -3,20 +3,17 @@ package interface_adapter.targetaudience;
 import java.util.List;
 
 import entity.DetailedTargetAudience;
+import use_case.set_targetaudience.DetailedInputBoundary;
 import use_case.set_targetaudience.DetailedInteractor;
 
 /**
  * Controller class for generating detailed target audiences.
  */
 public class DetailedController {
+    private final DetailedInputBoundary detailedInputBoundary;
 
-    private final DetailedInteractor interactor;
-
-    public DetailedController(DetailedInteractor interactor) {
-        if (interactor == null) {
-            throw new IllegalArgumentException("Interactor cannot be null.");
-        }
-        this.interactor = interactor;
+    public DetailedController(DetailedInputBoundary detailedInputBoundary) {
+        this.detailedInputBoundary = detailedInputBoundary;
     }
 
     /**
