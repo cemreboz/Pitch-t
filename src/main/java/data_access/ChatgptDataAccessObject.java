@@ -22,7 +22,7 @@ import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface,
+public class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface,
         ExpertChatDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";

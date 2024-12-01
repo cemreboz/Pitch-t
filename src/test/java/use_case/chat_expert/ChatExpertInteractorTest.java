@@ -32,13 +32,7 @@ public class ChatExpertInteractorTest {
         };
 
         // Create a mock ChatGPT data access object
-        DetailedDataAccessObjectInterface chatgptDataAccessObject = new DetailedDataAccessObjectInterface() {
-            @Override
-            public String utilizeApi(String systemMessage, String userMessage) {
-                // Return a mock response
-                return "Sure, I'd be happy to help!";
-            }
-
+        ExpertChatDataAccessInterface chatgptDataAccessObject = new ExpertChatDataAccessInterface() {
             @Override
             public String utilizeApi(List<ChatMessage> messages) {
                 // Return the expected mock response
