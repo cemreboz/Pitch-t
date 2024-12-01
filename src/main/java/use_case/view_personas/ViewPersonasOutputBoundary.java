@@ -9,12 +9,12 @@ public interface ViewPersonasOutputBoundary {
      *
      * @param outputData the output data containing personas.
      */
-    void presentSuccess(ViewPersonasOutputData outputData);
+    void prepareSuccessView(ViewPersonasOutputData outputData);
 
     /**
      * Presents an error message in case of failure.
      *
      * @param errorMessage the error message.
      */
-    void presentFailure(String errorMessage);
+    void prepareFailView(String errorMessage);
 }

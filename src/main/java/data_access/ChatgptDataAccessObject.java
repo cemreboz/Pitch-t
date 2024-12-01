@@ -11,16 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.ChatMessage;
+import entity.Persona;
+import entity.Pitch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
 
+import use_case.view_personas.ViewPersonasGptDataAccessInterface;
+
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface, ChatExpertGptAccessInterface, ComparePersonasGptAccessInterface {
+public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface,
+        ChatExpertGptAccessInterface,
+        ComparePersonasGptAccessInterface,
+        ViewPersonasGptDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -138,4 +145,28 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
             System.out.println("Error logging API call: " + exception.getMessage());
         }
     }
+
+    // Todo: implement this call
+
+    @Override
+    public List<Persona> generatePersonas(Pitch pitch) throws Exception {
+            // Jads prompts
+// StringBuilder systemPromptBuilder = new StringBuilder();
+// systemPromptBuilder.append("You are a marketing expert. Based on the following detailed target audience information and project description, create a persona for each audience category and one extra persona that wouldn't be attracted to the product but the differences should be subtle.\n\n");
+// systemPromptBuilder.append("Target Audience:\n").append(targetAudience).append("\n\n");
+// systemPromptBuilder.append("Project Description:\n").append(projectDescription).append("\n\n");
+//
+// systemPromptBuilder.append("For each persona, provide the following details:\n")
+//         .append("- Name\n")
+//         .append("- Age\n")
+//         .append("- Occupation\n")
+//         .append("- Interests\n")
+//         .append("- Salary Range\n")
+//         .append("- Education\n")
+//         .append("- About (this section should be a paragraph that describes who the persona is and what they're like)\n")
+//         .append("- Market Statistics (this should be a paragraph detailing the potential market size and capital depending on the previous criteria)\n\n")
+//         .append("Present the personas in JSON format as an array.\n");
+        return new ArrayList<>();
+    }
 }
+
