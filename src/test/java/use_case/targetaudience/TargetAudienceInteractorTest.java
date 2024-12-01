@@ -1,8 +1,5 @@
 package use_case.targetaudience;
 
-import data_access.ChatgptDataAccessObject;
-import interface_adapter.pitch.PitchViewModel;
-import interface_adapter.targetaudience.TargetAudiencePresenter;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.json.JSONException;
@@ -13,43 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for TargetAudienceInteractor.
  */
-public class TargetAudienceInteractorTest {
-
-//    @Test
-//    void executeSuccessTest() throws Exception {
-//        // Create input data
-//        String pitchName = "Organic Pickles";
-//        String pitchDescription = "A project that provides homemade organic pickles.";
-//        TargetAudienceInputData inputData = new TargetAudienceInputData(pitchName, pitchDescription);
-//
-//        // Create a mock data access object
-//        TargetAudienceDataAccessInterface dataAccessObject = new ChatgptDataAccessObject();
-//
-//        TargetAudienceInteractor interactor = getTargetAudienceInteractor(dataAccessObject);
-//
-//        // Execute the use case
-//        interactor.execute(inputData);
-//    }
-//
-//    @NotNull
-//    private static TargetAudienceInteractor getTargetAudienceInteractor(TargetAudienceDataAccessInterface dataAccessObject) {
-//        PitchViewModel pitchViewModel = new PitchViewModel();
-//        TargetAudienceOutputBoundary outputBoundary = new TargetAudiencePresenter(pitchViewModel) {
-//            @Override
-//            public void prepareSuccessView(TargetAudienceOuputData outputData) {
-//                // Assertions to verify the output data
-//                assertEquals("- Foodies;\n- Health-Conscious;\n- Snack Enthusiasts;\n- Organic Lovers;\n- Chefs", outputData.getTargetAudience());
-//            }
-//
-//            @Override
-//            public void prepareFailView(String errorMessage) {
-//                fail("Output boundary should not be called for a successful case.");
-//            }
-//        };
-//
-//        // Create the interactor
-//        return new TargetAudienceInteractor(dataAccessObject, outputBoundary);
-//    }
+class TargetAudienceInteractorTest {
 
     @Test
     void executeFailureTest() throws Exception {
@@ -67,6 +28,14 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create a mock output boundary
+        TargetAudienceInteractor interactor = getInteractor(dataAccessObject);
+
+        // Execute the use case
+        interactor.execute(inputData);
+    }
+
+    @NotNull
+    private static TargetAudienceInteractor getInteractor(TargetAudienceDataAccessInterface dataAccessObject) {
         TargetAudienceOutputBoundary outputBoundary = new TargetAudienceOutputBoundary() {
             @Override
             public void prepareSuccessView(TargetAudienceOuputData outputData) {
@@ -81,10 +50,7 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create the interactor
-        TargetAudienceInteractor interactor = new TargetAudienceInteractor(dataAccessObject, outputBoundary);
-
-        // Execute the use case
-        interactor.execute(inputData);
+        return new TargetAudienceInteractor(dataAccessObject, outputBoundary);
     }
 
     @Test
@@ -101,6 +67,18 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create a mock output boundary
+        TargetAudienceInteractor interactor = getTargetAudienceInteractor(dataAccessObject);
+
+        // Expect an exception
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            interactor.execute(inputData);
+        });
+
+        assertEquals("inputData must not be null", exception.getMessage());
+    }
+
+    @NotNull
+    private static TargetAudienceInteractor getTargetAudienceInteractor(TargetAudienceDataAccessInterface dataAccessObject) {
         TargetAudienceOutputBoundary outputBoundary = new TargetAudienceOutputBoundary() {
             @Override
             public void prepareSuccessView(TargetAudienceOuputData outputData) {
@@ -114,14 +92,7 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create the interactor
-        TargetAudienceInteractor interactor = new TargetAudienceInteractor(dataAccessObject, outputBoundary);
-
-        // Expect an exception
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            interactor.execute(inputData);
-        });
-
-        assertEquals("inputData must not be null", exception.getMessage());
+        return new TargetAudienceInteractor(dataAccessObject, outputBoundary);
     }
 
     @Test
@@ -141,6 +112,14 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create a mock output boundary
+        TargetAudienceInteractor interactor = getAudienceInteractor(dataAccessObject);
+
+        // Execute the use case
+        interactor.execute(inputData);
+    }
+
+    @NotNull
+    private static TargetAudienceInteractor getAudienceInteractor(TargetAudienceDataAccessInterface dataAccessObject) {
         TargetAudienceOutputBoundary outputBoundary = new TargetAudienceOutputBoundary() {
             @Override
             public void prepareSuccessView(TargetAudienceOuputData outputData) {
@@ -155,9 +134,6 @@ public class TargetAudienceInteractorTest {
         };
 
         // Create the interactor
-        TargetAudienceInteractor interactor = new TargetAudienceInteractor(dataAccessObject, outputBoundary);
-
-        // Execute the use case
-        interactor.execute(inputData);
+        return new TargetAudienceInteractor(dataAccessObject, outputBoundary);
     }
 }
