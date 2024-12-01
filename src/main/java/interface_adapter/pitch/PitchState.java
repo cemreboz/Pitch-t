@@ -14,7 +14,7 @@ public class PitchState {
     private String password = "";
     private String pitchLoadError;
     private String detailedTaLoadError;
-    private List<String> targetaudience = new ArrayList<>();
+    private String targetaudience = "";
 
     public Pitch getPitch() {
         return pitch;
@@ -56,11 +56,11 @@ public class PitchState {
         this.detailedTaLoadError = detailedTaLoadError;
     }
 
-    public void setTargetAudience(List<String> targetAudience) {
+    public void setTargetAudience(String targetAudience) {
         this.targetaudience = targetAudience;
     }
 
-    public List<String> getTargetAudience() {
+    public String getTargetAudience() {
         return targetaudience;
     }
 
