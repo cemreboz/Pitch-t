@@ -2,7 +2,13 @@ package interface_adapter.pitch;
 
 import java.util.ArrayList;
 
+import data_access.ChatgptDataAccessObject;
 import entity.Pitch;
+import interface_adapter.targetaudience.TargetAudiencePresenter;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceInputData;
+import use_case.set_targetaudience.TargetAudienceInteractor;
+import use_case.set_targetaudience.TargetAudienceOutputBoundary;
 
 /**
  * The state for the pitch view model.
@@ -55,8 +61,14 @@ public class PitchState {
         this.detailedTaLoadError = detailedTaLoadError;
     }
 
-    public void setTargetAudience(String targetAudience) {
-        this.targetaudience = targetAudience;
+    public void setTargetAudience() throws Exception {
+        final TargetAudienceInputData inputData = new TargetAudienceInputData(pitch.getName(), pitch.getDescription());
+        final TargetAudienceDataAccessInterface dataAccessObject = new ChatgptDataAccessObject();
+        final PitchViewModel pitchViewModel = new PitchViewModel();
+        final TargetAudienceOutputBoundary outputBoundary = new TargetAudiencePresenter(pitchViewModel);
+        final TargetAudienceInteractor targetAudienceInteractor = new TargetAudienceInteractor(dataAccessObject,
+                outputBoundary);
+        targetAudienceInteractor.execute(inputData);
     }
 
     public String getTargetAudience() {

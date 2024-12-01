@@ -20,30 +20,32 @@ public class TargetAudienceInteractor implements TargetAudienceInputBoundary {
      * Method for executing the DetailedTA based on the input Data.
      *
      * @param inputData from the input data class.
-     * @return the Target Audience generated.
      * @throws Exception If it cannot get the Detailed Target Audience.
      */
     @Override
-    public String execute(TargetAudienceInputData inputData) throws Exception {
-        String response = "";
+    public void execute(TargetAudienceInputData inputData) throws Exception {
+        if (inputData == null) {
+            throw new IllegalArgumentException("inputData must not be null");
+        }
+
         final String systemMessage = """
-                Based on the name and description of this project, I want you to give me a list of five \
-                categories of people that would be interested in this project. Here is an example and how to structure:
-                - Foodies;
-                - Snack Enthusiasts;
-                - Pickle Lovers;
-                - Health-Conscious;
-                - Construction workers;
-                Your output must only contain the list, nothing else.""";
+            Based on the name and description of this project, I want you to give me a list of five \
+            categories of people that would be interested in this project. Here is an example and how to structure:
+            - Foodies;
+            - Snack Enthusiasts;
+            - Pickle Lovers;
+            - Health-Conscious;
+            - Construction workers;
+            Your output must only contain the list, nothing else.""";
         final String userMessage = inputData.getPitchname() + " " + inputData.getPitchdescription();
         try {
-            response = dataAccessObject.generateTargetAudience(systemMessage, userMessage);
+            final String response = dataAccessObject.generateTargetAudience(systemMessage, userMessage);
             final TargetAudienceOuputData outputData = new TargetAudienceOuputData(response);
             outputBoundary.prepareSuccessView(outputData);
         }
         catch (JSONException exception) {
             outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
         }
-        return response;
     }
+
 }

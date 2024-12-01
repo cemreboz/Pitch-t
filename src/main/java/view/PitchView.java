@@ -6,12 +6,7 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
@@ -84,24 +79,46 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final PitchState state = (PitchState) evt.getNewValue();
-        if (state.getPitchLoadError() != null) {
-            JOptionPane.showMessageDialog(null, state.getPitchLoadError());
-        }
-        else if (state.getDetailedTaLoadError() != null) {
-            JOptionPane.showMessageDialog(null, state.getDetailedTaLoadError());
-        }
-        else {
-            final String newPitchName = state.getPitch().getName();
-            namePanel.removeAll();
+        SwingUtilities.invokeLater(() -> {
+            final PitchState state = (PitchState) evt.getNewValue();
+            if (state.getPitchLoadError() != null) {
+                JOptionPane.showMessageDialog(null, state.getPitchLoadError());
+            } else if (state.getDetailedTaLoadError() != null) {
+                JOptionPane.showMessageDialog(null, state.getDetailedTaLoadError());
+            } else {
+                // Debug statement to check pitch name and target audience values
+                System.out.println("Property Change Triggered");
+                System.out.println("Updated Pitch Name: " + state.getPitch().getName());
+                System.out.println("Updated Target Audience: " + state.getPitch().getTargetAudienceList());
 
-            final JLabel nameLabel = new JLabel(newPitchName);
-            namePanel.add(nameLabel);
+                // Update pitch name
+                final String newPitchName = state.getPitch().getName();
+                namePanel.removeAll();
+                final JLabel nameLabel = new JLabel("Pitch Name: " + newPitchName);
+                namePanel.add(nameLabel);
 
-            namePanel.revalidate();
-            namePanel.repaint();
-        }
+                // Update target audience details
+                final String newTargetAudience = state.getPitch().getTargetAudienceList();
+                final JPanel targetAudiencePanel = new JPanel();
+                targetAudiencePanel.removeAll();
+                if (newTargetAudience != null && !newTargetAudience.isEmpty()) {
+                    final JLabel targetAudienceLabel = new JLabel("Target Audience: " + newTargetAudience);
+                    targetAudiencePanel.add(targetAudienceLabel);
+                }
+                else {
+                    final JLabel targetAudienceLabel = new JLabel("Target Audience: Not available");
+                    targetAudiencePanel.add(targetAudienceLabel);
+                }
+
+                // Revalidate and repaint to update the UI
+                namePanel.revalidate();
+                namePanel.repaint();
+                targetAudiencePanel.revalidate();
+                targetAudiencePanel.repaint();
+            }
+        });
     }
+
 
     public String getViewName() {
         return viewName;

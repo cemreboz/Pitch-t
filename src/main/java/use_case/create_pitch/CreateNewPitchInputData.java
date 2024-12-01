@@ -38,12 +38,6 @@ public class CreateNewPitchInputData {
     }
 
     public String getTargetAudienceList() throws Exception {
-        final TargetAudienceDataAccessInterface dataAccess = new ChatgptDataAccessObject();
-        final PitchViewModel viewModel = new PitchViewModel();
-        final TargetAudienceOutputBoundary outputBoundary = new TargetAudiencePresenter(viewModel);
-        final TargetAudienceInputBoundary inputBoundary = new TargetAudienceInteractor(dataAccess, outputBoundary);
-        final TargetAudienceController targetAudienceController = new TargetAudienceController(inputBoundary);
-        final TargetAudienceInputData inputData = new TargetAudienceInputData(name, description);
-        return targetAudienceController.generate(inputData);
+        return targetAudience;
     }
 }

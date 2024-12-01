@@ -12,5 +12,5 @@ public interface TargetAudienceInputBoundary {
      * @return the Target Audience.
      * @throws Exception If it cannot get the Detailed Target Audience.                 
      */
-    String execute(TargetAudienceInputData inputData) throws Exception;
+    void execute(TargetAudienceInputData inputData) throws Exception;
 }

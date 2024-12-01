@@ -21,10 +21,10 @@ public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
      * @param outputData the outputdata for General Target Audience.
      */
     @Override
-    public void prepareSuccessView(TargetAudienceOuputData outputData) {
+    public void prepareSuccessView(TargetAudienceOuputData outputData) throws Exception {
         final PitchState state = viewModel.getState();
 
-        state.setTargetAudience(outputData.getTargetAudience());
+        state.setTargetAudience();
         viewModel.setState(state);
         viewModel.firePropertyChanged();
     }

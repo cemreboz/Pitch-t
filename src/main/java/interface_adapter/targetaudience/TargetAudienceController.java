@@ -16,10 +16,9 @@ public class TargetAudienceController {
     /**
      * Generates the Target Audience.
      * @param inputData The Input data for the general Target Audience.
-     * @return the generated TA.
      * @throws Exception if there is an error with generating the target audience.
      */
-    public String generate(TargetAudienceInputData inputData) throws Exception {
-        return inputBoundary.execute(inputData);
+    public void generate(TargetAudienceInputData inputData) throws Exception {
+        inputBoundary.execute(inputData);
     }
 }
