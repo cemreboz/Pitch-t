@@ -119,14 +119,15 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void savePitch() {
         String name = nameField.getText();
         String description = descriptionArea.getText();
-        final String targetAudience = targetAudienceField.getText();
+        List<String> targetAudience = new ArrayList<String>();
+        targetAudience.add(targetAudienceField.getText());
         String image = imageField.getText();
         // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
         // the target audience field should be removed from the view too but its their temporarily for IDk what reason
         // viktor put it there
         // i.e. the controller below shouldnt't need to take targetAudience, it should be generated in the interactor
 
-        createNewPitchController.execute(name, description, image);
+        createNewPitchController.execute(name, description, image, targetAudience);
     }
 
     /**

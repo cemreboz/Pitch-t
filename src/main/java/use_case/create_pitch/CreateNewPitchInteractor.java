@@ -1,11 +1,9 @@
 package use_case.create_pitch;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import entity.DBUser;
 import entity.Pitch;
-import interface_adapter.targetaudience.TargetAudienceController;
+import use_case.dashboard_show_pitch.DashboardOutputData;
+import use_case.new_pitch.NewPitchInputData;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.
@@ -13,21 +11,17 @@ import interface_adapter.targetaudience.TargetAudienceController;
 public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
     private CreateNewPitchDataAccessInterface userDataAccessObject;
     private final CreateNewPitchOutputBoundary userPresenter;
-    private final TargetAudienceController targetAudienceController;
 
     /**
      * Constructor for the CreateNewPitchInteractor.
      *
      * @param createNewPitchDataAccessInterface Gateway for pitch-related data access.
      * @param createNewPitchOutputBoundary the presenter to be used after this interactor
-     * @param targetAudienceController generates the target audience.
      */
     public CreateNewPitchInteractor(CreateNewPitchDataAccessInterface createNewPitchDataAccessInterface,
-                                    CreateNewPitchOutputBoundary createNewPitchOutputBoundary,
-                                    TargetAudienceController targetAudienceController) {
+                                    CreateNewPitchOutputBoundary createNewPitchOutputBoundary) {
         this.userDataAccessObject = createNewPitchDataAccessInterface;
         this.userPresenter = createNewPitchOutputBoundary;
-        this.targetAudienceController = targetAudienceController;
     }
 
     @Override
@@ -39,21 +33,11 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         if (createNewPitchInputData.getDescription().isEmpty()) {
             userPresenter.prepareFailView("Pitch description cannot be empty");
         }
-        List<String> targetAudienceList = new ArrayList<>();
-        try {
-            final Pitch tempPitch = new Pitch(
-                    null,
-                    createNewPitchInputData.getName(),
-                    null,
-                    createNewPitchInputData.getDescription(),
-                    null
-            );
-            final String generatedAudience = targetAudienceController.fetchAndUpdateTargetAudience(tempPitch);
-            targetAudienceList = List.of(generatedAudience.split(";"));
-        }
-        catch (Exception exception) {
-            userPresenter.prepareFailView("Failed to generate target audience: "
-                                          + exception.getMessage());
+        if (createNewPitchInputData.getTargetAudienceList().isEmpty()) {
+            userPresenter.prepareFailView("Pitch target audience list cannot be empty");
+            // TODO Rainy get the general TAs here, use your controller to insert it into the pitch object
+            // instead of making users manually put them in remove this if and have it so the General TA is generated
+            // based off of everything else
         }
 
         // Image is nice but not mandatory.
@@ -61,10 +45,11 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
 
         // Create a new Pitch
         final Pitch newPitch = new Pitch(
-            generatePitchID(),
-            createNewPitchInputData.getName(),
-            createNewPitchInputData.getImage(),  // Image is optional and can be null
-            createNewPitchInputData.getDescription(), targetAudienceList
+                generatePitchID(),
+                createNewPitchInputData.getName(),
+                createNewPitchInputData.getImage(),
+                createNewPitchInputData.getDescription(),
+                createNewPitchInputData.getTargetAudienceList()
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {

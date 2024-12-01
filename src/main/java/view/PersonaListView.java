@@ -97,24 +97,26 @@ public class PersonaListView extends JPanel {
             JOptionPane.showMessageDialog(this, "Please select a persona to generate a vision.");
             return;
         }
-
-        VisionViewModel visionViewModel = new VisionViewModel();
-        VisionController visionController = new VisionController(new GenerateVisualInteractor(
-                new VisualDataAccessObject() {
-                    @Override
-                    public void saveVisual(Visual visual) {
-                    }
-                }, new ImageAnalyzer()));
-
-        VisionView visionView = new VisionView(selectedPersona, null, visionController, visionViewModel);
-
-        final JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        parentFrame.setContentPane(visionView);
-        parentFrame.revalidate();
-        parentFrame.repaint();
     }
-
     public void setComparePersonasController(ComparePersonasController comparePersonasController) {
         // Implement for the view personas list
     }
 }
+
+//       /* VisionViewModel visionViewModel = new VisionViewModel();
+//        VisionController visionController = new VisionController(new GenerateVisualInteractor(
+//                new VisualDataAccessObject() {
+//                    @Override
+//                    public void saveVisual(Visual visual) {
+//                    }
+//                }, new ImageAnalyzer()));*/
+////
+////        VisionView visionView = new VisionView(selectedPersona, null, visionController, visionViewModel);
+//
+//        final JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//        parentFrame.setContentPane(visionView);
+//        parentFrame.revalidate();
+//        parentFrame.repaint();
+/*
+//    }
+*/

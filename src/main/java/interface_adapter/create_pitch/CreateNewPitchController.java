@@ -29,10 +29,12 @@ public class CreateNewPitchController {
      * @param name           the name of the pitch
      * @param description    the description of the pitch
      * @param image          the image URL/path associated with the pitch
+     * @param targetAudience the list of target audiences for the pitch
      */
-    public void execute(String name, String description, String image) {
+    public void execute(String name, String description, String image, List<String> targetAudience) {
         // Creating an input data object for the use case
-        final CreateNewPitchInputData createNewPitchInputData = new CreateNewPitchInputData(name, description, image);
+        final CreateNewPitchInputData createNewPitchInputData = new CreateNewPitchInputData(name, description,
+                image, targetAudience);
 
         // Execute the use case to create the pitch
         createNewPitchInputBoundary.execute(createNewPitchInputData);
@@ -44,5 +46,4 @@ public class CreateNewPitchController {
     public void switchToPitchView() {
 
     }
-
 }
