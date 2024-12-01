@@ -30,7 +30,7 @@ public class DetailedInteractor implements DetailedInputBoundary {
     @Override
     public void execute(DetailedInputData inputData) throws Exception {
         final String systemMessage = """
-                Provide a detailed analysis of the target audience category "%s".\s
+                Provide a detailed analysis of the pitch name and description and the target audience category "%s".\s
                 Structure your response in JSON format with the following fields:
                 {
                   "Name": "",
@@ -68,7 +68,8 @@ public class DetailedInteractor implements DetailedInputBoundary {
                 }""".formatted(inputData.getAudiencecategory());
 
         try {
-            final String response = dataAccess.utilizeApi(systemMessage, inputData.getAudiencecategory());
+            final String response = dataAccess.utilizeApi(systemMessage, inputData.getPitchname() + " "
+                    + inputData.getPitchdescription() + " " + inputData.getAudiencecategory());
             final List<DetailedTargetAudience> parseDetailedTargetAudience = parseDetailedTargetAudience(response);
             final DetailedOutputData outputData = new DetailedOutputData(parseDetailedTargetAudience);
             outputBoundary.prepareSuccessView(outputData);
