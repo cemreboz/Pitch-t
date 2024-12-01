@@ -3,7 +3,6 @@ package use_case.generate_visuals;
 import app.ImageAnalyzer;
 import data_access.InMemoryVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
-import use_case.generate_visuals.*;
 
 import org.junit.jupiter.api.Test;
 

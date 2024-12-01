@@ -1,5 +1,6 @@
 package app;
 
+import data_access.VisualDataAccessObject;
 import use_case.generate_visuals.ImageGeneratorInterface;
 
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ public class ImageAnalyzer implements ImageGeneratorInterface {
 
     public String generateAndDownloadImage(String userInput, String outputFilePath) throws Exception {
         // Use ImageGenerator to get the image URL
-        String imageUrl = ImageGenerator.generateImage(userInput, "dall-e-3", 1, "1024x1024");
+        String imageUrl = VisualDataAccessObject.generateImage(userInput, "dall-e-3", 1, "1024x1024");
 
         // Download the image from the URL
         downloadImage(imageUrl, outputFilePath);

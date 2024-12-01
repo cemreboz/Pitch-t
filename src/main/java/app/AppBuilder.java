@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryUserDataAccessObject;
 import data_access.InMemoryVisualDataAccessObject;
-import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -38,7 +37,6 @@ import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.generate_visuals.GenerateVisualInputBoundary;
 import use_case.generate_visuals.GenerateVisualInteractor;
 import use_case.generate_visuals.GenerateVisualOutputBoundary;
-import use_case.generate_visuals.ImageGeneratorInterface;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;

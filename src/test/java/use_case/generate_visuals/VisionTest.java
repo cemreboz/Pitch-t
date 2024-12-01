@@ -7,7 +7,6 @@ import interface_adapter.vision.VisionPresenter;
 import view.VisionView;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionViewModel;
-import use_case.generate_visuals.GenerateVisualInteractor;
 import data_access.VisualDataAccessObject;
 import app.ImageAnalyzer;
 

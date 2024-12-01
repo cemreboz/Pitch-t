@@ -1,6 +1,5 @@
 package use_case.generate_visuals;
 
-import app.ImageAnalyzer;
 import data_access.VisualDataAccessObject;
 import entity.Visual;
 
