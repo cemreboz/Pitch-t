@@ -26,7 +26,6 @@ public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
     public void prepareSuccessView(DetailedOutputData outputData) {
         final DetailedTargetAudienceState detailedState = viewModel.getState();
         // Update the state with the detailed target audience data
-        detailedState.setLoading(true);
         detailedState.setDetailedTargetAudience(outputData.getDetailedTargetAudience());
 
         viewModel.setState(detailedState);
@@ -41,7 +40,6 @@ public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         final DetailedTargetAudienceState detailedState = viewModel.getState();
-        detailedState.setLoading(false);
         detailedState.setErrorMessage(errorMessage);
 
         viewModel.setState(detailedState);

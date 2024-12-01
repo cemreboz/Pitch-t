@@ -23,7 +23,6 @@ public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
     @Override
     public void prepareSuccessView(TargetAudienceOuputData outputData) {
         final PitchState state = viewModel.getState();
-        state.setLoading(true);
 
         state.setTargetAudience(outputData.getTargetAudience());
         viewModel.setState(state);
@@ -38,7 +37,6 @@ public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         final PitchState state = viewModel.getState();
-        state.setLoading(false);
         state.setErrorMessage(errorMessage);
         viewModel.setState(state);
         viewModel.firePropertyChanged();

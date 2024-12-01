@@ -1,22 +1,15 @@
 package interface_adapter.targetaudience;
 
+import java.util.List;
+
 import entity.DetailedTargetAudience;
 
 /**
  * Class for the DetailedTargetAudienceState.
  */
 public class DetailedTargetAudienceState {
-    private boolean loading;
     private String errorMessage;
-    private DetailedTargetAudience detailedTargetAudience;
-
-    public boolean isLoading() {
-        return loading;
-    }
-
-    public void setLoading(boolean loading) {
-        this.loading = loading;
-    }
+    private List<DetailedTargetAudience> detailedTargetAudience;
 
     public String getErrorMessage() {
         return errorMessage;
@@ -26,11 +19,11 @@ public class DetailedTargetAudienceState {
         this.errorMessage = errorMessage;
     }
 
-    public DetailedTargetAudience getDetailedTargetAudience() {
+    public List<DetailedTargetAudience> getDetailedTargetAudience() {
         return detailedTargetAudience;
     }
 
-    public void setDetailedTargetAudience(DetailedTargetAudience detailedTargetAudience) {
+    public void setDetailedTargetAudience(List<DetailedTargetAudience> detailedTargetAudience) {
         this.detailedTargetAudience = detailedTargetAudience;
     }
 }

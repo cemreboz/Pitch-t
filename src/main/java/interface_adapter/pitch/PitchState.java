@@ -1,7 +1,6 @@
 package interface_adapter.pitch;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import entity.Pitch;
 
@@ -62,14 +61,6 @@ public class PitchState {
 
     public String getTargetAudience() {
         return targetaudience;
-    }
-
-    /**
-     * To determine whether the target audience is loading.
-     * @param loading return whether it's loading or not.
-     */
-    public void setLoading(boolean loading) {
-        // TODO document why this method is empty
     }
 
     /**
