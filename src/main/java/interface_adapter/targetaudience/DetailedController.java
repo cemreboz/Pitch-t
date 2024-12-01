@@ -1,10 +1,7 @@
 package interface_adapter.targetaudience;
 
-import java.util.List;
-
-import entity.DetailedTargetAudience;
 import use_case.set_targetaudience.DetailedInputBoundary;
-import use_case.set_targetaudience.DetailedInteractor;
+import use_case.set_targetaudience.DetailedInputData;
 
 /**
  * Controller class for generating detailed target audiences.
@@ -17,17 +14,12 @@ public class DetailedController {
     }
 
     /**
-     * Executes the interactor to fetch detailed target audiences.
+     * Generates the DetailedTA based off of the input data.
      *
-     * @param audienceCategory The audience category to fetch details for.
-     * @return A list of detailed target audiences.
-     * @throws Exception If there is an error during execution.
-     * @throws IllegalArgumentException if the audience category is null or empty.
+     * @param detailedInputData The inputData for the Detailed TA.
+     * @throws Exception when there is an error with generating the DetailedTA.
      */
-    public List<DetailedTargetAudience> execute(String audienceCategory) throws Exception {
-        if (audienceCategory == null || audienceCategory.isEmpty()) {
-            throw new IllegalArgumentException("Audience category cannot be null or empty.");
-        }
-        return interactor.fetchDetailedTargetAudience(audienceCategory);
+    public void generateDetailed(DetailedInputData detailedInputData) throws Exception {
+        detailedInputBoundary.execute(detailedInputData);
     }
 }
