@@ -1,18 +1,20 @@
 package use_case.view_personas;
 
+import entity.Pitch;
+
 /**
  * Input Data for the View Personas Use Case.
  */
 public class ViewPersonasInputData {
-    private final String pitchID;
+    private final Pitch currentPitch;
 
     /**
      * Constructs the input data with the specified pitch ID.
      *
-     * @param pitchID the ID of the pitch.
+     * @param currentPitch the ID of the pitch.
      */
-    public ViewPersonasInputData(String pitchID) {
-        this.pitchID = pitchID;
+    public ViewPersonasInputData(Pitch currentPitch) {
+        this.currentPitch = currentPitch;
     }
 
     /**
@@ -20,8 +22,8 @@ public class ViewPersonasInputData {
      *
      * @return the pitch ID.
      */
-    public String getPitchID() {
-        return pitchID;
+    public Pitch getPitch() {
+        return currentPitch;
     }
 }
 

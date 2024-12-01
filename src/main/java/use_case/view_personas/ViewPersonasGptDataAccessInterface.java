@@ -12,9 +12,8 @@ public interface ViewPersonasGptDataAccessInterface {
     /**
      * Generates personas based on the pitch.
      *
-     * @param pitch the pitch data.
      * @return a list of generated personas.
      * @throws Exception if an error occurs during generation.
      */
-    List<Persona> generatePersonas(Pitch pitch) throws Exception;
+    List<Persona> generatePersonas(String pitchName, String pitchDescription, List<String> targetAudience) throws Exception;
 }

@@ -3,8 +3,7 @@ package view;
 import entity.Persona;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
-import interface_adapter.chat_with_persona.ChatController;
-import interface_adapter.vision.VisionController;
+import interface_adapter.view_personas.ViewPersonasViewModel;
 import use_case.compare_personas.ComparePersonasInputData;
 
 import javax.swing.*;
@@ -18,24 +17,20 @@ import java.util.List;
 public class PersonaListView extends JPanel {
     private final ComparePersonasController compareController;
     private final ComparePersonasViewModel compareViewModel;
-//    private final ChatController chatController;
-//    private final VisionController visionController;
     private final List<Persona> personas;
     private final JButton compareButton;
     private final JButton visionButton;
     private final JButton chatButton;
     private final JCheckBox[] personaCheckBoxes;
 
-    public PersonaListView(List<Persona> personas, ComparePersonasController compareController, ComparePersonasViewModel compareViewModel, ChatController chatController, VisionController visionController) {
+    public PersonaListView(List<Persona> personas, ComparePersonasController compareController, ComparePersonasViewModel compareViewModel) {
         this.personas = personas;
         this.compareController = compareController;
         this.compareViewModel = compareViewModel;
-//        this.chatController = chatController;
-//        this.visionController = visionController;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JLabel titleLabel = new JLabel("Select Personas to Compare, Chat, or View Vision");
+        JLabel titleLabel = new JLabel("Select Personas to Compare, Chat, or Generate Vision");
         titleLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(titleLabel);
 
@@ -45,10 +40,10 @@ public class PersonaListView extends JPanel {
             add(personaCheckBoxes[i]);
         }
 
-        // Compare Button
         compareButton = new JButton("Compare Selected Personas");
         compareButton.setAlignmentX(CENTER_ALIGNMENT);
         add(compareButton);
+
         compareButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,10 +51,10 @@ public class PersonaListView extends JPanel {
             }
         });
 
-        // Vision Button
         visionButton = new JButton("Generate Vision");
         visionButton.setAlignmentX(CENTER_ALIGNMENT);
         add(visionButton);
+
         visionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,10 +62,10 @@ public class PersonaListView extends JPanel {
             }
         });
 
-        // Chat Button
-        chatButton = new JButton("Chat with Selected Persona");
+        chatButton = new JButton("Chat with Persona");
         chatButton.setAlignmentX(CENTER_ALIGNMENT);
         add(chatButton);
+
         chatButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,8 +111,8 @@ public class PersonaListView extends JPanel {
             return;
         }
 
-        // Trigger vision generation
-//        visionController.generateVision(selectedPersona);
+        // TODO: Implement the vision generation feature
+        JOptionPane.showMessageDialog(this, "Vision generation for " + selectedPersona.getName() + " is not yet implemented.");
     }
 
     private void handleChatButton() {
@@ -135,7 +130,11 @@ public class PersonaListView extends JPanel {
             return;
         }
 
-        // Trigger chat with the selected persona
-//        chatController.initiateChat(selectedPersona);
+        // TODO: Implement the chat feature
+        JOptionPane.showMessageDialog(this, "Chat with " + selectedPersona.getName() + " is not yet implemented.");
+    }
+
+    public void setComparePersonasController(ComparePersonasController comparePersonasController) {
+        // Implement for the view personas list
     }
 }

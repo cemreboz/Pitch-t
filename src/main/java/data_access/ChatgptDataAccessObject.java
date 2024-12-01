@@ -149,7 +149,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
     // Todo: implement this call
 
     @Override
-    public List<Persona> generatePersonas(Pitch pitch) throws Exception {
+    public List<Persona> generatePersonas(String pitchName, String pitchDescription, List<String> targetAudience) throws Exception {
             // Jads prompts
 // StringBuilder systemPromptBuilder = new StringBuilder();
 // systemPromptBuilder.append("You are a marketing expert. Based on the following detailed target audience information and project description, create a persona for each audience category and one extra persona that wouldn't be attracted to the product but the differences should be subtle.\n\n");
