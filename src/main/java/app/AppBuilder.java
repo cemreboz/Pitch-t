@@ -194,6 +194,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the DetailedTA view to the application.
+     * @return this builder
+     */
+    public AppBuilder addDetailedTargetAudiencePageView() {
+        detailedTargetAudiencePageViewModel = new DetailedTargetAudiencePageViewModel();
+        detailedView = new DetailedView(detailedTargetAudiencePageViewModel);
+        cardPanel.add(detailedView, detailedView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the expert chat view to the application.
      * @return this builder
      */
@@ -399,21 +410,21 @@ public class AppBuilder {
     }
 
     /**
-     *
+     * Adds the add DetailedTA use case.
      * @return this builder.
      */
-//    public AppBuilder addDetailedTargetAudienceUseCase() {
-//        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
-//                detailedTargetAudiencePageViewModel);
-//
-//        final DetailedtaDataAccessInterface detailedDataAccessInterface = new DetailedtaDataAccessInterface();
-//        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
-//                detailedOutputBoundary);
-//        final DetailedController detailedController = new DetailedController(detailedInteractor);
-//
-//        detailedView;
-//        return this;
-//    }
+    public AppBuilder addDetailedTargetAudienceUseCase() {
+        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
+                detailedTargetAudiencePageViewModel);
+
+        final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary);
+        final DetailedController detailedController = new DetailedController(detailedInteractor);
+
+        detailedView.setController(detailedController);
+        return this;
+    }
 
     /**
      * Adds the compare personas use case.

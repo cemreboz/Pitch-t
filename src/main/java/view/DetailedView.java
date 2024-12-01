@@ -3,81 +3,65 @@ package view;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
-
-import entity.DetailedTargetAudience;
-import interface_adapter.targetaudience.DetailedController;
 import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
+import interface_adapter.targetaudience.DetailedController;
+import entity.DetailedTargetAudience;
 
 /**
- * The view page for Detailed Target Audience.
+ * The view for displaying detailed target audience information.
  */
-public class DetailedView extends JFrame implements PropertyChangeListener {
-    private JPanel contentPanel;
+public class DetailedView extends JPanel implements PropertyChangeListener {
+
+    private final String viewName = "detailed target audience";
     private final DetailedTargetAudiencePageViewModel viewModel;
-    private final DetailedController controller;
+    private DetailedController controller;
+    private DetailedTargetAudience detailedTargetAudience;
 
-    public DetailedView(DetailedTargetAudiencePageViewModel viewModel, DetailedController controller) {
+    private final JPanel contentPanel;
+
+    private static final int FIELD_WIDTH = 300;
+    private static final int SIZE = 24;
+    private static final int FIELD_HEIGHT = 20;
+
+    public DetailedView(DetailedTargetAudiencePageViewModel viewModel) {
         this.viewModel = viewModel;
-        this.controller = controller;
-
-        // Register as a listener to the ViewModel
         this.viewModel.addPropertyChangeListener(this);
 
-        initializeUI();
-    }
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.WHITE);
 
-    private void initializeUI() {
-        setTitle("Detailed Target Audience - Loading...");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setSize(800, 600);
-        setMinimumSize(new Dimension(600, 400));
+        // Title Label
+        final JLabel titleLabel = new JLabel("Detailed Target Audience", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, SIZE));
+        add(titleLabel);
+        add(Box.createVerticalStrut(FIELD_HEIGHT));
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
-
-        JLabel headerLabel = new JLabel("Detailed Target Audience - Loading...", SwingConstants.CENTER);
-        headerLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
-        mainPanel.add(headerLabel, BorderLayout.NORTH);
-
+        // Content Panel
         contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(Color.WHITE);
 
-        // Scroll Pane
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Set main panel as content pane
-        setContentPane(mainPanel);
-
-        // Attempt to load data via controller
-        try {
-            controller.generateDetailed(null); // Replace `null` with appropriate DetailedInputData if needed
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        final JScrollPane contentScrollPane = new JScrollPane(contentPanel);
+        add(contentScrollPane);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("detailedTA".equals(evt.getPropertyName())) {
+        if ("detailedTargetAudience".equals(evt.getPropertyName())) {
             // Update the UI when ViewModel's state changes
-            DetailedTargetAudience updatedTA = viewModel.getState().getDetailedTargetAudience().get(0); // Assuming the list contains a single target audience
-            updateDetailedTA(updatedTA);
+            final DetailedTargetAudience updatedTargetAudience = viewModel.getState().getDetailedTargetAudience().get(0); // Assuming the list contains a single target audience
+            updateDetailedTA(updatedTargetAudience);
         }
     }
 
     // Updates the UI when new data is loaded
     public void updateDetailedTA(DetailedTargetAudience detailedTA) {
         SwingUtilities.invokeLater(() -> {
-            this.detailedTA = detailedTA;
-            setTitle("Detailed Target Audience - " + detailedTA.getName());
+            this.detailedTargetAudience = detailedTA;
             populateContent();
         });
     }
@@ -128,43 +112,59 @@ public class DetailedView extends JFrame implements PropertyChangeListener {
 
     private List<String[]> getDemographicAttributes() {
         List<String[]> attrs = new ArrayList<>();
-        attrs.add(new String[]{"Age Range", detailedTA != null ? detailedTA.getMinAge() + " - " + detailedTA.getMaxAge() : "Loading..."});
-        attrs.add(new String[]{"Gender", safeString(detailedTA != null ? detailedTA.getGender() : null)});
-        attrs.add(new String[]{"Education Level", safeString(detailedTA != null ? detailedTA.getEducationLevel() : null)});
-        attrs.add(new String[]{"Occupation", safeString(detailedTA != null ? detailedTA.getOccupation() : null)});
-        attrs.add(new String[]{"Income Level", safeString(detailedTA != null ? detailedTA.getIncomeLevel() : null)});
-        attrs.add(new String[]{"Geographic Location", safeString(detailedTA != null ? detailedTA.getGeographicLocation() : null)});
+        if (detailedTargetAudience != null) {
+            attrs.add(new String[]{"Age Range", detailedTargetAudience.getMinAge() + " - " + detailedTargetAudience.getMaxAge()});
+            attrs.add(new String[]{"Gender", safeString(detailedTargetAudience.getGender())});
+            attrs.add(new String[]{"Education Level", safeString(detailedTargetAudience.getEducationLevel())});
+            attrs.add(new String[]{"Occupation", safeString(detailedTargetAudience.getOccupation())});
+            attrs.add(new String[]{"Income Level", safeString(detailedTargetAudience.getIncomeLevel())});
+            attrs.add(new String[]{"Geographic Location", safeString(detailedTargetAudience.getGeographicLocation())});
+        } else {
+            attrs.add(new String[]{"Loading", "Loading..."});
+        }
         return attrs;
     }
 
     private List<String[]> getPsychographicAttributes() {
         List<String[]> attrs = new ArrayList<>();
-        attrs.add(new String[]{"Interests and Passions", String.join(", ", safeList(detailedTA != null ? detailedTA.getInterestsAndPassions() : null))});
-        attrs.add(new String[]{"Values", String.join(", ", safeList(detailedTA != null ? detailedTA.getValues() : null))});
-        attrs.add(new String[]{"Personality Traits", String.join(", ", safeList(detailedTA != null ? detailedTA.getPersonalityTraits() : null))});
-        attrs.add(new String[]{"Lifestyle", safeString(detailedTA != null ? detailedTA.getLifestyle() : null)});
+        if (detailedTargetAudience != null) {
+            attrs.add(new String[]{"Interests and Passions", String.join(", ", safeList(detailedTargetAudience.getInterestsAndPassions()))});
+            attrs.add(new String[]{"Values", String.join(", ", safeList(detailedTargetAudience.getValues()))});
+            attrs.add(new String[]{"Personality Traits", String.join(", ", safeList(detailedTargetAudience.getPersonalityTraits()))});
+            attrs.add(new String[]{"Lifestyle", safeString(detailedTargetAudience.getLifestyle())});
+        } else {
+            attrs.add(new String[]{"Loading", "Loading..."});
+        }
         return attrs;
     }
 
     private List<String[]> getBehavioralAttributes() {
         List<String[]> attrs = new ArrayList<>();
-        attrs.add(new String[]{"Early Adopter", detailedTA != null ? (detailedTA.isEarlyAdopter() ? "Yes" : "No") : "Loading..."});
-        attrs.add(new String[]{"Tech Savviness", safeString(detailedTA != null ? detailedTA.getTechSavviness() : null)});
-        attrs.add(new String[]{"Gadget Ownership", String.join(", ", safeList(detailedTA != null ? detailedTA.getGadgetOwnership() : null))});
-        attrs.add(new String[]{"Media Consumption", String.join(", ", safeList(detailedTA != null ? detailedTA.getMediaConsumption() : null))});
-        attrs.add(new String[]{"Online Engagement", String.join(", ", safeList(detailedTA != null ? detailedTA.getOnlineEngagement() : null))});
-        attrs.add(new String[]{"Influencer", detailedTA != null ? (detailedTA.isInfluencer() ? "Yes" : "No") : "Loading..."});
+        if (detailedTargetAudience != null) {
+            attrs.add(new String[]{"Early Adopter", detailedTargetAudience.isEarlyAdopter() ? "Yes" : "No"});
+            attrs.add(new String[]{"Tech Savviness", safeString(detailedTargetAudience.getTechSavviness())});
+            attrs.add(new String[]{"Gadget Ownership", String.join(", ", safeList(detailedTargetAudience.getGadgetOwnership()))});
+            attrs.add(new String[]{"Media Consumption", String.join(", ", safeList(detailedTargetAudience.getMediaConsumption()))});
+            attrs.add(new String[]{"Online Engagement", String.join(", ", safeList(detailedTargetAudience.getOnlineEngagement()))});
+            attrs.add(new String[]{"Influencer", detailedTargetAudience.isInfluencer() ? "Yes" : "No"});
+        } else {
+            attrs.add(new String[]{"Loading", "Loading..."});
+        }
         return attrs;
     }
 
     private List<String[]> getOtherAttributes() {
         List<String[]> attrs = new ArrayList<>();
-        attrs.add(new String[]{"Event Participation", String.join(", ", safeList(detailedTA != null ? detailedTA.getEventParticipation() : null))});
-        attrs.add(new String[]{"Hobbies", String.join(", ", safeList(detailedTA != null ? detailedTA.getHobbies() : null))});
-        attrs.add(new String[]{"Brand Affinity", String.join(", ", safeList(detailedTA != null ? detailedTA.getBrandAffinity() : null))});
-        attrs.add(new String[]{"Environmental Concerns", detailedTA != null ? (detailedTA.isEnvironmentalConcerns() ? "Yes" : "No") : "Loading..."});
-        attrs.add(new String[]{"Global Perspective", detailedTA != null ? (detailedTA.isGlobalPerspective() ? "Yes" : "No") : "Loading..."});
-        attrs.add(new String[]{"Multilingual Abilities", detailedTA != null ? (detailedTA.isMultilingualAbilities() ? "Yes" : "No") : "Loading..."});
+        if (detailedTargetAudience != null) {
+            attrs.add(new String[]{"Event Participation", String.join(", ", safeList(detailedTargetAudience.getEventParticipation()))});
+            attrs.add(new String[]{"Hobbies", String.join(", ", safeList(detailedTargetAudience.getHobbies()))});
+            attrs.add(new String[]{"Brand Affinity", String.join(", ", safeList(detailedTargetAudience.getBrandAffinity()))});
+            attrs.add(new String[]{"Environmental Concerns", detailedTargetAudience.isEnvironmentalConcerns() ? "Yes" : "No"});
+            attrs.add(new String[]{"Global Perspective", detailedTargetAudience.isGlobalPerspective() ? "Yes" : "No"});
+            attrs.add(new String[]{"Multilingual Abilities", detailedTargetAudience.isMultilingualAbilities() ? "Yes" : "No"});
+        } else {
+            attrs.add(new String[]{"Loading", "Loading..."});
+        }
         return attrs;
     }
 
@@ -175,5 +175,17 @@ public class DetailedView extends JFrame implements PropertyChangeListener {
 
     private List<String> safeList(List<String> list) {
         return list != null ? list : new ArrayList<>();
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    /**
+     * Method to set the detailed target audience controller.
+     * @param controller detailed target audience controller
+     */
+    public void setController(DetailedController controller) {
+        this.controller = controller;
     }
 }

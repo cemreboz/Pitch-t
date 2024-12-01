@@ -20,6 +20,7 @@ public class Main {
                                             .addDashboardView()
                                             .addPitchView()
                                             .addNewPitchView()
+                                            .addDetailedTargetAudiencePageView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()
@@ -29,6 +30,7 @@ public class Main {
                                             .addPitchUseCase()
                                             .addNewPitchUseCase()
                                             .addCreateNewPitchUseCase()
+                                            .addDetailedTargetAudienceUseCase()
                                             .addExpertUseCase()
                                             .addChatExpertUseCase()
                                             .build();
