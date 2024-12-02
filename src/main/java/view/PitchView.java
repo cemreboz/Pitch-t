@@ -1,18 +1,14 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
@@ -27,6 +23,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "pitch";
     private final PitchViewModel pitchViewModel;
+    private final ViewManagerModel viewManagerModel;
     private HamburgerMenu hamburgerMenu;
 
     private final int fifty = 50;
@@ -36,11 +33,16 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
 
-    public PitchView(PitchViewModel pitchViewModel) {
+    private ExpertController expertController;
+
+    public PitchView(PitchViewModel pitchViewModel, ViewManagerModel viewManagerModel) {
         this.pitchViewModel = pitchViewModel;
         this.pitchViewModel.addPropertyChangeListener(this);
 
+        this.viewManagerModel = viewManagerModel;
+
         final JPanel headerPanel = createHeaderPanel();
+        final JPanel footerPanel = createFooterPanel();
 
         final PitchState state = pitchViewModel.getState();
         final String pitchName = state.getPitch().getName();
@@ -52,7 +54,9 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(headerPanel);
+        this.add(footerPanel);
         this.add(namePanel);
+
     }
 
     private JPanel createHeaderPanel() {
@@ -82,6 +86,36 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         return headerPanel;
     }
 
+    private JPanel createFooterPanel() {
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        final JButton personaButton = new JButton("Personas");
+        buttonPanel.add(personaButton);
+
+        final JButton askExpertsButton = new JButton("Ask Experts");
+        buttonPanel.add(askExpertsButton);
+
+        personaButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        final PitchState state = pitchViewModel.getState();
+                        expertController.execute(state.getUsername(), state.getPassword());
+                    }
+                }
+        );
+
+        askExpertsButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        final PitchState state = pitchViewModel.getState();
+                        expertController.execute(state.getUsername(), state.getPassword());
+                    }
+                }
+        );
+
+        return buttonPanel;
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final PitchState state = (PitchState) evt.getNewValue();
@@ -92,15 +126,38 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             JOptionPane.showMessageDialog(null, state.getDetailedTaLoadError());
         }
         else {
+
             final String newPitchName = state.getPitch().getName();
             namePanel.removeAll();
 
             final JLabel nameLabel = new JLabel(newPitchName);
             namePanel.add(nameLabel);
 
-            namePanel.revalidate();
-            namePanel.repaint();
+            final String newPitchDescription = state.getPitch().getDescription();
+            final JLabel descriptionLabel = new JLabel(newPitchDescription);
+            descriptionLabel.setPreferredSize(new Dimension(300, descriptionLabel.getPreferredSize().height));
+            namePanel.add(descriptionLabel);
+
+            final String newPitchImage = state.getPitch().getImage();
+            if (newPitchImage != null) {
+                final JLabel imageLabel = new JLabel(newPitchImage);
+                namePanel.add(imageLabel);
+            }
+
+            final JPanel audiencePanel = new JPanel();
+            audiencePanel.setLayout(new BoxLayout(audiencePanel, BoxLayout.Y_AXIS));
+            audiencePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Target Audiences"));
+            final JComboBox<String> audienceDropdown = new JComboBox<>(state.getPitch().getTargetAudienceList().toArray(new String[0]));
+
+            audiencePanel.add(new JLabel("Select Audience:"));
+            audiencePanel.add(audienceDropdown);
+            namePanel.add(audiencePanel);
+
         }
+
+        namePanel.revalidate();
+        namePanel.repaint();
+
     }
 
     public String getViewName() {
@@ -128,6 +185,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
      * @param expertController expert controller
      */
     public void setExpertController(ExpertController expertController) {
+        this.expertController = expertController;
         hamburgerMenu.setExpertController(expertController);
     }
 
@@ -138,4 +196,5 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     public void setNewPitchController(NewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
+
 }

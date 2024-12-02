@@ -171,7 +171,7 @@ public class AppBuilder {
      */
     public AppBuilder addPitchView() {
         pitchViewModel = new PitchViewModel();
-        pitchView = new PitchView(pitchViewModel);
+        pitchView = new PitchView(pitchViewModel, viewManagerModel);
         cardPanel.add(pitchView, pitchView.getViewName());
         return this;
     }
