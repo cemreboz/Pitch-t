@@ -1,6 +1,7 @@
 package interface_adapter.view_personas;
 
 import entity.Persona;
+import entity.Pitch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ViewPersonasState {
     private List<Persona> personas = new ArrayList<Persona>();
     private String errorMessage;
+    private Pitch thisPitch;
 
     // Constructors
     public ViewPersonasState() {
@@ -35,6 +37,12 @@ public class ViewPersonasState {
     public String getErrorMessage() {
         return errorMessage;
     }
+
+    public Pitch getThisPitch() {
+        return thisPitch;
+    }
+
+    public void setThisPitch(Pitch thisPitch) {}
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;

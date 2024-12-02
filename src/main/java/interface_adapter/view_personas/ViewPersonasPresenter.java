@@ -33,6 +33,15 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
 
     @Override
     public void prepareFailView(String errorMessage) {
-        // TOOD: Handle me
+        ViewPersonasState state = new ViewPersonasState();
+        state.setPersonas(null); // No personas in the failure case
+        state.setErrorMessage(errorMessage);
+
+        // Update the view model with the failure output
+        viewPersonasViewModel.setState(state);
+        viewPersonasViewModel.firePropertyChanged();
+
+        viewManagerModel.setState(viewPersonasViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }
