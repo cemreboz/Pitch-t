@@ -14,11 +14,11 @@ public class Pitch {
     private String name;
     private String image;
     private String description;
-    private List<String> targetAudienceList;
+    private String targetAudienceList;
     private Map<String, DetailedTargetAudience> detailedTargetAudienceMap;
     private List<Persona> personas = new ArrayList<>();
 
-    public Pitch(String pitchID, String name, String image, String description, List<String> targetAudienceList) {
+    public Pitch(String pitchID, String name, String image, String description, String targetAudienceList) {
         this.pitchID = pitchID;
         this.name = name;
         this.image = image;
@@ -43,7 +43,7 @@ public class Pitch {
         return description;
     }
 
-    public List<String> getTargetAudienceList() {
+    public String getTargetAudienceList() {
         return targetAudienceList;
     }
 

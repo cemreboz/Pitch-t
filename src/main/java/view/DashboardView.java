@@ -1,6 +1,8 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -17,10 +19,14 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import entity.Pitch;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.NewPitchController;
 
 /**
  * The view for when the user is logged in and at the dashboard page.
@@ -29,19 +35,19 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "dashboard";
     private final DashboardViewModel dashboardViewModel;
-    private final HamburgerMenu hamburgerMenu;
+    private HamburgerMenu hamburgerMenu;
 
-    private final JButton newPitch;
-    private final JButton experts;
+    private JButton newPitch;
+    private JButton experts;
     private final int fifty = 50;
     private final int hundred = 100;
     private final int thousand = 1000;
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
 
-    // private DashboardController dashboardController;
-    // private NewPitchController newPitchController;
-    // private ExpertController expertController;
+    private DashboardController dashboardController;
+    private NewPitchController newPitchController;
+    private ExpertController expertController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
 
@@ -53,6 +59,21 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         this.setLayout(new BorderLayout());
         this.setBackground(Color.WHITE);
 
+        final JPanel headerPanel = createHeaderPanel();
+        final JPanel footerPanel = createFooterPanel();
+
+        pitchHistoryPanel.setLayout(new BoxLayout(pitchHistoryPanel, BoxLayout.Y_AXIS));
+        pitchHistoryPanel.setBackground(Color.WHITE);
+        pitchHistoryPanel.setMaximumSize(new Dimension(thousand, thousand));
+        final JScrollPane scrollPane = new JScrollPane(pitchHistoryPanel);
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(footerPanel);
+        this.add(scrollPane);
+    }
+
+    private JPanel createHeaderPanel() {
         final JLabel logoLabel = new JLabel(logoIcon);
         logoLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -77,6 +98,10 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         headerPanel.add(logoLabel, BorderLayout.EAST);
         headerPanel.add(title, BorderLayout.CENTER);
 
+        return headerPanel;
+    }
+
+    private JPanel createFooterPanel() {
         final JPanel buttons = new JPanel();
         newPitch = new JButton("New Pitch");
         buttons.add(newPitch);
@@ -86,33 +111,25 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         buttons.setMaximumSize(new Dimension(thousand, hundred));
         buttons.setBackground(Color.WHITE);
 
-        pitchHistoryPanel.setLayout(new BoxLayout(pitchHistoryPanel, BoxLayout.Y_AXIS));
-        pitchHistoryPanel.setBackground(Color.WHITE);
-        pitchHistoryPanel.setMaximumSize(new Dimension(thousand, thousand));
-        final JScrollPane scrollPane = new JScrollPane(pitchHistoryPanel);
-
         newPitch.addActionListener(
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) { JOptionPane
-                            .showMessageDialog(newPitch, "go to new pitch");
+                    public void actionPerformed(ActionEvent evt) {
+                        final DashboardState state = dashboardViewModel.getState();
+                        newPitchController.execute(state.getUsername(), state.getPassword());
                     }
                 }
         );
 
         experts.addActionListener(
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) { JOptionPane
-                            .showMessageDialog(experts, "go to experts");
+                    public void actionPerformed(ActionEvent evt) {
+                        final DashboardState state = dashboardViewModel.getState();
+                        expertController.execute(state.getUsername(), state.getPassword());
                     }
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        this.add(headerPanel, BorderLayout.NORTH);
-        this.add(buttons);
-        this.add(scrollPane);
-
+        return buttons;
     }
 
     /**
@@ -130,19 +147,33 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
-    /*
-    public void setNewPitchController(NewPitchController newPitchController) {
-        this.newPitchController = newPitchController;
-    }
 
-    public void setExpertController(ExpertController expertController) {
-        this.expertController = expertController;
-    }
-
+    /**
+     * Method to set the dashboard pitch view controller.
+     * @param dashboardController dashboard controller
+     */
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
     }
-    */
+
+    /**
+     * Method to set the new pitch view controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(NewPitchController newPitchController) {
+        this.newPitchController = newPitchController;
+        hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    /**
+     * Method to set the expert controller.
+     * @param expertController expert controller
+     */
+    public void setExpertController(ExpertController expertController) {
+        this.expertController = expertController;
+        hamburgerMenu.setExpertController(expertController);
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
@@ -166,8 +197,8 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
             pitchButton.addActionListener(
                     new ActionListener() {
                         public void actionPerformed(ActionEvent evt) {
-                            JOptionPane.showMessageDialog(pitchButton, "go to" + pitch.getName());
-                            // replace messagedialog ^ with this: DashboardController.execute(pitch)
+                            final DashboardState state = dashboardViewModel.getState();
+                            dashboardController.execute(pitch, state.getUsername(), state.getPassword());
                         }
                     });
             pitchHistoryPanel.add(pitchButton);

@@ -138,8 +138,8 @@ public class DetailedTargetAudience {
         return isEarlyAdopter;
     }
 
-    public void setEarlyAdopter(boolean isEarlyAdopter) {
-        this.isEarlyAdopter = isEarlyAdopter;
+    public void setEarlyAdopter(boolean inputisEarlyAdopter) {
+        this.isEarlyAdopter = inputisEarlyAdopter;
     }
 
     public String getTechSavviness() {
@@ -178,8 +178,8 @@ public class DetailedTargetAudience {
         return isInfluencer;
     }
 
-    public void setInfluencer(boolean isInfluencer) {
-        this.isInfluencer = isInfluencer;
+    public void setInfluencer(boolean inputisInfluencer) {
+        this.isInfluencer = inputisInfluencer;
     }
 
     public List<String> getEventParticipation() {

@@ -22,13 +22,15 @@ public class VisionTest {
         mockPersona.setAge(28);
         mockPersona.setOccupation("Software Engineer");
 
+        String targetAudienceList = String.join(", ", "User-Friendly", "AI-Driven", "Scalable");
+
         // Create a mock Pitch
         Pitch mockPitch = new Pitch(
+                "pitch123",
                 "Smart AI Assistant",
+                "image_url",
                 "An AI-powered assistant designed to simplify daily tasks.",
-                "Technology",
-                "Global Market",
-                List.of("User-Friendly", "AI-Driven", "Scalable")
+                targetAudienceList
         );
 
         // Create ViewModel, Presenter, and Interactor

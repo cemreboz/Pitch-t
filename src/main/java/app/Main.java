@@ -14,9 +14,13 @@ public class Main {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
                                             .addLoginView()
+                                            .addExpertChatView()
                                             .addSignupView()
                                             .addAccountSettingsView()
                                             .addDashboardView()
+                                            .addPitchView()
+                                            .addNewPitchView()
+                                            .addDetailedTargetAudiencePageView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
                                             .addChangePasswordUseCase()
@@ -25,6 +29,12 @@ public class Main {
                                             .addAccountSettingsUseCase()
                                             .addVisionView()
                                             .addVisionUseCase()
+                                            .addPitchUseCase()
+                                            .addNewPitchUseCase()
+                                            .addCreateNewPitchUseCase()
+                                            .addDetailedTargetAudienceUseCase()
+                                            .addExpertUseCase()
+                                            .addChatExpertUseCase()
                                             .build();
 
         application.pack();

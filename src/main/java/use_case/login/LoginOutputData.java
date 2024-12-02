@@ -33,4 +33,8 @@ public class LoginOutputData {
         return password;
     }
 
+    public boolean isUseCaseFailed() {
+        return useCaseFailed;
+    }
+
 }

@@ -18,8 +18,12 @@ import javax.swing.JPopupMenu;
 import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.pitch.PitchState;
 
 /**
  * A panel for the hamburger menu.
@@ -28,6 +32,8 @@ public class HamburgerMenu extends JPanel {
 
     private LoginController loginController;
     private AccountSettingsController accountSettingsController;
+    private ExpertController expertController;
+    private NewPitchController newPitchController;
     private ViewModel viewModel;
 
     private final int hamburgerSize = 24;
@@ -39,7 +45,6 @@ public class HamburgerMenu extends JPanel {
         menuIcon.setFont(new Font("Arial", Font.PLAIN, hamburgerSize));
         menuIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        // Add mouse listener to display the popup menu
         menuIcon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -52,7 +57,6 @@ public class HamburgerMenu extends JPanel {
     }
 
     private void showMenu(Component invoker) {
-        // Create the popup menu
         final JPopupMenu menu = new JPopupMenu();
 
         final JMenuItem dashboardItem = new JMenuItem("Dashboard");
@@ -66,6 +70,14 @@ public class HamburgerMenu extends JPanel {
                     final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
                 }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, "error");
                 }
@@ -74,14 +86,54 @@ public class HamburgerMenu extends JPanel {
         menu.add(dashboardItem);
 
         final JMenuItem newPitchItem = new JMenuItem("New Pitch");
-        newPitchItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+        newPitchItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (viewModel.getState() instanceof DashboardState) {
+                    final DashboardState currentState = (DashboardState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof AccountSettingsState) {
+                    final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else {
+                    JOptionPane.showMessageDialog(newPitchItem, "error");
+                }
+            }
         });
         menu.add(newPitchItem);
 
         final JMenuItem expertsItem = new JMenuItem("Experts");
-        expertsItem.addActionListener(evt -> {
-            JOptionPane.showMessageDialog(this, "lol");
+        expertsItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                if (viewModel.getState() instanceof DashboardState) {
+                    final DashboardState currentState = (DashboardState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof AccountSettingsState) {
+                    final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else {
+                    JOptionPane.showMessageDialog(expertsItem, "error");
+                }
+            }
         });
         menu.add(expertsItem);
 
@@ -95,6 +147,14 @@ public class HamburgerMenu extends JPanel {
                 else if (viewModel.getState() instanceof AccountSettingsState) {
                     final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                }
+                else if (viewModel.getState() instanceof PitchState) {
+                    final PitchState currentState = (PitchState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ExpertState) {
+                    final ExpertState currentState = (ExpertState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
                     JOptionPane.showMessageDialog(accountSettingsItem, "error");
@@ -113,6 +173,14 @@ public class HamburgerMenu extends JPanel {
 
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         this.accountSettingsController = accountSettingsController;
+    }
+
+    public void setExpertController(ExpertController expertController) {
+        this.expertController = expertController;
+    }
+
+    public void setNewPitchController(NewPitchController newPitchController) {
+        this.newPitchController = newPitchController;
     }
 
 }

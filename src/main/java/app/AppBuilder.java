@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.ChatExpertDataAccessObject;
+import data_access.ChatgptDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.FileVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
@@ -19,18 +21,35 @@ import interface_adapter.account_settings.AccountSettingsPresenter;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.chat_expert.ChatExpertController;
+import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.compare_personas.ComparePersonasController;
+import interface_adapter.compare_personas.ComparePersonasPresenter;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
+import interface_adapter.create_pitch.CreateNewPitchController;
+import interface_adapter.create_pitch.CreateNewPitchPresenter;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertPresenter;
+import interface_adapter.expert.ExpertViewModel;
+import interface_adapter.dashboard.DashboardController;
+import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.NewPitchPresenter;
+import interface_adapter.new_pitch.NewPitchViewModel;
+import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionPresenter;
 import interface_adapter.vision.VisionViewModel;
+import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -41,12 +60,34 @@ import use_case.generate_visuals.GenerateVisualInputBoundary;
 import use_case.generate_visuals.GenerateVisualInteractor;
 import use_case.generate_visuals.GenerateVisualOutputBoundary;
 import use_case.generate_visuals.ImageGeneratorInterface;
+import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
+import use_case.chat_expert.ChatExpertInputBoundary;
+import use_case.chat_expert.ChatExpertInteractor;
+import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.compare_personas.ComparePersonasInputBoundary;
+import use_case.compare_personas.ComparePersonasInteractor;
+import use_case.compare_personas.ComparePersonasOutputBoundary;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.create_pitch.CreateNewPitchInputBoundary;
+import use_case.create_pitch.CreateNewPitchInteractor;
+import use_case.create_pitch.CreateNewPitchOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
+import use_case.new_pitch.NewPitchInputBoundary;
+import use_case.new_pitch.NewPitchInteractor;
+import use_case.new_pitch.NewPitchOutputBoundary;
+import use_case.dashboard_show_pitch.DashboardInputBoundary;
+import use_case.dashboard_show_pitch.DashboardInteractor;
+import use_case.dashboard_show_pitch.DashboardOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.set_targetaudience.*;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -71,9 +112,6 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-
-
-
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
 
@@ -82,6 +120,7 @@ public class AppBuilder {
     private LoginViewModel loginViewModel;
     private AccountSettingsViewModel accountSettingsViewModel;
     private VisionViewModel visionViewModel;
+    private PitchViewModel pitchViewModel;
     private AccountSettingsView accountSettingsView;
     private LoginView loginView;
     private DashboardViewModel dashboardViewModel;
@@ -89,6 +128,15 @@ public class AppBuilder {
     private VisionView visionView;
     private Persona persona;
     private Pitch pitch;
+    private PitchView pitchView;
+    private NewPitchViewModel newPitchViewModel;
+    private NewPitchView newPitchView;
+    private ExpertChatView expertChatView;
+    private ExpertViewModel expertViewModel;
+    private ComparePersonasViewModel comparePersonasViewModel;
+    private PersonaListView personaListView;
+    private DetailedTargetAudiencePageViewModel detailedTargetAudiencePageViewModel;
+    private DetailedView detailedView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -128,7 +176,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn View to the application.
+     * Adds the AccountSettings View to the application.
      * @return this builder
      */
     public AppBuilder addAccountSettingsView() {
@@ -146,6 +194,51 @@ public class AppBuilder {
         visionViewModel = new VisionViewModel();
         visionView = new VisionView(visionViewModel);
         cardPanel.add(visionView, visionView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Pitch View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPitchView() {
+        pitchViewModel = new PitchViewModel();
+        pitchView = new PitchView(pitchViewModel);
+        cardPanel.add(pitchView, pitchView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the New Pitch View to the application.
+     * @return this builder
+     */
+    public AppBuilder addNewPitchView() {
+        newPitchViewModel = new NewPitchViewModel();
+        newPitchView = new NewPitchView(newPitchViewModel);
+        cardPanel.add(newPitchView, newPitchView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the DetailedTA view to the application.
+     * @return this builder
+     */
+    public AppBuilder addDetailedTargetAudiencePageView() {
+        detailedTargetAudiencePageViewModel = new DetailedTargetAudiencePageViewModel();
+        detailedView = new DetailedView(detailedTargetAudiencePageViewModel);
+        cardPanel.add(detailedView, detailedView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the expert chat view to the application.
+     * @return this builder
+     */
+    public AppBuilder addExpertChatView() {
+        expertViewModel = new ExpertViewModel();
+        expertChatView = new ExpertChatView(expertViewModel, viewManagerModel);
+        cardPanel.add(expertChatView, expertChatView.getViewName());
+
         return this;
     }
 
@@ -213,7 +306,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the dashboard use case as part of the hamburger menu to each view with the menu.
+     * Adds the dashboard use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addDashboardUseCase() {
@@ -225,11 +318,13 @@ public class AppBuilder {
         final LoginController loginController = new LoginController(loginInteractor);
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
+        pitchView.setLoginController(loginController);
+        expertChatView.setLoginController(loginController);
         return this;
     }
 
     /**
-     * Adds the account settings use case as part of the hamburger menu to each view with the menu.
+     * Adds the account settings use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addAccountSettingsUseCase() {
@@ -242,6 +337,144 @@ public class AppBuilder {
                 accountSettingsInteractor);
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
+        pitchView.setAccountSettingsController(accountSettingsController);
+        expertChatView.setAccountSettingsController(accountSettingsController);
+        return this;
+    }
+
+    /**
+     * Adds the pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addPitchUseCase() {
+        final DashboardOutputBoundary dashboardOutputBoundary = new DashboardPresenter(
+                dashboardViewModel, pitchViewModel, viewManagerModel);
+        final DashboardInputBoundary dashboardInteractor = new DashboardInteractor(
+                userDataAccessObject, dashboardOutputBoundary);
+
+        final DashboardController dashboardController = new DashboardController(
+                dashboardInteractor);
+        dashboardView.setDashboardController(dashboardController);
+        return this;
+    }
+
+    /**
+     * Adds the new pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addNewPitchUseCase() {
+        final NewPitchOutputBoundary newPitchOutputBoundary = new NewPitchPresenter(
+                newPitchViewModel, dashboardViewModel, viewManagerModel);
+        final NewPitchInputBoundary newPitchInteractor = new NewPitchInteractor(
+                userDataAccessObject, newPitchOutputBoundary);
+
+        final NewPitchController newPitchController = new NewPitchController(
+                newPitchInteractor);
+        dashboardView.setNewPitchController(newPitchController);
+        accountSettingsView.setNewPitchController(newPitchController);
+        pitchView.setNewPitchController(newPitchController);
+        expertChatView.setNewPitchController(newPitchController);
+        return this;
+    }
+
+    /**
+     * Adds the create new pitch view use case.
+     * @return this builder
+     */
+    public AppBuilder addCreateNewPitchUseCase() {
+        final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
+                newPitchViewModel, pitchViewModel, viewManagerModel);
+
+        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
+                userDataAccessObject, createNewPitchOutputBoundary);
+
+        final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
+                createNewPitchInteractor);
+        newPitchView.setCreateNewPitchController(createNewPitchController);
+        return this;
+    }
+
+    /**
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu.
+     * @return this builder
+     */
+    public AppBuilder addExpertUseCase() {
+        final ExpertOutputBoundary expertOutputBoundary = new ExpertPresenter(
+                expertViewModel, viewManagerModel);
+        final ExpertInputBoundary expertInteractor = new ExpertInteractor(
+                userDataAccessObject, expertOutputBoundary);
+
+        final ExpertController expertController = new ExpertController(
+                expertInteractor);
+        dashboardView.setExpertController(expertController);
+        accountSettingsView.setExpertController(expertController);
+        pitchView.setExpertController(expertController);
+        expertChatView.setExpertController(expertController);
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual expert use case.
+     * @return this builder
+     */
+    public AppBuilder addChatExpertUseCase() {
+        final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
+                expertViewModel, viewManagerModel);
+
+        final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
+        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
+                chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
+
+        final ChatExpertController chatExpertController = new ChatExpertController(
+                chatExpertInteractor);
+        expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the add DetailedTA use case.
+     * @return this builder.
+     */
+    public AppBuilder addDetailedTargetAudienceUseCase() {
+        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
+                detailedTargetAudiencePageViewModel);
+
+        final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary);
+        final DetailedController detailedController = new DetailedController(detailedInteractor);
+
+        detailedView.setController(detailedController);
+        return this;
+    }
+
+    /**
+     * Adds the compare personas use case.
+     * @return this builder
+     */
+    public AppBuilder addComparePersonasUseCase() {
+        // Instantiate Output Boundary
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel);
+
+        // Instantiate GPT Data Access Interface
+        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        // Create the Interactor, providing it the GPT data access object and output boundary
+        final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
+                chatgptDataAccessObject, comparePersonasOutputBoundary);
+
+        // Create the controller using the Interactor
+        final ComparePersonasController comparePersonasController = new ComparePersonasController(
+                comparePersonasInteractor);
+
+        // Set the controller for the Persona List View
+        personaListView.setComparePersonasController(comparePersonasController);
+
         return this;
     }
 

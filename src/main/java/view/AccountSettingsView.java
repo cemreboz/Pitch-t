@@ -19,8 +19,10 @@ import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
 import interface_adapter.account_settings.AccountSettingsViewModel;
 import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
+import interface_adapter.new_pitch.NewPitchController;
 
 /**
  * The View for when the user is logged into the program.
@@ -56,7 +58,7 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
 
         hamburgerMenu = new HamburgerMenu(accountSettingsViewModel);
 
-        final JLabel title = new JLabel("Logged In Screen");
+        final JLabel title = new JLabel("Account Settings");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         final JPanel menuWrapper = new JPanel();
@@ -182,4 +184,21 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
+
+    /**
+     * Method to set hamburger menu expert controller.
+     * @param expertController expert controller
+     */
+    public void setExpertController(ExpertController expertController) {
+        hamburgerMenu.setExpertController(expertController);
+    }
+
+    /**
+     * Method to set hamburger menu new pitch controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(NewPitchController newPitchController) {
+        hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
 }
