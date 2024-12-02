@@ -187,7 +187,8 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
                 chatExpertController.startChat(selectedExpertId, userMessage);
                 updateChatArea();
                 messageInput.setText("");
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
                         "No Expert Selected", JOptionPane.WARNING_MESSAGE);
             }

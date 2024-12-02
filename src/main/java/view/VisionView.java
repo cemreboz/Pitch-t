@@ -2,6 +2,9 @@ package view;
 
 import entity.Persona;
 import entity.Pitch;
+import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
@@ -86,9 +89,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         final JButton regenerateButton = new JButton("Regenerate Visual");
         regenerateButton.addActionListener(e -> regenerateVisual());
         footerPanel.add(regenerateButton);
-
-        final JButton backButton = new JButton("Back");
-        footerPanel.add(backButton);
 
         add(footerPanel, BorderLayout.SOUTH);
     }
@@ -184,4 +184,32 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     public String getViewName() {
         return viewName;
     }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
+    }
+
+    /**
+     * Method to set hamburger menu new pitch controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(NewPitchController newPitchController) {
+        hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
 }
+
+
+
