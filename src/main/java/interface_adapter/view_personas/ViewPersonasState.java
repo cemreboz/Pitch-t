@@ -15,11 +15,12 @@ public class ViewPersonasState {
     // Constructors
     public ViewPersonasState() {
         // Default constructor for fail state
+        this.errorMessage = "";
     }
 
     public ViewPersonasState(List<Persona> personas) {
+
         this.personas = personas;
-        this.errorMessage = "";
     }
 
     // Getters and Setters

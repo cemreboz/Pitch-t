@@ -1,5 +1,6 @@
 package interface_adapter.view_personas;
 
+import interface_adapter.ViewManagerModel;
 import use_case.view_personas.ViewPersonasOutputBoundary;
 import use_case.view_personas.ViewPersonasOutputData;
 
@@ -8,10 +9,12 @@ import use_case.view_personas.ViewPersonasOutputData;
  */
 public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
 
-    private final ViewPersonasViewModel viewModel;
+    private final ViewPersonasViewModel viewPersonasViewModel;
+    private final ViewManagerModel viewManagerModel;
 
-    public ViewPersonasPresenter(ViewPersonasViewModel viewModel) {
-        this.viewModel = viewModel;
+    public ViewPersonasPresenter(ViewPersonasViewModel viewModel, ViewManagerModel viewManagerModel) {
+        this.viewPersonasViewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     @Override
@@ -21,11 +24,15 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
         state.setErrorMessage(null); // No error in the success case
 
         // Update the view model with the successful output
-        viewModel.setState(state);
+        viewPersonasViewModel.setState(state);
+        viewPersonasViewModel.firePropertyChanged();
+
+        viewManagerModel.setState(viewPersonasViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
-    public void prepareFailView(String error) {
-        viewModel.getState().setErrorMessage(error);
+    public void prepareFailView(String errorMessage) {
+        // TOOD: Handle me
     }
 }

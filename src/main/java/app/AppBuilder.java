@@ -475,7 +475,7 @@ public class AppBuilder {
      */
     public AppBuilder addViewPersonasUseCase() {
         // Instantiate Output Boundary (Presenter)
-        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel);
+        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
 
         // Instantiate Interactor
         ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
@@ -485,7 +485,7 @@ public class AppBuilder {
         ViewPersonasController controller = new ViewPersonasController(interactor);
 
         // Set Controller in View
-        personaListView.setViewPersonasController(controller);
+        pitchView.setViewPersonasController(controller);
 
         return this;
     }

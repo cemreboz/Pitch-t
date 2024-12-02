@@ -23,6 +23,7 @@ import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.view_personas.ViewPersonasController;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -39,6 +40,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
+    private ViewPersonasController viewPersonasController;
 
     public PitchView(PitchViewModel pitchViewModel) {
         this.pitchViewModel = pitchViewModel;
@@ -131,13 +133,15 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        // Pass this to the ViewPersonasController to initiate the use case
-        //viewPersonasController.execute(pitch);
-        // TODO
+        this.viewPersonasController.execute(pitch);
     }
 
     public String getViewName() {
         return viewName;
+    }
+
+    public void setViewPersonasController(ViewPersonasController controller) {
+        this.viewPersonasController = controller;
     }
 
     /**
