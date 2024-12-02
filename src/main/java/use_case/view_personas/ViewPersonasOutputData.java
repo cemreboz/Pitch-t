@@ -1,7 +1,8 @@
 package use_case.view_personas;
 
-import entity.Persona;
 import java.util.List;
+
+import entity.Persona;
 
 /**
  * Output Data for the View Personas Use Case.

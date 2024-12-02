@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.swing.WindowConstants;
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
+import entity.ChatMessage;
 import entity.DBUserFactory;
 import entity.Persona;
 import entity.UserFactory;
@@ -406,7 +408,12 @@ public class AppBuilder {
                 expertViewModel, viewManagerModel);
 
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatExpertGptAccessInterface() {
+            @Override
+            public String getInteraction(List<ChatMessage> messages) throws IOException, InterruptedException {
+                return "";
+            }
+        };
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
@@ -427,7 +434,12 @@ public class AppBuilder {
                 comparePersonasViewModel);
 
         // Instantiate GPT Data Access Interface
-        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ComparePersonasGptAccessInterface() {
+            @Override
+            public String getInteraction(List<ChatMessage> messages) throws IOException, InterruptedException {
+                return "";
+            }
+        };
 
         // Create the Interactor, providing it the GPT data access object and output boundary
         final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(

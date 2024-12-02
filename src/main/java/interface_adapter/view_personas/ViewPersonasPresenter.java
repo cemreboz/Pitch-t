@@ -1,9 +1,7 @@
 package interface_adapter.view_personas;
 
-import entity.Persona;
 import use_case.view_personas.ViewPersonasOutputBoundary;
 import use_case.view_personas.ViewPersonasOutputData;
-import java.util.List;
 
 /**
  * Presenter for the View Personas use case.
@@ -18,23 +16,21 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
 
     @Override
     public void prepareSuccessView(ViewPersonasOutputData outputData) {
-        // Extract list of personas from output data
-        List<Persona> personas = outputData.getPersonas();
+        ViewPersonasState state = new ViewPersonasState();
+        state.setPersonas(outputData.getPersonas());
+        state.setErrorMessage(null); // No error in the success case
 
-        // Create a new state object encapsulating the personas
-        ViewPersonasState state = new ViewPersonasState(personas);
-
-        // Update the view model with the newly created state
+        // Update the view model with the successful output
         viewModel.setState(state);
     }
 
     @Override
     public void prepareFailView(String errorMessage) {
-        // Create a state object with an error message
         ViewPersonasState state = new ViewPersonasState();
+        state.setPersonas(null); // No personas to display in the failure case
         state.setErrorMessage(errorMessage);
 
-        // Update the view model with the error state
+        // Update the view model with the error message
         viewModel.setState(state);
     }
 }
