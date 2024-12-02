@@ -357,7 +357,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return experts;
     }
 
-    private String pitchesToJson(List<Pitch> pitches) {
+    protected String pitchesToJson(List<Pitch> pitches) {
         final JSONArray pitchesArray = new JSONArray();
         for (Pitch pitch : pitches) {
             final JSONObject pitchJson = new JSONObject();
@@ -380,7 +380,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitchesArray.toString();
     }
 
-    private List<Pitch> pitchesFromJson(String pitchesJson) {
+    protected List<Pitch> pitchesFromJson(String pitchesJson) {
         final List<Pitch> pitches = new ArrayList<>();
         final JSONArray pitchesArray = new JSONArray(pitchesJson);
 
@@ -413,7 +413,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitches;
     }
 
-    private JSONObject detailedTargetAudienceMapToJson(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
+    protected JSONObject detailedTargetAudienceMapToJson(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
         final JSONObject detailedTargetAudienceMapJson = new JSONObject();
         for (Map.Entry<String, DetailedTargetAudience> entry : detailedTargetAudienceMap.entrySet()) {
             final DetailedTargetAudience detailedTargetAudience = entry.getValue();
@@ -454,7 +454,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return detailedTargetAudienceMapJson;
     }
 
-    private Map<String, DetailedTargetAudience> detailedTargetAudienceMapFromJson(
+    protected Map<String, DetailedTargetAudience> detailedTargetAudienceMapFromJson(
             JSONObject detailedTargetAudienceMapJson) {
         final Map<String, DetailedTargetAudience> detailedTargetAudienceMap = new HashMap<>();
         for (String key : detailedTargetAudienceMapJson.keySet()) {
@@ -509,7 +509,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return list;
     }
 
-    private JSONObject personaToJson(Persona persona) {
+    protected JSONObject personaToJson(Persona persona) {
         final JSONObject personaJson = new JSONObject();
         personaJson.put("personaID", persona.getPersonaID());
         personaJson.put(NAME_FIELD, persona.getName());
@@ -535,7 +535,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return personaJson;
     }
 
-    private Persona personaFromJson(JSONObject personaJson) {
+    protected Persona personaFromJson(JSONObject personaJson) {
         final Persona persona = new Persona();
         persona.setPersonaID(personaJson.getInt("personaID"));
         persona.setName(personaJson.getString(NAME_FIELD));
