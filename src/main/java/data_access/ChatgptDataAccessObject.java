@@ -13,6 +13,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
 
 import app.PitchitManager;
 import entity.ChatMessage;
@@ -25,7 +29,9 @@ import use_case.set_targetaudience.DetailedtaDataAccessInterface;
  */
 public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ExpertChatDataAccessInterface,
-        ChatPersonaDataAccessInterface {
+        ChatPersonaDataAccessInterface,
+        ComparePersonasGptAccessInterface,
+        TargetAudienceDataAccessInterface{
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -132,5 +138,18 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         catch (IOException ex) {
             throw new RuntimeException("Error logging API call.", ex);
         }
+    }
+
+    /**
+     * Generates a list of target audiences based on a project description.
+     *
+     * @param systemMessage The message sent to the Chatgpt system.
+     * @param userMessage   Dependent on the pitch itself.
+     * @return A list of target audience categories.
+     * @throws Exception If any error occurs during data fetching.
+     */
+    @Override
+    public String generateTargetAudience(String systemMessage, String userMessage) throws Exception {
+        return utilizeApi(systemMessage, userMessage);
     }
 }

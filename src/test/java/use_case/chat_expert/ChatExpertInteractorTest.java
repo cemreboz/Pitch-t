@@ -4,6 +4,7 @@ import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 import entity.ChatMessage;
 import entity.Expert;
 import org.junit.jupiter.api.Test;
+import use_case.set_targetaudience.DetailedtaDataAccessInterface;
 
 import java.util.List;
 
