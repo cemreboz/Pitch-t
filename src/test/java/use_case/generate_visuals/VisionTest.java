@@ -1,5 +1,6 @@
 package use_case.generate_visuals;
 
+import entity.DBUser;
 import entity.Persona;
 import entity.Pitch;
 import entity.Visual;
@@ -38,17 +39,34 @@ public class VisionTest {
         VisionViewModel visionViewModel = new VisionViewModel();
         VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
 
+        DBUser mockUser = new DBUser("testUser", "testPassword");
+
+        VisualDataAccessObject mockVisualDataAccessObject = new VisualDataAccessObject() {
+            @Override
+            public void saveImage(Visual visual) {
+                System.out.println("Mock Visual Saved: " + visual.getImagePath());
+            }
+        };
+
+        FileVisualDataAccessObject mockFileVisualDataAccessObject = new FileVisualDataAccessObject() {
+            @Override
+            public String generateAndDownloadImage(String prompt, String outputFilePath) {
+                System.out.println("Mock Image Generated for Prompt: " + prompt);
+                return "mocked_generated_visual.png"; // Simulated file path for the generated image
+            }
+        };
+
         GenerateVisualInteractor generateVisualInteractor = new GenerateVisualInteractor(
-                new VisualDataAccessObject() {
-                    public void saveVisual(Visual visual) {
-                        // Mock saving visual
-                        System.out.println("Visual saved: " + visual.getImagePath());
+                mockVisualDataAccessObject,
+                new VisionDBDataAccessObject() {
+                    @Override
+                    public DBUser getCurrentUser() {
+                        return mockUser; // Return the mock user
                     }
                 },
-                new FileVisualDataAccessObject(),
+                mockFileVisualDataAccessObject,
                 visionPresenter
         );
-
         VisionController visionController = new VisionController(generateVisualInteractor);
 
         // Create and initialize the VisionView
