@@ -105,7 +105,7 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
 
     @Override
     public String utilizeApi(String systemMessage) throws IOException, InterruptedException {
-        final String apiKey = System.getenv("OPENAI_API_KEY");
+        final String apiKey = PitchitManager.getApiKey();
 
         if (apiKey == null || apiKey.isEmpty()) {
             throw new IllegalArgumentException("API key is missing. Please set the OPENAI_API_KEY environment variable.");
