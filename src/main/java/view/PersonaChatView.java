@@ -25,7 +25,6 @@ import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaViewModel;
-import interface_adapter.vision.VisionController;
 
 /**
  * View for chatting with a single defined persona.

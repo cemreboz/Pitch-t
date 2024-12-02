@@ -1,17 +1,26 @@
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import interface_adapter.create_pitch.CreateNewPitchController;
-import interface_adapter.create_pitch.CreateNewPitchViewModel;
 import interface_adapter.create_pitch.CreateNewPitchState;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
 
 /**
  * The view for creating a new pitch.

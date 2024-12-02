@@ -1,8 +1,8 @@
 package use_case.chat_expert;
 
-import entity.ChatMessage;
-
 import java.util.List;
+
+import entity.ChatMessage;
 
 /**
  * Output data class for the Chat with Expert use case.

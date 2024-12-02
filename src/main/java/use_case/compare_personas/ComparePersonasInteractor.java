@@ -1,11 +1,11 @@
 package use_case.compare_personas;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.ChatMessage;
 import entity.Persona;
 import entity.Pitch;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Interactor class for the Compare Personas use case.

@@ -1,12 +1,5 @@
 package data_access;
 
-import entity.ChatMessage;
-import org.json.JSONException;
-import use_case.view_personas.ViewPersonasGptDataAccessInterface;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,16 +13,15 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import use_case.chat_expert.ChatExpertGptAccessInterface;
-import use_case.compare_personas.ComparePersonasGptAccessInterface;
-import use_case.set_targetaudience.DetailedtaDataAccessInterface;
-import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
 
 import app.PitchitManager;
 import entity.ChatMessage;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
 import use_case.chat_persona.ChatPersonaDataAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
+import use_case.view_personas.ViewPersonasGptDataAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.

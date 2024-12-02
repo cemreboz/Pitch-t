@@ -1,12 +1,13 @@
 package view;
 
-import interface_adapter.compare_personas.ComparePersonasViewModel;
-import interface_adapter.compare_personas.ComparePersonasState;
-
-import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.*;
+
+import interface_adapter.compare_personas.ComparePersonasState;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
 
 /**
  * View for comparing two personas.
