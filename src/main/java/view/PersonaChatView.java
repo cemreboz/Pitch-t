@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.format.DateTimeFormatter;
@@ -43,6 +41,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private JTextArea chatArea;
     private JTextField messageInput;
     private HamburgerMenu hamburgerMenu;
+    private boolean initialized = false;
 
     /**
      * Constructs a PersonaChatView object.
@@ -65,9 +64,6 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
 
         // Build the message input area
         buildMessageInputArea();
-
-        chatPersonaController.startChat("",
-                personaViewModel.getState().getPersona(), personaViewModel.getState().getPitch());
     }
 
     /**
@@ -80,12 +76,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         // Left side: Back button and hamburger menu
         final JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         final JButton backButton = new JButton("Back");
-        backButton.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        JOptionPane.showMessageDialog(backButton, "you thought i made a working back button??? LOL");
-                    }
-                });
+        backButton.addActionListener(evt -> JOptionPane.showMessageDialog(backButton, "Back button not implemented."));
         leftPanel.add(backButton);
 
         hamburgerMenu = new HamburgerMenu(personaViewModel);
@@ -141,9 +132,14 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private void sendMessage() {
         final String userMessage = messageInput.getText().trim();
         if (!userMessage.isEmpty()) {
-            chatPersonaController.startChat("",
-                    personaViewModel.getState().getPersona(), personaViewModel.getState().getPitch());
+            personaViewModel.getState().getChatHistory().add(new ChatMessage("user", userMessage));
+
+            chatPersonaController.startChat(userMessage,
+                    personaViewModel.getState().getPersona(),
+                    personaViewModel.getState().getPitch());
+
             updateChatArea();
+
             messageInput.setText("");
         }
         messageInput.requestFocusInWindow();
@@ -178,9 +174,6 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         headerNameLabel.setText(personaViewModel.getState().getPersona().getName());
         updateChatArea();
-
-        headerNameLabel.repaint();
-        headerNameLabel.revalidate();
     }
 
     public void setChatPersonaController(ChatPersonaController chatPersonaController) {
@@ -222,5 +215,4 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     public void setNewPitchController(NewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
-
 }
