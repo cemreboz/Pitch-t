@@ -139,7 +139,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         }
 
         final JScrollPane expertScrollPane = new JScrollPane(expertListPanel);
-        expertScrollPane.setPreferredSize(new Dimension(200, 0));
+        expertScrollPane.setPreferredSize(new Dimension(280, 0));
         add(expertScrollPane, BorderLayout.WEST);
     }
 
