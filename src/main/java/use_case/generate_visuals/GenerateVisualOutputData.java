@@ -6,10 +6,14 @@ package use_case.generate_visuals;
 public class GenerateVisualOutputData {
     private final String imagePath;
     private final String message;
+    private final String username;
+    private final String password;
 
-    public GenerateVisualOutputData(String imagePath, String message) {
+    public GenerateVisualOutputData(String imagePath, String message, String username, String password) {
         this.imagePath = imagePath;
         this.message = message;
+        this.username = username;
+        this.password = password;
     }
 
     public String getImagePath() {
@@ -18,5 +22,13 @@ public class GenerateVisualOutputData {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

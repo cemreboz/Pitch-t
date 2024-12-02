@@ -317,7 +317,4 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 
-    public void setVisionController(VisionController visionController) {
-
-    }
 }

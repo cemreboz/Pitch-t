@@ -23,6 +23,7 @@ import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
+import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
@@ -42,7 +43,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
-        PersonaDataAccessInterface {
+        PersonaDataAccessInterface,
+        VisionDBDataAccessObject {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";

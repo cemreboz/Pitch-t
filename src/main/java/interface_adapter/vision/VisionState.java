@@ -12,9 +12,27 @@ public class VisionState {
     private String generatedImageUrl = "";
     private String errorMessage;
     private boolean isLoading;
+    private String username;
+    private String password;
     private boolean isSuccess;
 
     // Getters and Setters
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Persona getSelectedPersona() {
         return selectedPersona;
     }

@@ -13,15 +13,18 @@ public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
 
     private static final Logger LOGGER = Logger.getLogger(GenerateVisualInteractor.class.getName());
     private final VisualDataAccessObject visualDataAccessObject;
+    private final VisionDBDataAccessObject userDBAccessObject;
     private final ImageGeneratorInterface imageGenerator;
     private final GenerateVisualOutputBoundary presenter;
 
     public GenerateVisualInteractor(VisualDataAccessObject visualDataAccessObject,
+                                    VisionDBDataAccessObject visionDBDataAccessObject,
                                     ImageGeneratorInterface imageGenerator,
                                     GenerateVisualOutputBoundary presenter) {
         this.visualDataAccessObject = visualDataAccessObject;
         this.imageGenerator = imageGenerator;
         this.presenter = presenter;
+        this.userDBAccessObject = visionDBDataAccessObject;
     }
 
     /**
@@ -46,7 +49,9 @@ public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
             visualDataAccessObject.saveImage(visual);
 
             // Prepare the output data (successful case)
-            final GenerateVisualOutputData outputData = new GenerateVisualOutputData(imagePath, "Visual generated successfully!");
+            final GenerateVisualOutputData outputData = new GenerateVisualOutputData(imagePath,
+                    "Visual generated successfully!", userDBAccessObject.getCurrentUser().getName(),
+                    userDBAccessObject.getCurrentUser().getPassword());
 
             // Call the presenter to update the view
             presenter.prepareSuccessView(outputData);

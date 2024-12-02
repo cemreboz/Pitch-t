@@ -1,8 +1,6 @@
 package app;
 
 import java.awt.CardLayout;
-import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,10 +8,9 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
-import data_access.InMemoryUserDataAccessObject;
 import data_access.FileVisualDataAccessObject;
+import data_access.InMemoryUserDataAccessObject;
 import data_access.VisualDataAccessObject;
-import entity.ChatMessage;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -31,6 +28,7 @@ import interface_adapter.compare_personas.ComparePersonasPresenter;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
@@ -44,7 +42,6 @@ import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.new_pitch.ShowNewPitchPresenter;
-import interface_adapter.create_pitch.CreateNewPitchViewModel;
 import interface_adapter.persona.PersonaController;
 import interface_adapter.persona.PersonaPresenter;
 import interface_adapter.persona.PersonaViewModel;
@@ -52,49 +49,46 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.targetaudience.DetailedController;
+import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
+import interface_adapter.targetaudience.DetailedTargetAudiencePresenter;
+import interface_adapter.view_personas.ViewPersonasController;
+import interface_adapter.view_personas.ViewPersonasPresenter;
+import interface_adapter.view_personas.ViewPersonasViewModel;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionPresenter;
 import interface_adapter.vision.VisionViewModel;
-import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
-import use_case.generate_visuals.GenerateVisualInputBoundary;
-import use_case.generate_visuals.GenerateVisualInteractor;
-import use_case.generate_visuals.GenerateVisualOutputBoundary;
-import use_case.generate_visuals.ImageGeneratorInterface;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
-import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
-import use_case.compare_personas.ComparePersonasInputBoundary;
-import use_case.compare_personas.ComparePersonasInteractor;
-import use_case.compare_personas.ComparePersonasOutputBoundary;
-import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
 import use_case.chat_persona.ChatPersonaDataAccessInterface;
 import use_case.chat_persona.ChatPersonaInputBoundary;
 import use_case.chat_persona.ChatPersonaInteractor;
 import use_case.chat_persona.ChatPersonaOutputBoundary;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.compare_personas.ComparePersonasInputBoundary;
+import use_case.compare_personas.ComparePersonasInteractor;
+import use_case.compare_personas.ComparePersonasOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
-import use_case.expert.ExpertInputBoundary;
-import use_case.expert.ExpertInteractor;
-import use_case.expert.ExpertOutputBoundary;
-import use_case.show_new_pitch.ShowNewPitchInputBoundary;
-import use_case.show_new_pitch.ShowNewPitchInteractor;
-import use_case.show_new_pitch.ShowNewPitchOutputBoundary;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
 import use_case.expert.ExpertInputBoundary;
 import use_case.expert.ExpertInteractor;
 import use_case.expert.ExpertOutputBoundary;
+import use_case.generate_visuals.GenerateVisualInputBoundary;
+import use_case.generate_visuals.GenerateVisualInteractor;
+import use_case.generate_visuals.GenerateVisualOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -104,25 +98,33 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.persona.PersonaInputBoundary;
 import use_case.persona.PersonaInteractor;
 import use_case.persona.PersonaOutputBoundary;
-import use_case.set_targetaudience.*;
+import use_case.set_targetaudience.DetailedInputBoundary;
+import use_case.set_targetaudience.DetailedInteractor;
+import use_case.set_targetaudience.DetailedOutputBoundary;
+import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.show_new_pitch.ShowNewPitchInputBoundary;
+import use_case.show_new_pitch.ShowNewPitchInteractor;
+import use_case.show_new_pitch.ShowNewPitchOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import interface_adapter.view_personas.ViewPersonasController;
-import interface_adapter.view_personas.ViewPersonasPresenter;
-import interface_adapter.view_personas.ViewPersonasViewModel;
-import use_case.view_personas.*;
-import view.PersonaListView;
+import use_case.view_personas.ViewPersonasGptDataAccessInterface;
+import use_case.view_personas.ViewPersonasInputBoundary;
+import use_case.view_personas.ViewPersonasInteractor;
+import use_case.view_personas.ViewPersonasOutputBoundary;
 import view.AccountSettingsView;
+import view.CreateNewPitchView;
 import view.DashboardView;
+import view.DetailedView;
 import view.ExpertChatView;
 import view.LoginView;
-import view.CreateNewPitchView;
 import view.PersonaChatView;
+import view.PersonaComparisonView;
+import view.PersonaListView;
 import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
-import view.*;
+import view.VisionView;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -239,7 +241,7 @@ public class AppBuilder {
         PersonaComparisonView personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
         cardPanel.add(personaComparisonView, personaComparisonView.getViewName());
         return this;
-}
+    }
 
     /**
      * Adds Vision to the application.
@@ -401,6 +403,7 @@ public class AppBuilder {
         pitchView.setLoginController(loginController);
         expertChatView.setLoginController(loginController);
         personaChatView.setLoginController(loginController);
+        visionView.setLoginController(loginController);
         return this;
     }
 
@@ -421,6 +424,7 @@ public class AppBuilder {
         pitchView.setAccountSettingsController(accountSettingsController);
         expertChatView.setAccountSettingsController(accountSettingsController);
         personaChatView.setAccountSettingsController(accountSettingsController);
+        visionView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -463,6 +467,7 @@ public class AppBuilder {
         pitchView.setNewPitchController(showNewPitchController);
         expertChatView.setNewPitchController(showNewPitchController);
         personaChatView.setNewPitchController(showNewPitchController);
+        visionView.setNewPitchController(showNewPitchController);
         return this;
     }
 
@@ -501,6 +506,7 @@ public class AppBuilder {
         pitchView.setExpertController(expertController);
         expertChatView.setExpertController(expertController);
         personaChatView.setExpertController(expertController);
+        visionView.setExpertController(expertController);
         return this;
     }
 
@@ -594,14 +600,12 @@ public class AppBuilder {
         final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
         final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject(),
+                userDataAccessObject,
                 new FileVisualDataAccessObject(),
                 generateVisualOutputBoundary);
 
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
-        accountSettingsView.setVisionController(visionController);
-        expertChatView.setVisionController(visionController);
-        personaChatView.setVisionController(visionController);
         return this;
     }
 

@@ -12,6 +12,7 @@ import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
+import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
@@ -32,7 +33,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
-        PersonaDataAccessInterface {
+        PersonaDataAccessInterface,
+        VisionDBDataAccessObject {
 
     private final Map<String, User> users = new HashMap<>();
 
