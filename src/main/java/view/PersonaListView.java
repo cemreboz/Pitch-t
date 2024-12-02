@@ -1,5 +1,13 @@
 package view;
 
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.*;
+
 import entity.Persona;
 import entity.Pitch;
 import interface_adapter.compare_personas.ComparePersonasController;
@@ -7,15 +15,6 @@ import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.view_personas.ViewPersonasState;
 import interface_adapter.view_personas.ViewPersonasViewModel;
 import use_case.compare_personas.ComparePersonasInputData;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * The View for listing personas and comparing them.

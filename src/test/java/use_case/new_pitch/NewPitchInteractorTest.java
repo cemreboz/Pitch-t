@@ -4,6 +4,7 @@ import entity.DBUser;
 import entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import use_case.show_new_pitch.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,13 +12,13 @@ class NewPitchInteractorTest {
 
     private TestNewPitchDataAccess testDataAccess;
     private TestNewPitchPresenter testPresenter;
-    private NewPitchInteractor interactor;
+    private ShowNewPitchInteractor interactor;
 
     @BeforeEach
     void setUp() {
         testDataAccess = new TestNewPitchDataAccess();
         testPresenter = new TestNewPitchPresenter();
-        interactor = new NewPitchInteractor(testDataAccess, testPresenter);
+        interactor = new ShowNewPitchInteractor(testDataAccess, testPresenter);
     }
 
     @Test
@@ -27,7 +28,7 @@ class NewPitchInteractorTest {
         User currentUser = new DBUser(username, password);
         testDataAccess.setCurrentUser(currentUser);
 
-        NewPitchInputData inputData = new NewPitchInputData(username, password);
+        ShowNewPitchInputData inputData = new ShowNewPitchInputData(username, password);
 
         interactor.execute(inputData);
 
@@ -39,7 +40,7 @@ class NewPitchInteractorTest {
     /**
      * Test stub for NewPitchDataAccessInterface.
      */
-    static class TestNewPitchDataAccess implements NewPitchDataAccessInterface {
+    static class TestNewPitchDataAccess implements ShowNewPitchDataAccessInterface {
 
         private User currentUser;
 
@@ -56,12 +57,12 @@ class NewPitchInteractorTest {
     /**
      * Test stub for NewPitchOutputBoundary.
      */
-    static class TestNewPitchPresenter implements NewPitchOutputBoundary {
+    static class TestNewPitchPresenter implements ShowNewPitchOutputBoundary {
 
-        NewPitchOutputData outputData;
+        ShowNewPitchOutputData outputData;
 
         @Override
-        public void prepareSuccessView(NewPitchOutputData outputData) {
+        public void prepareSuccessView(ShowNewPitchOutputData outputData) {
             this.outputData = outputData;
         }
 

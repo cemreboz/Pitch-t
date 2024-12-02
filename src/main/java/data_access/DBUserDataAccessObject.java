@@ -7,11 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import entity.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import entity.ChatMessage;
+import entity.DBUser;
+import entity.DetailedTargetAudience;
+import entity.Expert;
+import entity.Persona;
+import entity.Pitch;
+import entity.User;
+import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,11 +30,12 @@ import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
+import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.persona.PersonaDataAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
-import use_case.persona.PersonaDataAccessInterface;
 
 /**
  * The DAO for user data.
@@ -42,7 +50,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
-        PersonaDataAccessInterface {
+        PersonaDataAccessInterface,
+        VisionDBDataAccessObject {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
