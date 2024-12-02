@@ -2,8 +2,6 @@ package use_case.create_pitch;
 
 import entity.DBUser;
 import entity.Pitch;
-import use_case.dashboard_show_pitch.DashboardOutputData;
-import use_case.new_pitch.NewPitchInputData;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.

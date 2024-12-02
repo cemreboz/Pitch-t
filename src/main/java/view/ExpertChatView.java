@@ -5,10 +5,9 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.expert.ExpertController;
-import interface_adapter.expert.ExpertState;
 import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -311,7 +310,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      *
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 }

@@ -22,7 +22,7 @@ import interface_adapter.expert.ExpertController;
 import interface_adapter.expert.ExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 
 /**
@@ -33,7 +33,7 @@ public class HamburgerMenu extends JPanel {
     private LoginController loginController;
     private AccountSettingsController accountSettingsController;
     private ExpertController expertController;
-    private NewPitchController newPitchController;
+    private ShowNewPitchController newPitchController;
     private ViewModel viewModel;
 
     private final int hamburgerSize = 24;
@@ -179,7 +179,7 @@ public class HamburgerMenu extends JPanel {
         this.expertController = expertController;
     }
 
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         this.newPitchController = newPitchController;
     }
 

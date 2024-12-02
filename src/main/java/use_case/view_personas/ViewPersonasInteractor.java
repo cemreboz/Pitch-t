@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interactor for the View Personas use case.
@@ -54,17 +55,23 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
         sb.append("Pitch Name: ").append(pitch.getName()).append("\n");
         sb.append("Description: ").append(pitch.getDescription()).append("\n");
         sb.append("Target Audiences: ").append(String.join(", ", pitch.getTargetAudienceList())).append("\n");
-        sb.append("For each persona, provide the following details:\n")
-                .append("- Name\n")
-                .append("- Age\n")
-                .append("- Gender\n")
-                .append("- Occupation\n")
-                .append("- Interests\n")
-                .append("- Salary Range\n")
-                .append("- Education\n")
-                .append("- About (a paragraph describing the persona)\n")
-                .append("- Market Statistics\n\n")
-                .append("Present the personas in JSON format as an array.");
+
+        sb.append("Return a valid JSON response that is an array of JSON objects in the following format:\n");
+        sb.append("[\n");
+        sb.append("    {\n");
+        sb.append("        \"name\": \"<NAME>\",\n");
+        sb.append("        \"age\": \"<AGE>\",\n");
+        sb.append("        \"gender\": \"<GENDER>\",\n");
+        sb.append("        \"education\": \"<EDUCATION>\",\n");
+        sb.append("        \"salaryRange\": \"<$XXXXXX - $YYYYYY>\",\n");
+        sb.append("        \"about\": \"<a paragraph describing the persona>\",\n");
+        sb.append("        \"stats\": \"<STATS>\",\n");
+        sb.append("        \"location\": \"<CITY, COUNTRY>\",\n");
+        sb.append("        \"occupation\": \"<OCCUPATION>\",\n");
+        sb.append("        \"interests\": [\"<INTEREST1>\", \"<INTEREST2>\"],\n");
+        sb.append("    }\n");
+        sb.append("]\n\n");
+        sb.append("Do not include any markdown syntax. The response should be exactly a JSON array of objects as above.");
 
         return sb.toString();
     }

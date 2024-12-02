@@ -20,10 +20,9 @@ import entity.Pitch;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
-import interface_adapter.view_personas.ViewPersonasController;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -40,9 +39,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
-
-    // Add reference to the ViewPersonasController
-    private ViewPersonasController viewPersonasController;
 
     public PitchView(PitchViewModel pitchViewModel) {
         this.pitchViewModel = pitchViewModel;
@@ -136,31 +132,43 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         }
 
         // Pass this to the ViewPersonasController to initiate the use case
-        viewPersonasController.execute(pitch);
-    }
-
-    // Setters for controllers
-    public void setLoginController(LoginController loginController) {
-        hamburgerMenu.setLoginController(loginController);
-    }
-
-    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
-        hamburgerMenu.setAccountSettingsController(accountSettingsController);
-    }
-
-    public void setExpertController(ExpertController expertController) {
-        hamburgerMenu.setExpertController(expertController);
-    }
-
-    public void setNewPitchController(NewPitchController newPitchController) {
-        hamburgerMenu.setNewPitchController(newPitchController);
-    }
-
-    public void setViewPersonasController(ViewPersonasController viewPersonasController) {
-        this.viewPersonasController = viewPersonasController;
+        //viewPersonasController.execute(pitch);
+        // TODO
     }
 
     public String getViewName() {
         return viewName;
+    }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
+    }
+
+    /**
+     * Method to set hamburger menu expert controller.
+     * @param expertController expert controller
+     */
+    public void setExpertController(ExpertController expertController) {
+        hamburgerMenu.setExpertController(expertController);
+    }
+
+    /**
+     * Method to set hamburger menu new pitch controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
+        hamburgerMenu.setNewPitchController(newPitchController);
     }
 }

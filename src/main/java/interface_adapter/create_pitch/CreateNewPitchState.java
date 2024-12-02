@@ -1,4 +1,4 @@
-package interface_adapter.new_pitch;
+package interface_adapter.create_pitch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import entity.User;
 /**
  * The state for the New Pitch View Model.
  */
-public class NewPitchState {
+public class CreateNewPitchState {
     private User currentUser = new DBUser("", "");
     private String name = "";
     private String description = "";

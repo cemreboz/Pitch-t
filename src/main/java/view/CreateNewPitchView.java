@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interface_adapter.create_pitch.CreateNewPitchController;
-import interface_adapter.new_pitch.NewPitchController;
-import interface_adapter.new_pitch.NewPitchViewModel;
-import interface_adapter.new_pitch.NewPitchState;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
+import interface_adapter.create_pitch.CreateNewPitchState;
 
 /**
  * The view for creating a new pitch.
  */
-public class NewPitchView extends JPanel implements PropertyChangeListener {
+public class CreateNewPitchView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "new pitch";
-    private final NewPitchViewModel newPitchViewModel;
+    private final CreateNewPitchViewModel newPitchViewModel;
     private CreateNewPitchController createNewPitchController;
 
     private final JTextField nameField;
@@ -34,7 +33,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private static final int BUTTON_WIDTH = 150;
     private static final int BUTTON_HEIGHT = 40;
 
-    public NewPitchView(NewPitchViewModel newPitchViewModel) {
+    public CreateNewPitchView(CreateNewPitchViewModel newPitchViewModel) {
         this.newPitchViewModel = newPitchViewModel;
         this.newPitchViewModel.addPropertyChangeListener(this);
 
@@ -146,7 +145,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            NewPitchState state = (NewPitchState) evt.getNewValue();
+            CreateNewPitchState state = (CreateNewPitchState) evt.getNewValue();
             setViewModelState(state);
         }
     }
@@ -155,7 +154,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
      * Updates the view with the current state.
      * @param state The state to be displayed in the view.
      */
-    private void setViewModelState(NewPitchState state) {
+    private void setViewModelState(CreateNewPitchState state) {
         nameField.setText(state.getName());
         descriptionArea.setText(state.getDescription());
         targetAudienceField.setText(String.valueOf(state.getTargetAudience()));

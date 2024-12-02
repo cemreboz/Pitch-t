@@ -18,7 +18,6 @@ import java.util.List;
  * The View for listing personas and comparing them.
  */
 public class PersonaListView extends JPanel implements PropertyChangeListener {
-    private final ComparePersonasController compareController;
     private final ComparePersonasViewModel compareViewModel;
     private final ViewPersonasViewModel viewModel;
     private final JButton compareButton;
@@ -29,10 +28,8 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
     private final String viewname = "Personas List";
 
     public PersonaListView(ViewPersonasViewModel viewModel,
-                           ComparePersonasController compareController,
                            ComparePersonasViewModel compareViewModel) {
         this.viewModel = viewModel;
-        this.compareController = compareController;
         this.compareViewModel = compareViewModel;
 
         this.viewModel.addPropertyChangeListener(this);
@@ -103,7 +100,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
 
         // Trigger comparison
         ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas[0], selectedPersonas[1]);
-        compareController.compare(inputData);
+        // TODO
     }
 
     private void handleVisionButton() {

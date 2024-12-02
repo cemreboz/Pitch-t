@@ -13,27 +13,29 @@ public class Main {
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
-                                            .addLoginView()
-                                            .addExpertChatView()
-                                            .addSignupView()
-                                            .addAccountSettingsView()
-                                            .addDashboardView()
-                                            .addPitchView()
-                                            .addNewPitchView()
-                                            .addViewPersonasView()
-                                            .addViewPersonasUseCase()
-                                            .addSignupUseCase()
-                                            .addLoginUseCase()
-                                            .addChangePasswordUseCase()
-                                            .addLogoutUseCase()
-                                            .addDashboardUseCase()
-                                            .addAccountSettingsUseCase()
-                                            .addPitchUseCase()
-                                            .addNewPitchUseCase()
-                                            .addCreateNewPitchUseCase()
-                                            .addExpertUseCase()
-                                            .addChatExpertUseCase()
-                                            .build();
+                // Construct the views
+                .addLoginView()
+                .addExpertChatView()
+                .addSignupView()
+                .addAccountSettingsView()
+                .addDashboardView()
+                .addPitchView()
+                .addCreateNewPitchView()
+                .addPersonaListView()
+                // Construct the use cases
+                .addViewPersonasUseCase()
+                .addSignupUseCase()
+                .addLoginUseCase()
+                .addChangePasswordUseCase()
+                .addLogoutUseCase()
+                .addDashboardUseCase()
+                .addAccountSettingsUseCase()
+                .addPitchUseCase()
+                .addShowNewPitchUseCase()
+                .addCreateNewPitchUseCase()
+                .addExpertUseCase()
+                .addChatExpertUseCase()
+                .build();
 
         application.pack();
         application.setVisible(true);
