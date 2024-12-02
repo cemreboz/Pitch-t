@@ -122,11 +122,10 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
      * Handles the save pitch action.
      */
     private void savePitch() throws Exception {
-        String name = nameField.getText();
-        String description = descriptionArea.getText();
-        String targetAudience = targetAudienceField.getText();
-        String image = imageField.getText();
-        // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
+        final String name = nameField.getText();
+        final String description = descriptionArea.getText();
+        final String targetAudience = targetAudienceField.getText();
+        final String image = imageField.getText();
         // the target audience field should be removed from the view too but its their temporarily for IDk what reason
         // viktor put it there
         // i.e. the controller below shouldnt't need to take targetAudience, it should be generated in the interactor
@@ -150,7 +149,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            NewPitchState state = (NewPitchState) evt.getNewValue();
+            final NewPitchState state = (NewPitchState) evt.getNewValue();
             setViewModelState(state);
         }
     }
