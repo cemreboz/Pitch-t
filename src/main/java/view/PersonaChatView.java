@@ -23,7 +23,7 @@ import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.chat_persona.ChatPersonaController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaViewModel;
 import interface_adapter.vision.VisionController;
 
@@ -220,7 +220,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
      * Method to set hamburger menu new pitch controller.
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 

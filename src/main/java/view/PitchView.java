@@ -1,20 +1,32 @@
 package view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.*;
 
+import entity.Pitch;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.view_personas.ViewPersonasController;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -32,6 +44,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
+    private ViewPersonasController viewPersonasController;
 
     private ExpertController expertController;
 
@@ -42,7 +55,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         this.viewManagerModel = viewManagerModel;
 
         final JPanel headerPanel = createHeaderPanel();
-        final JPanel footerPanel = createFooterPanel();
 
         final PitchState state = pitchViewModel.getState();
         final String pitchName = state.getPitch().getName();
@@ -54,9 +66,18 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(headerPanel);
-        this.add(footerPanel);
         this.add(namePanel);
 
+        // Add the "View Personas" button
+        JButton viewPersonasButton = new JButton("View Personas");
+        viewPersonasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleViewPersonasButton();
+            }
+        });
+
+        this.add(viewPersonasButton);
     }
 
     private JPanel createHeaderPanel() {
@@ -160,8 +181,28 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     }
 
+    // Start of View Personas user flow
+    private void handleViewPersonasButton() {
+        // Assuming you have an instance of PitchState
+        PitchState pitchState = pitchViewModel.getState();
+        Pitch pitch = pitchState.getPitch();
+
+        if (pitch == null) {
+            // Handle error scenario - pitch not loaded properly
+            String error = pitchState.getPitchLoadError();
+            JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        this.viewPersonasController.execute(pitch);
+    }
+
     public String getViewName() {
         return viewName;
+    }
+
+    public void setViewPersonasController(ViewPersonasController controller) {
+        this.viewPersonasController = controller;
     }
 
     /**
@@ -193,7 +234,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
      * Method to set hamburger menu new pitch controller.
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 

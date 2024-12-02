@@ -1,11 +1,11 @@
-package use_case.new_pitch;
+package use_case.show_new_pitch;
 
 import entity.User;
 
 /**
  * Gateway interface for handling pitch-related data access.
  */
-public interface NewPitchDataAccessInterface {
+public interface ShowNewPitchDataAccessInterface {
 
     /**
      * Provides the current user to the dashboard.

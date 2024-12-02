@@ -1,6 +1,8 @@
 package app;
 
 import java.awt.CardLayout;
+import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,6 +13,7 @@ import data_access.ChatgptDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import data_access.FileVisualDataAccessObject;
 import data_access.VisualDataAccessObject;
+import entity.ChatMessage;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -39,9 +42,9 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
-import interface_adapter.new_pitch.NewPitchController;
-import interface_adapter.new_pitch.NewPitchPresenter;
-import interface_adapter.new_pitch.NewPitchViewModel;
+import interface_adapter.new_pitch.ShowNewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchPresenter;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
 import interface_adapter.persona.PersonaController;
 import interface_adapter.persona.PersonaPresenter;
 import interface_adapter.persona.PersonaViewModel;
@@ -80,6 +83,12 @@ import use_case.chat_persona.ChatPersonaOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
+import use_case.show_new_pitch.ShowNewPitchInputBoundary;
+import use_case.show_new_pitch.ShowNewPitchInteractor;
+import use_case.show_new_pitch.ShowNewPitchOutputBoundary;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
@@ -92,9 +101,6 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
-import use_case.new_pitch.NewPitchInputBoundary;
-import use_case.new_pitch.NewPitchInteractor;
-import use_case.new_pitch.NewPitchOutputBoundary;
 import use_case.persona.PersonaInputBoundary;
 import use_case.persona.PersonaInteractor;
 import use_case.persona.PersonaOutputBoundary;
@@ -102,11 +108,16 @@ import use_case.set_targetaudience.*;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import interface_adapter.view_personas.ViewPersonasController;
+import interface_adapter.view_personas.ViewPersonasPresenter;
+import interface_adapter.view_personas.ViewPersonasViewModel;
+import use_case.view_personas.*;
+import view.PersonaListView;
 import view.AccountSettingsView;
 import view.DashboardView;
 import view.ExpertChatView;
 import view.LoginView;
-import view.NewPitchView;
+import view.CreateNewPitchView;
 import view.PersonaChatView;
 import view.PitchView;
 import view.SignupView;
@@ -137,26 +148,39 @@ public class AppBuilder {
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
+
+    private LoginView loginView;
     private LoginViewModel loginViewModel;
+
+    private AccountSettingsView accountSettingsView;
     private AccountSettingsViewModel accountSettingsViewModel;
     private VisionViewModel visionViewModel;
-    private PitchViewModel pitchViewModel;
-    private AccountSettingsView accountSettingsView;
-    private LoginView loginView;
-    private DashboardViewModel dashboardViewModel;
-    private DashboardView dashboardView;
-    private VisionView visionView;
+
     private PitchView pitchView;
-    private NewPitchViewModel newPitchViewModel;
-    private NewPitchView newPitchView;
+    private PitchViewModel pitchViewModel;
+
+    private DashboardView dashboardView;
+    private DashboardViewModel dashboardViewModel;
+
+    private VisionView visionView;
+
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
-    private PersonaChatView personaChatView;
-    private PersonaViewModel personaViewModel;
+
+    private CreateNewPitchView createNewPitchView;
+    private CreateNewPitchViewModel createNewPitchViewModel;
+
+    // Unmitigated shit below this line
     private ComparePersonasViewModel comparePersonasViewModel;
     private PersonaListView personaListView;
+    private ViewPersonasViewModel viewPersonasViewModel;
+    private ComparePersonasController comparePersonasController;
+
     private DetailedTargetAudiencePageViewModel detailedTargetAudiencePageViewModel;
     private DetailedView detailedView;
+
+    private PersonaChatView personaChatView;
+    private PersonaViewModel personaViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -232,10 +256,10 @@ public class AppBuilder {
      * Adds the New Pitch View to the application.
      * @return this builder
      */
-    public AppBuilder addNewPitchView() {
-        newPitchViewModel = new NewPitchViewModel();
-        newPitchView = new NewPitchView(newPitchViewModel);
-        cardPanel.add(newPitchView, newPitchView.getViewName());
+    public AppBuilder addCreateNewPitchView() {
+        createNewPitchViewModel = new CreateNewPitchViewModel();
+        createNewPitchView = new CreateNewPitchView(createNewPitchViewModel);
+        cardPanel.add(createNewPitchView, createNewPitchView.getViewName());
         return this;
     }
 
@@ -271,6 +295,18 @@ public class AppBuilder {
         personaChatView = new PersonaChatView(personaViewModel, viewManagerModel);
         cardPanel.add(personaChatView, personaChatView.getViewName());
 
+        return this;
+    }
+
+    /**
+     * Adds the View Personas View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPersonaListView() {
+        viewPersonasViewModel = new ViewPersonasViewModel();
+        personaListView = new PersonaListView(viewPersonasViewModel,
+                comparePersonasViewModel);
+        cardPanel.add(personaListView, personaListView.getViewName());
         return this;
     }
 
@@ -386,6 +422,12 @@ public class AppBuilder {
         final DashboardInputBoundary dashboardInteractor = new DashboardInteractor(
                 userDataAccessObject, dashboardOutputBoundary);
 
+//        // Block for the ViewPersonasController
+//        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+//        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
+//        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
+//        pitchView.setViewPersonasController(viewPersonasController);
+
         final DashboardController dashboardController = new DashboardController(
                 dashboardInteractor);
         dashboardView.setDashboardController(dashboardController);
@@ -396,19 +438,19 @@ public class AppBuilder {
      * Adds the new pitch view use case.
      * @return this builder
      */
-    public AppBuilder addNewPitchUseCase() {
-        final NewPitchOutputBoundary newPitchOutputBoundary = new NewPitchPresenter(
-                newPitchViewModel, dashboardViewModel, viewManagerModel);
-        final NewPitchInputBoundary newPitchInteractor = new NewPitchInteractor(
-                userDataAccessObject, newPitchOutputBoundary);
+    public AppBuilder addShowNewPitchUseCase() {
+        final ShowNewPitchOutputBoundary showNewPitchOutputBoundary = new ShowNewPitchPresenter(
+                createNewPitchViewModel, dashboardViewModel, viewManagerModel);
+        final ShowNewPitchInputBoundary showNewPitchInteractor = new ShowNewPitchInteractor(
+                userDataAccessObject, showNewPitchOutputBoundary);
 
-        final NewPitchController newPitchController = new NewPitchController(
-                newPitchInteractor);
-        dashboardView.setNewPitchController(newPitchController);
-        accountSettingsView.setNewPitchController(newPitchController);
-        pitchView.setNewPitchController(newPitchController);
-        expertChatView.setNewPitchController(newPitchController);
-        personaChatView.setNewPitchController(newPitchController);
+        final ShowNewPitchController showNewPitchController = new ShowNewPitchController(
+                showNewPitchInteractor);
+        dashboardView.setNewPitchController(showNewPitchController);
+        accountSettingsView.setNewPitchController(showNewPitchController);
+        pitchView.setNewPitchController(showNewPitchController);
+        expertChatView.setNewPitchController(showNewPitchController);
+        personaChatView.setNewPitchController(showNewPitchController);
         return this;
     }
 
@@ -418,16 +460,15 @@ public class AppBuilder {
      */
     public AppBuilder addCreateNewPitchUseCase() {
         final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
-                newPitchViewModel, pitchViewModel, viewManagerModel);
-
-        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
-
+                createNewPitchViewModel, pitchViewModel, viewManagerModel);
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary);
 
+        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
+
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
-        newPitchView.setCreateNewPitchController(createNewPitchController);
+        createNewPitchView.setCreateNewPitchController(createNewPitchController);
         return this;
     }
 
@@ -509,6 +550,27 @@ public class AppBuilder {
 
         // Set the controller for the Persona List View
         personaListView.setComparePersonasController(comparePersonasController);
+
+        return this;
+    }
+
+    /**
+     * Adds the View Personas Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addViewPersonasUseCase() {
+        // Instantiate Output Boundary (Presenter)
+        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
+
+        // Instantiate Interactor
+        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
+
+        // Instantiate Controller
+        ViewPersonasController controller = new ViewPersonasController(interactor);
+
+        // Set Controller in View
+        pitchView.setViewPersonasController(controller);
 
         return this;
     }

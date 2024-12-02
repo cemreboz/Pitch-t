@@ -19,14 +19,13 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import entity.Pitch;
-import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.dashboard.DashboardViewModel;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 
 /**
  * The view for when the user is logged in and at the dashboard page.
@@ -46,7 +45,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
 
     private DashboardController dashboardController;
-    private NewPitchController newPitchController;
+    private ShowNewPitchController newPitchController;
     private ExpertController expertController;
 
     private final JPanel pitchHistoryPanel = new JPanel();
@@ -160,7 +159,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
      * Method to set the new pitch view controller.
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         this.newPitchController = newPitchController;
         hamburgerMenu.setNewPitchController(newPitchController);
     }

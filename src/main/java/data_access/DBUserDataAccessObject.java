@@ -25,9 +25,9 @@ import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
-import use_case.new_pitch.NewPitchDataAccessInterface;
-import use_case.persona.PersonaDataAccessInterface;
+import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.persona.PersonaDataAccessInterface;
 
 /**
  * The DAO for user data.
@@ -38,7 +38,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
-        NewPitchDataAccessInterface,
+        ShowNewPitchDataAccessInterface,
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,

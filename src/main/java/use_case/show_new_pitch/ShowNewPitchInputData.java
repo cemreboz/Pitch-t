@@ -1,20 +1,16 @@
-package use_case.new_pitch;
-
-import java.util.List;
-
-import entity.User;
+package use_case.show_new_pitch;
 
 
 /**
- * Input data for the Create Pitch use case.
- * Contains the necessary information to create a pitch.
+ * Input data for the Show New Pitch use case.
+ * Contains the necessary information to view a pitch.
  */
-public class NewPitchInputData {
+public class ShowNewPitchInputData {
 
     private final String username;
     private final String password;
 
-    public NewPitchInputData(String username, String password) {
+    public ShowNewPitchInputData(String username, String password) {
         this.username = username;
         this.password = password;
     }

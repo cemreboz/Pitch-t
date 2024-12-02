@@ -1,5 +1,12 @@
 package data_access;
 
+import entity.ChatMessage;
+import org.json.JSONException;
+import use_case.view_personas.ViewPersonasGptDataAccessInterface;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,7 +38,8 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ExpertChatDataAccessInterface,
         ChatPersonaDataAccessInterface,
         ComparePersonasGptAccessInterface,
-        TargetAudienceDataAccessInterface {
+        TargetAudienceDataAccessInterface,
+        ViewPersonasGptDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -101,6 +109,22 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
             throw new RuntimeException("Failed to utilize API.", ex);
         }
         return result;
+    }
+
+    @Override
+    public String utilizeApi(String systemMessage) throws IOException, InterruptedException {
+        final String apiKey = System.getenv("OPENAI_API_KEY");
+
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalArgumentException("API key is missing. Please set the OPENAI_API_KEY environment variable.");
+        }
+
+        // Construct the request body for the API call
+        List<ChatMessage> messages = new ArrayList<>();
+        messages.add(new ChatMessage("system", systemMessage));
+
+        // Make the API call and get response
+        return getInteraction(messages);
     }
 
     @Override

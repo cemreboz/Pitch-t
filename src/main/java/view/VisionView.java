@@ -5,7 +5,7 @@ import entity.Pitch;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
@@ -214,7 +214,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
      * Method to set hamburger menu new pitch controller.
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 

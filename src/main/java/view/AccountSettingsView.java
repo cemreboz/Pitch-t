@@ -22,7 +22,7 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
-import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.vision.VisionController;
 
 /**
@@ -198,7 +198,7 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
      * Method to set hamburger menu new pitch controller.
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 
