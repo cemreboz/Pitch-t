@@ -19,6 +19,7 @@ public class ViewPersonasState {
 
     public ViewPersonasState(List<Persona> personas) {
         this.personas = personas;
+        this.errorMessage = "";
     }
 
     // Getters and Setters

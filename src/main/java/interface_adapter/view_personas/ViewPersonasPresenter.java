@@ -25,12 +25,7 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
     }
 
     @Override
-    public void prepareFailView(String errorMessage) {
-        ViewPersonasState state = new ViewPersonasState();
-        state.setPersonas(null); // No personas to display in the failure case
-        state.setErrorMessage(errorMessage);
-
-        // Update the view model with the error message
-        viewModel.setState(state);
+    public void prepareFailView(String error) {
+        viewModel.getState().setErrorMessage(error);
     }
 }
