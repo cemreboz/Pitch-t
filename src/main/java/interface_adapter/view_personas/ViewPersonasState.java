@@ -1,13 +1,15 @@
 package interface_adapter.view_personas;
 
 import entity.Persona;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * State class for the View Personas use case.
  */
 public class ViewPersonasState {
-    private List<Persona> personas;
+    private List<Persona> personas = new ArrayList<Persona>();
     private String errorMessage;
 
     // Constructors
