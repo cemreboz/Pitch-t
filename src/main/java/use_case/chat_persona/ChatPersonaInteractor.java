@@ -20,10 +20,10 @@ public class ChatPersonaInteractor implements ChatPersonaInputBoundary {
     }
 
     /**
-     * Initiates a chat with an expert.
+     * Initiates a chat with a persona.
      *
      * @param inputData The input data containing user message
-     *                  and expert ID.
+     *                  and persona ID.
      */
     @Override
     public void initiateChat(ChatPersonaInputData inputData) {

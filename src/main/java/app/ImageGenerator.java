@@ -1,17 +1,17 @@
 package app;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ImageGenerator {
 
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
-    private static final String API_KEY = System.getenv("OPENAI_API_KEY");
+    private static final String API_KEY = PitchitManager.getApiKey();
 
     /**
      * Generates an image using OpenAI's DALL-E model.

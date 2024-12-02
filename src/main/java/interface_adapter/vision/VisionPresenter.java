@@ -20,6 +20,8 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
         final VisionState currentState = viewModel.getState();
         currentState.setGeneratedImageUrl(outputData.getImagePath());
         currentState.setErrorMessage(null);
+        currentState.setUsername(outputData.getUsername());
+        currentState.setPassword(outputData.getPassword());
 
         // Notify listeners that the state has been updated
         viewModel.updateView(currentState);
