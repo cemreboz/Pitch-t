@@ -475,6 +475,7 @@ public class AppBuilder {
             if (!viewManagerModel.getState().toString()
                     .equals("sign up") && !viewManagerModel.getState().toString().equals("log in")) {
                 System.out.println("Executing save before exit...");
+                userDataAccessObject.save(userDataAccessObject.getCurrentUser());
             }
         }));
 
