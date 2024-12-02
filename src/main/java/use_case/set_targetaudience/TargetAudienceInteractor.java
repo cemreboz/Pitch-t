@@ -20,14 +20,13 @@ public class TargetAudienceInteractor implements TargetAudienceInputBoundary {
      * Method for executing the DetailedTA based on the input Data.
      *
      * @param inputData from the input data class.
-     * @throws Exception If it cannot get the Detailed Target Audience.
      */
     @Override
-    public void execute(TargetAudienceInputData inputData) throws Exception {
+    public String execute(TargetAudienceInputData inputData) {
         if (inputData == null) {
             throw new IllegalArgumentException("inputData must not be null");
         }
-
+        String response = "";
         final String systemMessage = """
             Based on the name and description of this project, I want you to give me a list of five \
             categories of people that would be interested in this project. Here is an example and how to structure:
@@ -39,13 +38,16 @@ public class TargetAudienceInteractor implements TargetAudienceInputBoundary {
             Your output must only contain the list, nothing else.""";
         final String userMessage = inputData.getPitchname() + " " + inputData.getPitchdescription();
         try {
-            final String response = dataAccessObject.generateTargetAudience(systemMessage, userMessage);
+            response = dataAccessObject.generateTargetAudience(systemMessage, userMessage);
             final TargetAudienceOuputData outputData = new TargetAudienceOuputData(response);
             outputBoundary.prepareSuccessView(outputData);
         }
         catch (JSONException exception) {
             outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+        return response;
     }
 
 }

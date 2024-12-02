@@ -41,14 +41,13 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         }
         if (createNewPitchInputData.getTargetAudienceList().isEmpty()) {
             userPresenter.prepareFailView("Pitch target audience list cannot be empty");
-            final TargetAudienceController targetAudienceController = getTargetAudienceController();
-            final TargetAudienceInputData targetAudienceInputData = new TargetAudienceInputData(
-                    createNewPitchInputData.getName(), createNewPitchInputData.getDescription());
-            targetAudienceController.generate(targetAudienceInputData);
             // instead of making users manually put them in remove this if and have it so the General TA is generated
             // based off of everything else
         }
-
+        final TargetAudienceController targetAudienceController = getTargetAudienceController();
+        final TargetAudienceInputData targetAudienceInputData = new TargetAudienceInputData(
+                createNewPitchInputData.getName(), createNewPitchInputData.getDescription());
+        final String targetaudience = targetAudienceController.generate(targetAudienceInputData);
         // Image is nice but not mandatory.
         // TODO: validate image somehow?
 
@@ -58,7 +57,7 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
                 createNewPitchInputData.getName(),
                 createNewPitchInputData.getImage(),
                 createNewPitchInputData.getDescription(),
-                createNewPitchInputData.getTargetAudienceList()
+                targetaudience
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
