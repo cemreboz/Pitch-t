@@ -53,7 +53,7 @@ public class VisionTest {
         System.out.println("Occupation: " + mockPersona.getOccupation());
 
         // Instantiate and display the VisionView
-        VisionView visionView = new VisionView(mockPersona, mockPitch, visionController, visionViewModel);
+        VisionView visionView = new VisionView(visionViewModel);
         visionView.setVisible(true);
     }
 }

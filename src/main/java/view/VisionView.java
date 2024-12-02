@@ -2,7 +2,6 @@ package view;
 
 import entity.Persona;
 import entity.Pitch;
-import interface_adapter.login.LoginController;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
@@ -16,12 +15,12 @@ import javax.swing.*;
 /**
  * The View for the Vision Page.
  */
-public class VisionView extends JFrame implements PropertyChangeListener {
+public class VisionView extends JPanel implements PropertyChangeListener {
     private final String viewName = "vision";
 
     private final VisionViewModel visionViewModel;
-    private final Persona persona;
-    private final Pitch pitch;
+    private Persona persona;
+    private Pitch pitch;
     private VisionController controller;
 
     // UI Components
@@ -29,10 +28,7 @@ public class VisionView extends JFrame implements PropertyChangeListener {
     private JTextArea chatTextArea;
     private JTextField messageField;
 
-    public VisionView(Persona persona, Pitch pitch, VisionController controller, VisionViewModel viewModel) {
-        this.persona = persona;
-        this.pitch = pitch;
-        this.controller = controller;
+    public VisionView(VisionViewModel viewModel) {
         this.visionViewModel = viewModel;
 
         initializeUserInterface();
@@ -40,14 +36,13 @@ public class VisionView extends JFrame implements PropertyChangeListener {
     }
 
     private void initializeUserInterface() {
-        setTitle("Vision Feature for " + persona.getName());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         setSize(800, 600);
         setLayout(new BorderLayout());
 
         // Header Panel
         final JPanel headerPanel = new JPanel(new BorderLayout());
-        final JLabel headerLabel = new JLabel("Vision for Persona: " + persona.getName(), SwingConstants.CENTER);
+        final JLabel headerLabel = new JLabel("Vision for Persona", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
@@ -86,14 +81,12 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         regenerateButton.addActionListener(e -> regenerateVisual());
         footerPanel.add(regenerateButton);
 
+        //  WILL BE IMPLEMENTED
         final JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> dispose());
         footerPanel.add(backButton);
 
         add(footerPanel, BorderLayout.SOUTH);
 
-        // Trigger the initial visual generation
-        generateInitialVisual();
     }
 
     private void attachViewModelListeners() {
@@ -101,14 +94,17 @@ public class VisionView extends JFrame implements PropertyChangeListener {
     }
 
     private void generateInitialVisual() {
+        if (controller == null) {
+            System.err.println("Controller is not set yet");
+            return;
+        }
+
         // Set loading state and trigger the image generation process
         final VisionState state = visionViewModel.getState();
         state.setLoading(true);
         visionViewModel.updateView(state);
 
-        final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch"
-                + pitch.getName();
-
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch" + pitch.getName();
         controller.generateImage(prompt, persona.getName(), pitch.getName());
     }
 
@@ -116,6 +112,13 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         final String prompt = "Regenerate a visual tailored for persona: " + persona.getName()
                 + "for the pitch" + pitch.getName();
         controller.regenerateImage(prompt, persona.getName(), pitch.getName());
+    }
+
+    public void setPersonaAndPitch(Persona persona, Pitch pitch) {
+        this.persona = persona;
+        this.pitch = pitch;
+
+        generateInitialVisual();
     }
 
     @Override
@@ -156,7 +159,8 @@ public class VisionView extends JFrame implements PropertyChangeListener {
         return viewName;
     }
 
-    public void setVisionController(VisionController visionController) {
-        this.controller = visionController;
+    public void setVisionController(VisionController controller) {
+        this.controller = controller;
     }
+
 }

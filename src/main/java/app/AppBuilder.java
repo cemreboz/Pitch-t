@@ -76,8 +76,6 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
-    private final VisualDataAccessObject visualDataAccessObject = new VisualDataAccessObject();
-    private final FileVisualDataAccessObject fileVisualDataAccessObject = new FileVisualDataAccessObject();
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
@@ -89,10 +87,8 @@ public class AppBuilder {
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
     private VisionView visionView;
-    private ImageGeneratorInterface imageGenerator;
     private Persona persona;
     private Pitch pitch;
-
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -148,12 +144,8 @@ public class AppBuilder {
      */
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
-
-        // Add a placeholder JPanel for VisionView
-        final JPanel placeholderPanel = new JPanel();
-        placeholderPanel.setName("vision");
-        cardPanel.add(placeholderPanel, "vision");
-
+        visionView = new VisionView(visionViewModel);
+        cardPanel.add(visionView, visionView.getViewName());
         return this;
     }
 
@@ -258,10 +250,14 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addVisionUseCase() {
-        visionViewModel = new VisionViewModel();
-        final JPanel placeholderPanel = new JPanel();
-        placeholderPanel.setName("vision");
-        cardPanel.add(placeholderPanel, "vision");
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
+        final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
+                new VisualDataAccessObject(),
+                new FileVisualDataAccessObject(),
+                generateVisualOutputBoundary);
+
+        final VisionController visionController = new VisionController(generateVisualInteractor);
+        visionView.setVisionController(visionController);
         return this;
     }
 
