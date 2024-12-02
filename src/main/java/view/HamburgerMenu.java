@@ -25,6 +25,7 @@ import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.persona.PersonaState;
 import interface_adapter.pitch.PitchState;
+import interface_adapter.vision.VisionController;
 
 /**
  * A panel for the hamburger menu.
@@ -173,6 +174,7 @@ public class HamburgerMenu extends JPanel {
                     final PersonaState currentState = (PersonaState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+
                 else {
                     JOptionPane.showMessageDialog(accountSettingsItem, "error");
                 }

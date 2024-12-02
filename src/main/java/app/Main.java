@@ -28,6 +28,8 @@ public class Main {
                                             .addLogoutUseCase()
                                             .addDashboardUseCase()
                                             .addAccountSettingsUseCase()
+                                            .addVisionView()
+                                            .addVisionUseCase()
                                             .addPitchUseCase()
                                             .addNewPitchUseCase()
                                             .addCreateNewPitchUseCase()

@@ -9,6 +9,8 @@ import javax.swing.WindowConstants;
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
+import data_access.FileVisualDataAccessObject;
+import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -47,6 +49,9 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.vision.VisionController;
+import interface_adapter.vision.VisionPresenter;
+import interface_adapter.vision.VisionViewModel;
 import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
@@ -54,6 +59,10 @@ import use_case.account_settings.AccountSettingsOutputBoundary;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.generate_visuals.GenerateVisualInputBoundary;
+import use_case.generate_visuals.GenerateVisualInteractor;
+import use_case.generate_visuals.GenerateVisualOutputBoundary;
+import use_case.generate_visuals.ImageGeneratorInterface;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
 import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
@@ -130,11 +139,13 @@ public class AppBuilder {
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
     private AccountSettingsViewModel accountSettingsViewModel;
+    private VisionViewModel visionViewModel;
     private PitchViewModel pitchViewModel;
     private AccountSettingsView accountSettingsView;
     private LoginView loginView;
     private DashboardViewModel dashboardViewModel;
     private DashboardView dashboardView;
+    private VisionView visionView;
     private PitchView pitchView;
     private NewPitchViewModel newPitchViewModel;
     private NewPitchView newPitchView;
@@ -196,12 +207,23 @@ public class AppBuilder {
     }
 
     /**
+     * Adds Vision to the application.
+     * @return this builder
+     */
+    public AppBuilder addVisionView() {
+        visionViewModel = new VisionViewModel();
+        visionView = new VisionView(visionViewModel);
+        cardPanel.add(visionView, visionView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Pitch View to the application.
      * @return this builder
      */
     public AppBuilder addPitchView() {
         pitchViewModel = new PitchViewModel();
-        pitchView = new PitchView(pitchViewModel);
+        pitchView = new PitchView(pitchViewModel, viewManagerModel);
         cardPanel.add(pitchView, pitchView.getViewName());
         return this;
     }
@@ -488,6 +510,25 @@ public class AppBuilder {
         // Set the controller for the Persona List View
         personaListView.setComparePersonasController(comparePersonasController);
 
+        return this;
+    }
+
+    /**
+     * Adds the Vision Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addVisionUseCase() {
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
+        final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
+                new VisualDataAccessObject(),
+                new FileVisualDataAccessObject(),
+                generateVisualOutputBoundary);
+
+        final VisionController visionController = new VisionController(generateVisualInteractor);
+        visionView.setVisionController(visionController);
+        accountSettingsView.setVisionController(visionController);
+        expertChatView.setVisionController(visionController);
+        personaChatView.setVisionController(visionController);
         return this;
     }
 

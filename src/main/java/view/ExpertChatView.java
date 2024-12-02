@@ -9,6 +9,7 @@ import interface_adapter.expert.ExpertState;
 import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.vision.VisionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -187,7 +188,8 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
                 chatExpertController.startChat(selectedExpertId, userMessage);
                 updateChatArea();
                 messageInput.setText("");
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
                         "No Expert Selected", JOptionPane.WARNING_MESSAGE);
             }
@@ -313,5 +315,9 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(NewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    public void setVisionController(VisionController visionController) {
+
     }
 }

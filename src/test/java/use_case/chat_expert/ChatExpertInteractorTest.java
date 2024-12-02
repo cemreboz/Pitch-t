@@ -164,4 +164,5 @@ public class ChatExpertInteractorTest {
         // Execute the use case
         interactor.initiateChat(inputData);
     }
+
 }

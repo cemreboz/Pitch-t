@@ -105,6 +105,7 @@ public class DashboardView extends JPanel implements PropertyChangeListener {
         final JPanel buttons = new JPanel();
         newPitch = new JButton("New Pitch");
         buttons.add(newPitch);
+
         experts = new JButton("Experts");
         buttons.add(experts);
         buttons.setMaximumSize(new Dimension(thousand, hundred));
