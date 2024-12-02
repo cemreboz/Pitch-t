@@ -112,7 +112,7 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
     }
 
     @Override
-    public String utilizeApi(String systemMessage) throws IOException, InterruptedException {
+    public String utilizeApi(String systemMessage) {
         final String apiKey = System.getenv("OPENAI_API_KEY");
 
         if (apiKey == null || apiKey.isEmpty()) {
