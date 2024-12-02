@@ -41,7 +41,6 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private JTextArea chatArea;
     private JTextField messageInput;
     private HamburgerMenu hamburgerMenu;
-    private boolean initialized = false;
 
     /**
      * Constructs a PersonaChatView object.
