@@ -134,8 +134,11 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("imagePath".equals(evt.getPropertyName())) {
-            updateImageDisplay((String) evt.getNewValue());
-        } else if ("errorMessage".equals(evt.getPropertyName())) {
+            final String newImagePath = (String) evt.getNewValue();
+            System.out.println("Received Image Path: " + newImagePath);
+            updateImageDisplay(newImagePath);
+        }
+        else if ("errorMessage".equals(evt.getPropertyName())) {
             updateErrorMessage((String) evt.getNewValue());
         }
     }
@@ -146,7 +149,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             adLabel.setIcon(new ImageIcon(image));
             adLabel.setText(null);
-        } else {
+        }
+        else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }

@@ -31,6 +31,7 @@ public class FileVisualDataAccessObject implements ImageGeneratorInterface {
         // Use ImageGenerator to get the image URL
         final String imageUrl = VisualDataAccessObject.generateImage(userInput, "dall-e-3", 1, "1024x1024");
 
+        System.out.println("Generated image URL: " + imageUrl);
         // Download the image from the URL
         downloadImage(imageUrl, outputFilePath);
 
