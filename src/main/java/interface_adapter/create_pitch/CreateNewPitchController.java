@@ -31,7 +31,7 @@ public class CreateNewPitchController {
      * @param image          the image URL/path associated with the pitch
      * @param targetAudience the list of target audiences for the pitch
      */
-    public void execute(String name, String description, String image, List<String> targetAudience) {
+    public void execute(String name, String description, String image, String targetAudience) throws Exception {
         // Creating an input data object for the use case
         final CreateNewPitchInputData createNewPitchInputData = new CreateNewPitchInputData(name, description,
                 image, targetAudience);

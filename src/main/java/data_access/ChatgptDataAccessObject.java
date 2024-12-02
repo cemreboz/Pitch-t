@@ -14,11 +14,16 @@ import entity.ChatMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
  */
-public final class ChatgptDataAccessObject implements DetailedDataAccessObjectInterface {
+public final class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
+        ChatExpertGptAccessInterface, ComparePersonasGptAccessInterface, TargetAudienceDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -45,11 +50,11 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
         messages.add(new ChatMessage("user", userMessage));
 
         // Call the new method
-        return utilizeApi(messages);
+        return getInteraction(messages);
     }
 
     @Override
-    public String utilizeApi(List<ChatMessage> messages)
+    public String getInteraction(List<ChatMessage> messages)
             throws IOException, InterruptedException {
         final String apiKey = System.getenv("OPENAI_API_KEY");
 
@@ -68,7 +73,7 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
 
         // Create JSON request body
         final JSONObject requestBody = new JSONObject();
-        requestBody.put("model", "gpt-4o-mini"); // Update the model name as needed
+        requestBody.put("model", "gpt-4o-mini");
         requestBody.put("messages", messagesJson);
 
         final HttpClient client = HttpClient.newHttpClient();
@@ -132,8 +137,22 @@ public final class ChatgptDataAccessObject implements DetailedDataAccessObjectIn
             writer.newLine();
             writer.write("----------------------------------------------------");
             writer.newLine();
-        } catch (IOException exception) {
+        }
+        catch (IOException exception) {
             System.out.println("Error logging API call: " + exception.getMessage());
         }
+    }
+
+    /**
+     * Generates a list of target audiences based on a project description.
+     *
+     * @param systemMessage The message sent to the Chatgpt system.
+     * @param userMessage   Dependent on the pitch itself.
+     * @return A list of target audience categories.
+     * @throws Exception If any error occurs during data fetching.
+     */
+    @Override
+    public String generateTargetAudience(String systemMessage, String userMessage) throws Exception {
+        return utilizeApi(systemMessage, userMessage);
     }
 }

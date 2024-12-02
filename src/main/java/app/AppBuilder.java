@@ -8,7 +8,6 @@ import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
 import data_access.ChatgptDataAccessObject;
-import data_access.DetailedDataAccessObjectInterface;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -20,6 +19,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.compare_personas.ComparePersonasController;
+import interface_adapter.compare_personas.ComparePersonasPresenter;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
 import interface_adapter.expert.ExpertController;
@@ -40,6 +42,7 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -47,9 +50,14 @@ import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.chat_expert.ChatExpertGptAccessInterface;
 import use_case.chat_expert.ChatExpertInputBoundary;
 import use_case.chat_expert.ChatExpertInteractor;
 import use_case.chat_expert.ChatExpertOutputBoundary;
+import use_case.compare_personas.ComparePersonasInputBoundary;
+import use_case.compare_personas.ComparePersonasInteractor;
+import use_case.compare_personas.ComparePersonasOutputBoundary;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
@@ -68,17 +76,11 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.set_targetaudience.*;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.AccountSettingsView;
-import view.DashboardView;
-import view.ExpertChatView;
-import view.LoginView;
-import view.NewPitchView;
-import view.PitchView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -116,6 +118,10 @@ public class AppBuilder {
     private NewPitchView newPitchView;
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
+    private ComparePersonasViewModel comparePersonasViewModel;
+    private PersonaListView personaListView;
+    private DetailedTargetAudiencePageViewModel detailedTargetAudiencePageViewModel;
+    private DetailedView detailedView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -184,6 +190,17 @@ public class AppBuilder {
         newPitchViewModel = new NewPitchViewModel();
         newPitchView = new NewPitchView(newPitchViewModel);
         cardPanel.add(newPitchView, newPitchView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the DetailedTA view to the application.
+     * @return this builder
+     */
+    public AppBuilder addDetailedTargetAudiencePageView() {
+        detailedTargetAudiencePageViewModel = new DetailedTargetAudiencePageViewModel();
+        detailedView = new DetailedView(detailedTargetAudiencePageViewModel);
+        cardPanel.add(detailedView, detailedView.getViewName());
         return this;
     }
 
@@ -341,6 +358,9 @@ public class AppBuilder {
     public AppBuilder addCreateNewPitchUseCase() {
         final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
                 newPitchViewModel, pitchViewModel, viewManagerModel);
+
+        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
+
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary);
 
@@ -351,7 +371,7 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the expert view use case and as part of the hamburger menu to each view with the menu..
+     * Adds the expert view use case and as part of the hamburger menu to each view with the menu.
      * @return this builder
      */
     public AppBuilder addExpertUseCase() {
@@ -378,7 +398,7 @@ public class AppBuilder {
                 expertViewModel, viewManagerModel);
 
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final DetailedDataAccessObjectInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
@@ -386,6 +406,49 @@ public class AppBuilder {
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);
         expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the add DetailedTA use case.
+     * @return this builder.
+     */
+    public AppBuilder addDetailedTargetAudienceUseCase() {
+        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
+                detailedTargetAudiencePageViewModel);
+
+        final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary);
+        final DetailedController detailedController = new DetailedController(detailedInteractor);
+
+        detailedView.setController(detailedController);
+        return this;
+    }
+
+    /**
+     * Adds the compare personas use case.
+     * @return this builder
+     */
+    public AppBuilder addComparePersonasUseCase() {
+        // Instantiate Output Boundary
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel);
+
+        // Instantiate GPT Data Access Interface
+        final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        // Create the Interactor, providing it the GPT data access object and output boundary
+        final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
+                chatgptDataAccessObject, comparePersonasOutputBoundary);
+
+        // Create the controller using the Interactor
+        final ComparePersonasController comparePersonasController = new ComparePersonasController(
+                comparePersonasInteractor);
+
+        // Set the controller for the Persona List View
+        personaListView.setComparePersonasController(comparePersonasController);
+
         return this;
     }
 
