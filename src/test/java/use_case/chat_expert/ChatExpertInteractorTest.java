@@ -1,6 +1,5 @@
 package use_case.chat_expert;
 
-import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 import entity.ChatMessage;
 import entity.Expert;
 import org.junit.jupiter.api.Test;

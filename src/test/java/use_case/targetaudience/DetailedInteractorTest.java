@@ -55,7 +55,7 @@ public class DetailedInteractorTest {
         // Create a mock data access object that throws an exception
         DetailedtaDataAccessInterface dataAccessObject = new DetailedtaDataAccessInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
+            public String utilizeApi(String systemMessage, String userMessage) {
                 throw new JSONException("Test JSON Exception");
             }
         };
@@ -89,7 +89,7 @@ public class DetailedInteractorTest {
         // Create a mock data access object
         DetailedtaDataAccessInterface dataAccessObject = new DetailedtaDataAccessInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
+            public String utilizeApi(String systemMessage, String userMessage) {
                 return null;
             }
         };
@@ -129,7 +129,7 @@ public class DetailedInteractorTest {
         // Create a mock data access object
         DetailedtaDataAccessInterface dataAccessObject = new DetailedtaDataAccessInterface() {
             @Override
-            public String utilizeApi(String systemMessage, String userMessage) throws Exception {
+            public String utilizeApi(String systemMessage, String userMessage) {
                 // Return a mock response for empty input
                 return "{" +
                         "\"detailedTargetAudiences\": [" +

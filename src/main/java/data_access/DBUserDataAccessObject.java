@@ -378,11 +378,11 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         for (int i = 0; i < pitchesArray.length(); i++) {
             final JSONObject pitchJson = pitchesArray.getJSONObject(i);
 
-            final String targetAudienceList = "";
-//            final JSONArray targetAudienceArray = pitchJson.getJSONArray("targetAudienceList");
-//            for (int j = 0; j < targetAudienceArray.length(); j++) {
-//                targetAudienceList.add(targetAudienceArray.getString(j));
-//            }
+            final List<String> targetAudienceList = new ArrayList<>();
+            final JSONArray targetAudienceArray = pitchJson.getJSONArray("targetAudienceList");
+            for (int j = 0; j < targetAudienceArray.length(); j++) {
+                targetAudienceList.add(targetAudienceArray.getString(j));
+            }
 
             final Pitch pitch = new Pitch(
                     pitchJson.getString(ID_FIELD),
