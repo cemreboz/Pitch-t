@@ -42,7 +42,9 @@ public class ViewPersonasState {
         return thisPitch;
     }
 
-    public void setThisPitch(Pitch thisPitch) {}
+    public void setThisPitch(Pitch thisPitch) {
+        this.thisPitch = thisPitch;
+    }
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;

@@ -89,7 +89,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         // Trigger comparison using the comparePersonasController
         Pitch pitch = viewModel.getState().getThisPitch();
         ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas.get(0), selectedPersonas.get(1), pitch);
-//        comparePersonasController.comparePersonas(inputData);
+        comparePersonasController.comparePersonas(inputData);
     }
 
     private void handleVisionButton() {
@@ -164,5 +164,3 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
     }
 }
-
-//todo implement comparison
