@@ -15,6 +15,7 @@ import use_case.expert.ExpertDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.new_pitch.NewPitchDataAccessInterface;
+import use_case.persona.PersonaDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
@@ -30,7 +31,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         NewPitchDataAccessInterface,
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
-        ExpertDataAccessInterface {
+        ExpertDataAccessInterface,
+        PersonaDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

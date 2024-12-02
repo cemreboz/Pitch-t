@@ -20,6 +20,7 @@ public class Main {
                                             .addDashboardView()
                                             .addPitchView()
                                             .addNewPitchView()
+                                            .addPersonaChatView()
                                             .addDetailedTargetAudiencePageView()
                                             .addSignupUseCase()
                                             .addLoginUseCase()
@@ -35,6 +36,8 @@ public class Main {
                                             .addDetailedTargetAudienceUseCase()
                                             .addExpertUseCase()
                                             .addChatExpertUseCase()
+                                            .addPersonaUseCase()
+                                            .addChatPersonaUseCase()
                                             .build();
 
         application.pack();

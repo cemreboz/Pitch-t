@@ -23,6 +23,7 @@ import interface_adapter.expert.ExpertState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.persona.PersonaState;
 import interface_adapter.pitch.PitchState;
 
 /**
@@ -78,6 +79,10 @@ public class HamburgerMenu extends JPanel {
                     final ExpertState currentState = (ExpertState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof PersonaState) {
+                    final PersonaState currentState = (PersonaState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, "error");
                 }
@@ -102,6 +107,10 @@ public class HamburgerMenu extends JPanel {
                 }
                 else if (viewModel.getState() instanceof ExpertState) {
                     final ExpertState currentState = (ExpertState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof PersonaState) {
+                    final PersonaState currentState = (PersonaState) viewModel.getState();
                     newPitchController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
@@ -130,6 +139,10 @@ public class HamburgerMenu extends JPanel {
                     final ExpertState currentState = (ExpertState) viewModel.getState();
                     expertController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof PersonaState) {
+                    final PersonaState currentState = (PersonaState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(expertsItem, "error");
                 }
@@ -154,6 +167,10 @@ public class HamburgerMenu extends JPanel {
                 }
                 else if (viewModel.getState() instanceof ExpertState) {
                     final ExpertState currentState = (ExpertState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof PersonaState) {
+                    final PersonaState currentState = (PersonaState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
