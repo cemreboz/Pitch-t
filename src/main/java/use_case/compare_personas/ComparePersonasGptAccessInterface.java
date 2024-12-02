@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ComparePersonasGptAccessInterface {
 
-    String utilizeApi(List<ChatMessage> messages);
+    String utilizeApi(String message);
 }
