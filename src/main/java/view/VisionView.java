@@ -26,6 +26,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private JLabel adLabel;
     private JTextArea chatTextArea;
     private JTextField messageField;
+    private HamburgerMenu hamburgerMenu;
 
     public VisionView(VisionViewModel viewModel) {
         this.visionViewModel = viewModel;
@@ -44,6 +45,17 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
+
+        // Left side: Hamburger menu and logo
+        hamburgerMenu = createHamburgerMenu();
+        final JLabel logo = new JLabel("Pitch!t");
+        logo.setFont(new Font("Arial", Font.BOLD, 24));
+
+        final JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        logoPanel.add(hamburgerMenu);
+        logoPanel.add(logo);
+
+        headerPanel.add(logoPanel, BorderLayout.WEST);
 
         // Center Panel
         final JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -129,6 +141,12 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         if (persona != null && pitch != null) {
             generateInitialVisual();
         }
+    }
+
+    private HamburgerMenu createHamburgerMenu() {
+        hamburgerMenu = new HamburgerMenu(visionViewModel);
+        hamburgerMenu.setBackground(Color.WHITE);
+        return hamburgerMenu;
     }
 
     @Override
