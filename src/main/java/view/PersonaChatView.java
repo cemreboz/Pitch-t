@@ -172,6 +172,14 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         headerNameLabel.setText(personaViewModel.getState().getPersona().getName());
+
+        if (personaViewModel.getState().getChatHistory().isEmpty()) {
+            // Initialize the assistant if chat history is empty
+            chatPersonaController.startChat("",
+                    personaViewModel.getState().getPersona(),
+                    personaViewModel.getState().getPitch());
+        }
+
         updateChatArea();
     }
 

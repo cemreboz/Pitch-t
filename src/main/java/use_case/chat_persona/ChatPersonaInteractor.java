@@ -42,7 +42,9 @@ public class ChatPersonaInteractor implements ChatPersonaInputBoundary {
             chatHistory.add(new ChatMessage("system", initialPrompt));
         }
         // Add user's message
-        chatHistory.add(new ChatMessage("user", userMessage));
+        if (!("".equals(userMessage))) {
+            chatHistory.add(new ChatMessage("user", userMessage));
+        }
         // Call GPT API
         final String assistantResponse = chatGptDao.utilizeApi(chatHistory);
         chatHistory.add(new ChatMessage("assistant", assistantResponse));
