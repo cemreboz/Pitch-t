@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.ChatExpertDataAccessObject;
-import data_access.ChatgptDataAccessObject;
+import data_access.ChatgptDataAccess;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
@@ -408,7 +408,7 @@ public class AppBuilder {
         final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
                 expertViewModel, viewManagerModel);
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final ExpertChatDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ExpertChatDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccess();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
@@ -445,7 +445,7 @@ public class AppBuilder {
     public AppBuilder addChatPersonaUseCase() {
         final ChatPersonaOutputBoundary chatPersonaOutputBoundary = new ChatPersonaPresenter(
                 personaViewModel, viewManagerModel);
-        final ChatPersonaDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ChatPersonaDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccess();
 
         final ChatPersonaInputBoundary chatPersonaInteractor = new ChatPersonaInteractor(
                 chatgptDataAccessObject, chatPersonaOutputBoundary);

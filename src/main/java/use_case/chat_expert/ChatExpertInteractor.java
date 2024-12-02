@@ -3,7 +3,6 @@ package use_case.chat_expert;
 import java.util.ArrayList;
 import java.util.List;
 
-import use_case.set_targetaudience.DetailedDataAccessObjectInterface;
 import entity.ChatMessage;
 import entity.Expert;
 
