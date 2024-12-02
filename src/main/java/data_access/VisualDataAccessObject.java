@@ -1,5 +1,6 @@
 package data_access;
 
+import app.PitchitManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Visual;
@@ -17,7 +18,7 @@ import java.util.List;
 public class VisualDataAccessObject {
 
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
-    private static final String API_KEY = System.getenv("OPENAI_API_KEY");
+    private static final String API_KEY = PitchitManager.getApiKey();
 
     private final List<Visual> imageStorage = new ArrayList<>();
 
