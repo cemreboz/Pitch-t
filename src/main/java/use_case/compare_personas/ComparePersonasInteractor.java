@@ -1,8 +1,8 @@
 package use_case.compare_personas;
 
-import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import entity.ChatMessage;
 import entity.Persona;
+import entity.Pitch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +31,13 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
     /**
      * Executes the compare personas use case.
      *
-     * @param inputData The input data containing the personas to be compared.
+     * @param inputData The input data containing the personas and the current pitch.
      */
     @Override
     public void execute(ComparePersonasInputData inputData) {
         List<Persona> personas = inputData.getPersonas();
+        Pitch currentPitch = inputData.getCurrentPitch();
+
         if (personas.size() != 2) {
             outputBoundary.prepareFailView("Exactly two personas must be selected for comparison.");
             return;
@@ -46,44 +48,72 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
         // Prepare messages for API call
         List<ChatMessage> messagesForApi = new ArrayList<>();
-        String systemMessage = "You are tasked with analyzing and comparing two user personas and their opinions about a product pitch. Please provide concise responses.";
+        String systemMessage = "You are an assistant that analyzes and compares two user personas' opinions about a product pitch. Provide structured and concise responses.";
         messagesForApi.add(new ChatMessage("system", systemMessage));
 
-        // Add user messages for both personas
-        messagesForApi.add(new ChatMessage("user", String.format(
-                "Persona 1 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'likes' or 'dislikes'.",
-                persona1.getName(), persona1.getAbout())));
+        // Include pitch description
+        messagesForApi.add(new ChatMessage("user", "Here is the product pitch description:"));
+        messagesForApi.add(new ChatMessage("user", currentPitch.getDescription()));
 
+        // Add persona 1 information and ask for opinion
         messagesForApi.add(new ChatMessage("user", String.format(
-                "Persona 2 (%s): %s. Give 3 concise reasons for liking or disliking the pitch. Start each with the word 'likes' or 'dislikes'.",
-                persona2.getName(), persona2.getAbout())));
+                "Persona 1 (%s): %s", persona1.getName(), persona1.getAbout())));
+        messagesForApi.add(new ChatMessage("user", String.format(
+                "Based on the pitch, what are %s's thoughts? Provide 3 concise points starting with 'Likes:' or 'Dislikes:'.",
+                persona1.getName())));
 
-        // Add final prompt to compare both personas
+        // Add persona 2 information and ask for opinion
+        messagesForApi.add(new ChatMessage("user", String.format(
+                "Persona 2 (%s): %s", persona2.getName(), persona2.getAbout())));
+        messagesForApi.add(new ChatMessage("user", String.format(
+                "Based on the pitch, what are %s's thoughts? Provide 3 concise points starting with 'Likes:' or 'Dislikes:'.",
+                persona2.getName())));
+
+        // Ask to compare the opinions
         messagesForApi.add(new ChatMessage("user",
-                "Based on the above responses, compare the two personas. What are their similarities and differences regarding their opinions on the pitch? Start each with 'similar' or 'different'"));
+                "Compare the opinions of both personas. List similarities and differences starting with 'Similar:' or 'Different:'."));
 
         try {
-            // Using getOpinion to call the API
-            String comparisonResponse = chatgptDataAccessObject.getInteraction(messagesForApi);
+            // Call the GPT API
+            String comparisonResponse = chatgptDataAccessObject.utilizeApi(messagesForApi);
 
-            // Parse the response into opinions and comparison
+            // Parse the response
             String[] responseParts = comparisonResponse.split("\n\n");
+
             if (responseParts.length < 3) {
                 outputBoundary.prepareFailView("Unexpected response format from API.");
                 return;
             }
 
-            String persona1Opinion = responseParts[0];
-            String persona2Opinion = responseParts[1];
+            String p1Opinion = parseOpinion(responseParts[0]);
+            String p2Opinion = parseOpinion(responseParts[1]);
             String comparison = responseParts[2];
 
-            // Create output data and pass it to output boundary
-            ComparePersonasOutputData outputData = new ComparePersonasOutputData(persona1, persona2, persona1Opinion, persona2Opinion, extractSimilarities(comparison), extractDifferences(comparison));
-            outputBoundary.presentComparison(outputData);
+            // Extract similarities and differences
+            List<String> similarities = extractSimilarities(comparison);
+            List<String> differences = extractDifferences(comparison);
+
+            // Create output data
+            ComparePersonasOutputData outputData = new ComparePersonasOutputData(
+                    persona1, persona2, p1Opinion, p2Opinion, similarities, differences);
+
+            // Present the comparison result
+            outputBoundary.prepareSuccessView(outputData);
+
         } catch (Exception e) {
             outputBoundary.prepareFailView("Unable to retrieve data: " + e.getMessage());
-            e.printStackTrace();
         }
+    }
+
+    /**
+     * Parses the opinion text to extract concise points.
+     *
+     * @param opinionText The raw opinion text from the GPT response.
+     * @return A formatted opinion string with concise points.
+     */
+    private String parseOpinion(String opinionText) {
+        // Assuming the opinion text contains likes and dislikes, format them as needed
+        return opinionText.trim();
     }
 
     /**

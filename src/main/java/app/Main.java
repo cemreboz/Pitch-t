@@ -22,6 +22,7 @@ public class Main {
                 .addPitchView()
                 .addCreateNewPitchView()
                 .addPersonaListView()
+                .addPersonaComparisonView()
                 // Construct the use cases
                 .addViewPersonasUseCase()
                 .addPersonaChatView()
@@ -42,6 +43,7 @@ public class Main {
                 .addChatExpertUseCase()
                 .addPersonaUseCase()
                 .addChatPersonaUseCase()
+                .addComparePersonasUseCase()
                 .build();
 
         application.pack();

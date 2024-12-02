@@ -127,7 +127,6 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         return getInteraction(messages);
     }
 
-    @Override
     public String getInteraction(List<ChatMessage> messages) {
         final String result;
         try {

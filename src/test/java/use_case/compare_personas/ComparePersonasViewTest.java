@@ -4,7 +4,7 @@ import entity.Persona;
 import interface_adapter.compare_personas.ComparePersonasState;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
 import org.junit.jupiter.api.Test;
-import view.ComparePersonasView;
+import view.PersonaComparisonView;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ComparePersonasViewTest {
+public class PesonaComparisonViewTest {
 
     @Test
     void displayComparisonSuccessTest() throws InterruptedException {
@@ -50,12 +50,12 @@ public class ComparePersonasViewTest {
         viewModel.setState(state);
 
         // Create the view
-        ComparePersonasView comparePersonasView = new ComparePersonasView(viewModel);
+        PersonaComparisonView personaComparisonView = new PersonaComparisonView(viewModel);
 
         // Set up the frame
         JFrame frame = new JFrame("Compare Personas Test");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(comparePersonasView);
+        frame.add(personaComparisonView);
         frame.pack();
         frame.setVisible(true);
 

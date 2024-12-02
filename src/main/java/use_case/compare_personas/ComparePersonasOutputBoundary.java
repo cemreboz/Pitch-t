@@ -12,5 +12,5 @@ public interface ComparePersonasOutputBoundary {
      * Prepares the comparison results for the output.
      * @param outputData The output data containing comparison details.
      */
-    void presentComparison(ComparePersonasOutputData outputData);
+    void prepareSuccessView(ComparePersonasOutputData outputData);
 }

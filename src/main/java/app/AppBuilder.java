@@ -170,8 +170,6 @@ public class AppBuilder {
     private CreateNewPitchView createNewPitchView;
     private CreateNewPitchViewModel createNewPitchViewModel;
 
-    // Unmitigated shit below this line
-    private ComparePersonasViewModel comparePersonasViewModel;
     private PersonaListView personaListView;
     private ViewPersonasViewModel viewPersonasViewModel;
     private ComparePersonasController comparePersonasController;
@@ -181,6 +179,9 @@ public class AppBuilder {
 
     private PersonaChatView personaChatView;
     private PersonaViewModel personaViewModel;
+
+    private ComparePersonasViewModel comparePersonasViewModel;
+    private PersonaComparisonView personaComparisonView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -229,6 +230,16 @@ public class AppBuilder {
         cardPanel.add(accountSettingsView, accountSettingsView.getViewName());
         return this;
     }
+
+    /**
+     * Adds the Persona Comparison View to the application.
+     * @return this builder
+     */
+    public AppBuilder addPersonaComparisonView() {
+        PersonaComparisonView personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
+        cardPanel.add(personaComparisonView, personaComparisonView.getViewName());
+        return this;
+}
 
     /**
      * Adds Vision to the application.
@@ -304,6 +315,7 @@ public class AppBuilder {
      */
     public AppBuilder addPersonaListView() {
         viewPersonasViewModel = new ViewPersonasViewModel();
+        comparePersonasViewModel = new ComparePersonasViewModel();
         personaListView = new PersonaListView(viewPersonasViewModel,
                 comparePersonasViewModel);
         cardPanel.add(personaListView, personaListView.getViewName());
@@ -534,8 +546,7 @@ public class AppBuilder {
      */
     public AppBuilder addComparePersonasUseCase() {
         // Instantiate Output Boundary
-        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
-                comparePersonasViewModel);
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(comparePersonasViewModel, viewManagerModel);
 
         // Instantiate GPT Data Access Interface
         final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();

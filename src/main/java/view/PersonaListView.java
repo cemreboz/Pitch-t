@@ -1,6 +1,7 @@
 package view;
 
 import entity.Persona;
+import entity.Pitch;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.view_personas.ViewPersonasState;
@@ -86,8 +87,9 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
 
         // Trigger comparison using the comparePersonasController
-        ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas.get(0), selectedPersonas.get(1));
-//        comparePersonasController.comparePersonas(inputData);
+        Pitch pitch = viewModel.getState().getThisPitch();
+        ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas.get(0), selectedPersonas.get(1), pitch);
+        comparePersonasController.comparePersonas(inputData);
     }
 
     private void handleVisionButton() {
@@ -162,5 +164,3 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
     }
 }
-
-//todo implement comparison
