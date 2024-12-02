@@ -526,6 +526,10 @@ public class AppBuilder {
 
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
+        accountSettingsView.setVisionController(visionController);
+        pitchView.setVisionController(visionController);
+        expertChatView.setVisionController(visionController);
+        personaChatView.setVisionController(visionController);
         return this;
     }
 

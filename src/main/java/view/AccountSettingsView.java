@@ -23,6 +23,7 @@ import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.new_pitch.NewPitchController;
+import interface_adapter.vision.VisionController;
 
 /**
  * The View for when the user is logged into the program.
@@ -201,4 +202,6 @@ public class AccountSettingsView extends JPanel implements PropertyChangeListene
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 
+    public void setVisionController(VisionController visionController) {
+    }
 }

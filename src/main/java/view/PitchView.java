@@ -15,6 +15,7 @@ import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.vision.VisionController;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -158,5 +159,9 @@ public class PitchView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(NewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    public void setVisionController(VisionController visionController) {
+
     }
 }

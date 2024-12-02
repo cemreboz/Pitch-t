@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChatExpertInteractorTest {
-/*
+
     @Test
     void initiateChatSuccessTest() {
         // Create input data
@@ -165,5 +165,4 @@ public class ChatExpertInteractorTest {
         interactor.initiateChat(inputData);
     }
 
- */
 }

@@ -11,6 +11,7 @@ import data_access.VisualDataAccessObject;
 import data_access.FileVisualDataAccessObject;
 
 import javax.swing.*;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -22,7 +23,7 @@ public class VisionTest {
         mockPersona.setAge(28);
         mockPersona.setOccupation("Software Engineer");
 
-        String targetAudienceList = String.join(", ", "User-Friendly", "AI-Driven", "Scalable");
+        List<String> targetAudienceList = Arrays.asList("Tech Enthusiasts", "Developers", "AI Researchers");
 
         // Create a mock Pitch
         Pitch mockPitch = new Pitch(
