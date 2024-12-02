@@ -30,4 +30,10 @@ public interface LogoutUserDataAccessInterface {
      * @return the current user of the program
      */
     User getCurrentUser();
+
+    /**
+     * Saves the user.
+     * @param user the user to save
+     */
+    void save(User user);
 }

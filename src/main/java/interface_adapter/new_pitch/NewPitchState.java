@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.DBUser;
+import entity.Pitch;
 import entity.User;
+import use_case.set_targetaudience.TargetAudienceInteractor;
 
 /**
  * The state for the New Pitch View Model.

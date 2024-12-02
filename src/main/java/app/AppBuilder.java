@@ -19,17 +19,19 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
+import interface_adapter.chat_persona.ChatPersonaController;
+import interface_adapter.chat_persona.ChatPersonaPresenter;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasPresenter;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchPresenter;
-import interface_adapter.expert.ExpertController;
-import interface_adapter.expert.ExpertPresenter;
-import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.dashboard.DashboardController;
 import interface_adapter.dashboard.DashboardPresenter;
 import interface_adapter.dashboard.DashboardViewModel;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.expert.ExpertPresenter;
+import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -38,10 +40,14 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.new_pitch.NewPitchController;
 import interface_adapter.new_pitch.NewPitchPresenter;
 import interface_adapter.new_pitch.NewPitchViewModel;
+import interface_adapter.persona.PersonaController;
+import interface_adapter.persona.PersonaPresenter;
+import interface_adapter.persona.PersonaViewModel;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.targetaudience.*;
 import use_case.account_settings.AccountSettingsInputBoundary;
 import use_case.account_settings.AccountSettingsInteractor;
 import use_case.account_settings.AccountSettingsOutputBoundary;
@@ -57,24 +63,33 @@ import use_case.compare_personas.ComparePersonasInputBoundary;
 import use_case.compare_personas.ComparePersonasInteractor;
 import use_case.compare_personas.ComparePersonasOutputBoundary;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
+import use_case.chat_expert.ExpertChatDataAccessInterface;
+import use_case.chat_persona.ChatPersonaDataAccessInterface;
+import use_case.chat_persona.ChatPersonaInputBoundary;
+import use_case.chat_persona.ChatPersonaInteractor;
+import use_case.chat_persona.ChatPersonaOutputBoundary;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInteractor;
 import use_case.create_pitch.CreateNewPitchOutputBoundary;
-import use_case.expert.ExpertInputBoundary;
-import use_case.expert.ExpertInteractor;
-import use_case.expert.ExpertOutputBoundary;
-import use_case.new_pitch.NewPitchInputBoundary;
-import use_case.new_pitch.NewPitchInteractor;
-import use_case.new_pitch.NewPitchOutputBoundary;
 import use_case.dashboard_show_pitch.DashboardInputBoundary;
 import use_case.dashboard_show_pitch.DashboardInteractor;
 import use_case.dashboard_show_pitch.DashboardOutputBoundary;
+import use_case.expert.ExpertInputBoundary;
+import use_case.expert.ExpertInteractor;
+import use_case.expert.ExpertOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.new_pitch.NewPitchInputBoundary;
+import use_case.new_pitch.NewPitchInteractor;
+import use_case.new_pitch.NewPitchOutputBoundary;
+import use_case.persona.PersonaInputBoundary;
+import use_case.persona.PersonaInteractor;
+import use_case.persona.PersonaOutputBoundary;
+import use_case.set_targetaudience.*;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -83,10 +98,11 @@ import view.DashboardView;
 import view.ExpertChatView;
 import view.LoginView;
 import view.NewPitchView;
-import view.PersonaListView;
+import view.PersonaChatView;
 import view.PitchView;
 import view.SignupView;
 import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -124,8 +140,12 @@ public class AppBuilder {
     private NewPitchView newPitchView;
     private ExpertChatView expertChatView;
     private ExpertViewModel expertViewModel;
+    private PersonaChatView personaChatView;
+    private PersonaViewModel personaViewModel;
     private ComparePersonasViewModel comparePersonasViewModel;
     private PersonaListView personaListView;
+    private DetailedTargetAudiencePageViewModel detailedTargetAudiencePageViewModel;
+    private DetailedView detailedView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -198,6 +218,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the DetailedTA view to the application.
+     * @return this builder
+     */
+    public AppBuilder addDetailedTargetAudiencePageView() {
+        detailedTargetAudiencePageViewModel = new DetailedTargetAudiencePageViewModel();
+        detailedView = new DetailedView(detailedTargetAudiencePageViewModel);
+        cardPanel.add(detailedView, detailedView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the expert chat view to the application.
      * @return this builder
      */
@@ -205,6 +236,18 @@ public class AppBuilder {
         expertViewModel = new ExpertViewModel();
         expertChatView = new ExpertChatView(expertViewModel, viewManagerModel);
         cardPanel.add(expertChatView, expertChatView.getViewName());
+
+        return this;
+    }
+
+    /**
+     * Adds the persona chat view to the application.
+     * @return this builder
+     */
+    public AppBuilder addPersonaChatView() {
+        personaViewModel = new PersonaViewModel();
+        personaChatView = new PersonaChatView(personaViewModel, viewManagerModel);
+        cardPanel.add(personaChatView, personaChatView.getViewName());
 
         return this;
     }
@@ -287,6 +330,7 @@ public class AppBuilder {
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
         expertChatView.setLoginController(loginController);
+        personaChatView.setLoginController(loginController);
         return this;
     }
 
@@ -306,6 +350,7 @@ public class AppBuilder {
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
         expertChatView.setAccountSettingsController(accountSettingsController);
+        personaChatView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -341,6 +386,7 @@ public class AppBuilder {
         accountSettingsView.setNewPitchController(newPitchController);
         pitchView.setNewPitchController(newPitchController);
         expertChatView.setNewPitchController(newPitchController);
+        personaChatView.setNewPitchController(newPitchController);
         return this;
     }
 
@@ -351,6 +397,9 @@ public class AppBuilder {
     public AppBuilder addCreateNewPitchUseCase() {
         final CreateNewPitchOutputBoundary createNewPitchOutputBoundary = new CreateNewPitchPresenter(
                 newPitchViewModel, pitchViewModel, viewManagerModel);
+
+        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
+
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary);
 
@@ -376,6 +425,7 @@ public class AppBuilder {
         accountSettingsView.setExpertController(expertController);
         pitchView.setExpertController(expertController);
         expertChatView.setExpertController(expertController);
+        personaChatView.setExpertController(expertController);
         return this;
     }
 
@@ -386,9 +436,8 @@ public class AppBuilder {
     public AppBuilder addChatExpertUseCase() {
         final ChatExpertOutputBoundary chatExpertOutputBoundary = new ChatExpertPresenter(
                 expertViewModel, viewManagerModel);
-
         final ChatExpertDataAccessInterface chatExpertDataAccessObject = new ChatExpertDataAccessObject();
-        final ChatExpertGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ExpertChatDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final ChatExpertInputBoundary chatExpertInteractor = new ChatExpertInteractor(
                 chatExpertDataAccessObject, chatgptDataAccessObject, chatExpertOutputBoundary);
@@ -396,6 +445,23 @@ public class AppBuilder {
         final ChatExpertController chatExpertController = new ChatExpertController(
                 chatExpertInteractor);
         expertChatView.setChatExpertController(chatExpertController);
+        return this;
+    }
+
+    /**
+     * Adds the add DetailedTA use case.
+     * @return this builder.
+     */
+    public AppBuilder addDetailedTargetAudienceUseCase() {
+        final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
+                detailedTargetAudiencePageViewModel);
+
+        final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary);
+        final DetailedController detailedController = new DetailedController(detailedInteractor);
+
+        detailedView.setController(detailedController);
         return this;
     }
 
@@ -426,6 +492,43 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the persona view use case.
+     * @return this builder
+     */
+    public AppBuilder addPersonaUseCase() {
+        final PersonaOutputBoundary personaOutputBoundary = new PersonaPresenter(
+                personaViewModel, viewManagerModel);
+        final PersonaInputBoundary personaInteractor = new PersonaInteractor(
+                userDataAccessObject, personaOutputBoundary);
+
+        final PersonaController personaController = new PersonaController(
+                personaInteractor);
+
+        // dashboardView.setPersonaController(personaController);
+        // instead of dashboardView, set it in persona list view, this was for my testing purposes and i have
+        // removed any possible way of activating this screen from dashboard view so dont uncomment or it wont work
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual persona use case.
+     * @return this builder
+     */
+    public AppBuilder addChatPersonaUseCase() {
+        final ChatPersonaOutputBoundary chatPersonaOutputBoundary = new ChatPersonaPresenter(
+                personaViewModel, viewManagerModel);
+        final ChatPersonaDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final ChatPersonaInputBoundary chatPersonaInteractor = new ChatPersonaInteractor(
+                chatgptDataAccessObject, chatPersonaOutputBoundary);
+
+        final ChatPersonaController chatPersonaController = new ChatPersonaController(
+                chatPersonaInteractor);
+        personaChatView.setChatPersonaController(chatPersonaController);
+        return this;
+    }
+
+    /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
      * @return the application
      */
@@ -444,6 +547,7 @@ public class AppBuilder {
             if (!viewManagerModel.getState().toString()
                     .equals("sign up") && !viewManagerModel.getState().toString().equals("log in")) {
                 System.out.println("Executing save before exit...");
+                userDataAccessObject.save(userDataAccessObject.getCurrentUser());
             }
         }));
 

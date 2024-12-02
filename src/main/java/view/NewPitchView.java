@@ -100,7 +100,12 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle save pitch
-                savePitch();
+                try {
+                    savePitch();
+                }
+                catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -116,11 +121,10 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     /**
      * Handles the save pitch action.
      */
-    private void savePitch() {
+    private void savePitch() throws Exception {
         String name = nameField.getText();
         String description = descriptionArea.getText();
-        List<String> targetAudience = new ArrayList<String>();
-        targetAudience.add(targetAudienceField.getText());
+        String targetAudience = targetAudienceField.getText();
         String image = imageField.getText();
         // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
         // the target audience field should be removed from the view too but its their temporarily for IDk what reason

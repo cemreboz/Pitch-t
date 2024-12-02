@@ -1,9 +1,18 @@
 package use_case.create_pitch;
 
+import data_access.ChatgptDataAccessObject;
 import entity.DBUser;
 import entity.Pitch;
+import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.targetaudience.TargetAudienceController;
+import interface_adapter.targetaudience.TargetAudiencePresenter;
+import org.jetbrains.annotations.NotNull;
 import use_case.dashboard_show_pitch.DashboardOutputData;
 import use_case.new_pitch.NewPitchInputData;
+import use_case.set_targetaudience.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.
@@ -25,7 +34,7 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
     }
 
     @Override
-    public void execute(CreateNewPitchInputData createNewPitchInputData) {
+    public void execute(CreateNewPitchInputData createNewPitchInputData) throws Exception {
         // Validate input
         if (createNewPitchInputData.getName().isEmpty()) {
             userPresenter.prepareFailView("Pitch name cannot be empty");
@@ -35,21 +44,25 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         }
         if (createNewPitchInputData.getTargetAudienceList().isEmpty()) {
             userPresenter.prepareFailView("Pitch target audience list cannot be empty");
-            // TODO Rainy get the general TAs here, use your controller to insert it into the pitch object
             // instead of making users manually put them in remove this if and have it so the General TA is generated
             // based off of everything else
         }
-
+        final TargetAudienceController targetAudienceController = getTargetAudienceController();
+        final TargetAudienceInputData targetAudienceInputData = new TargetAudienceInputData(
+                createNewPitchInputData.getName(), createNewPitchInputData.getDescription());
+        final String targetaudience = targetAudienceController.generate(targetAudienceInputData);
         // Image is nice but not mandatory.
         // TODO: validate image somehow?
 
+        final List<String> targetAudienceList = parseTargetAudience(targetaudience);
+
         // Create a new Pitch
         final Pitch newPitch = new Pitch(
-            generatePitchID(),
-            createNewPitchInputData.getName(),
-            createNewPitchInputData.getImage(),  // Image is optional and can be null
-            createNewPitchInputData.getDescription(),
-            createNewPitchInputData.getTargetAudienceList()
+                generatePitchID(),
+                createNewPitchInputData.getName(),
+                createNewPitchInputData.getImage(),
+                createNewPitchInputData.getDescription(),
+                targetAudienceList
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
@@ -60,6 +73,33 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
                 newPitch, userDataAccessObject.getCurrentUser().getName(),
                 userDataAccessObject.getCurrentUser().getPassword());
         userPresenter.prepareSuccessView(createNewPitchOutputData);
+    }
+
+    private static List<String> parseTargetAudience(String input) {
+        final List<String> result = new ArrayList<>();
+
+        final String[] lines = input.split("\\r?\\n");
+
+        for (String line : lines) {
+            final String cleanedLine = line.replace("-", "").replace(";", "").trim();
+            if (!cleanedLine.isEmpty()) {
+                result.add(cleanedLine);
+            }
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private static TargetAudienceController getTargetAudienceController() {
+        final TargetAudienceDataAccessInterface dataAccessInterface = new ChatgptDataAccessObject();
+        final PitchViewModel pitchViewModel = new PitchViewModel();
+        final TargetAudienceOutputBoundary targetAudienceOutputBoundary = new TargetAudiencePresenter(pitchViewModel);
+        final TargetAudienceInputBoundary targetAudienceInputBoundary = new TargetAudienceInteractor(
+                dataAccessInterface, targetAudienceOutputBoundary);
+        final TargetAudienceController targetAudienceController = new TargetAudienceController(
+                targetAudienceInputBoundary);
+        return targetAudienceController;
     }
 
     /**
