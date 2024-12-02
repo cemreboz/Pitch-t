@@ -11,7 +11,7 @@ public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
     }
 
     @Override
-    public void presentComparison(ComparePersonasOutputData outputData) {
+    public void prepareSuccessView(ComparePersonasOutputData outputData) {
         ComparePersonasState state = viewModel.getState();
 
         state.setPersona1(outputData.getPersona1());

@@ -33,7 +33,7 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
             // Personas failed to generate -- treat as a failure, since we won't have anything to display.
             viewPersonasOutputBoundary.prepareFailView("No personas generated.");
         } else {
-            ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas);
+            ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas, pitch);
             viewPersonasOutputBoundary.prepareSuccessView(outputData);
         }
     }
