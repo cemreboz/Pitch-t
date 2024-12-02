@@ -24,7 +24,7 @@ public class TargetAudiencePresenter implements TargetAudienceOutputBoundary {
     public void prepareSuccessView(TargetAudienceOuputData outputData) throws Exception {
         final PitchState state = viewModel.getState();
 
-        state.setTargetAudience();
+        state.setTargetAudience(outputData.getTargetAudience());
         viewModel.setState(state);
         viewModel.firePropertyChanged();
     }

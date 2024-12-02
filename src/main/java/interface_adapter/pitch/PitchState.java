@@ -61,14 +61,8 @@ public class PitchState {
         this.detailedTaLoadError = detailedTaLoadError;
     }
 
-    public void setTargetAudience() throws Exception {
-        final TargetAudienceInputData inputData = new TargetAudienceInputData(pitch.getName(), pitch.getDescription());
-        final TargetAudienceDataAccessInterface dataAccessObject = new ChatgptDataAccessObject();
-        final PitchViewModel pitchViewModel = new PitchViewModel();
-        final TargetAudienceOutputBoundary outputBoundary = new TargetAudiencePresenter(pitchViewModel);
-        final TargetAudienceInteractor targetAudienceInteractor = new TargetAudienceInteractor(dataAccessObject,
-                outputBoundary);
-        targetAudienceInteractor.execute(inputData);
+    public void setTargetAudience(String newTargetAudience) {
+        this.targetaudience = newTargetAudience;
     }
 
     public String getTargetAudience() {
