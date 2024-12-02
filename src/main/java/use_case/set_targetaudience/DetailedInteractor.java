@@ -146,7 +146,7 @@ public class DetailedInteractor implements DetailedInputBoundary {
         }
         catch (JSONException exception) {
             throw new IllegalArgumentException("Error parsing DetailedTargetAudience JSON response: "
-                                               + exception.getMessage(), exception);
+                    + exception.getMessage(), exception);
         }
 
         return audienceList;
