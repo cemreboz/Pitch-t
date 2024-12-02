@@ -223,7 +223,7 @@ public class AppBuilder {
      */
     public AppBuilder addPitchView() {
         pitchViewModel = new PitchViewModel();
-        pitchView = new PitchView(pitchViewModel);
+        pitchView = new PitchView(pitchViewModel, viewManagerModel);
         cardPanel.add(pitchView, pitchView.getViewName());
         return this;
     }
@@ -527,7 +527,6 @@ public class AppBuilder {
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
         accountSettingsView.setVisionController(visionController);
-        pitchView.setVisionController(visionController);
         expertChatView.setVisionController(visionController);
         personaChatView.setVisionController(visionController);
         return this;
