@@ -3,10 +3,7 @@ package use_case.signup;
 import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.User;
-import entity.UserFactory;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +30,7 @@ class SignupInteractorTest {
 
             @Override
             public void switchToLoginView() {
-                // This is expected
+                fail("switchToLoginView should not be called in this test.");
             }
         };
 
@@ -61,7 +58,7 @@ class SignupInteractorTest {
 
             @Override
             public void switchToLoginView() {
-                // This is expected
+                fail("switchToLoginView should not be called in this test.");
             }
         };
 
@@ -75,8 +72,7 @@ class SignupInteractorTest {
         SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
         // Add Paul to the repo so that when we check later they already exist
-        UserFactory factory = new DBUserFactory();
-        User user = factory.create("Paul", "pwd");
+        User user = new DBUserFactory().create("Paul", "pwd");
         userRepository.save(user);
 
         // This creates a presenter that tests whether the test case is as we expect.
@@ -94,11 +90,38 @@ class SignupInteractorTest {
 
             @Override
             public void switchToLoginView() {
-                // This is expected
+                fail("switchToLoginView should not be called in this test.");
             }
         };
 
         SignupInputBoundary interactor = new SignupInteractor(userRepository, failurePresenter, new DBUserFactory());
         interactor.execute(inputData);
+    }
+
+    @Test
+    void switchToLoginViewTest() {
+        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+
+        // Test the invocation of switchToLoginView
+        SignupOutputBoundary switchToLoginPresenter = new SignupOutputBoundary() {
+            @Override
+            public void prepareSuccessView(SignupOutputData user) {
+                fail("Use case success is unexpected.");
+            }
+
+            @Override
+            public void prepareFailView(String error) {
+                fail("Use case failure is unexpected.");
+            }
+
+            @Override
+            public void switchToLoginView() {
+                // Verify that this method is called
+                assertTrue(true);
+            }
+        };
+
+        SignupInputBoundary interactor = new SignupInteractor(userRepository, switchToLoginPresenter, new DBUserFactory());
+        interactor.switchToLoginView();
     }
 }

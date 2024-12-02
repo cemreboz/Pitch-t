@@ -3,7 +3,6 @@ package use_case.chat_expert;
 import java.util.ArrayList;
 import java.util.List;
 
-import use_case.chat_expert.ChatExpertGptAccessInterface;
 import entity.ChatMessage;
 import entity.Expert;
 
@@ -14,7 +13,7 @@ import entity.Expert;
 public class ChatExpertInteractor implements ChatExpertInputBoundary {
 
     private final ChatExpertDataAccessInterface expertRepository;
-    private final ChatExpertGptAccessInterface chatgptDataAccessObject;
+    private final ExpertChatDataAccessInterface chatgptDataAccessObject;
     private final ChatExpertOutputBoundary outputBoundary;
 
     /**
@@ -25,7 +24,7 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
      * @param outputBoundary   The output boundary interface.
      */
     public ChatExpertInteractor(
-            ChatExpertDataAccessInterface expertRepository, ChatExpertGptAccessInterface chatgptDataAccessObject,
+            ChatExpertDataAccessInterface expertRepository, ExpertChatDataAccessInterface chatgptDataAccessObject,
             ChatExpertOutputBoundary outputBoundary) {
         this.expertRepository = expertRepository;
         this.chatgptDataAccessObject = chatgptDataAccessObject;
@@ -69,7 +68,7 @@ public class ChatExpertInteractor implements ChatExpertInputBoundary {
         // Call the GPT API to get expert's response
         String expertResponse;
         try {
-            expertResponse = chatgptDataAccessObject.getInteraction(messagesForApi);
+            expertResponse = chatgptDataAccessObject.utilizeApi(messagesForApi);
         }
         catch (Exception event) {
             expertResponse = "I'm sorry, but I'm having trouble responding right now.";

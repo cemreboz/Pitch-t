@@ -11,6 +11,9 @@ import use_case.dashboard_show_pitch.DashboardOutputData;
 import use_case.new_pitch.NewPitchInputData;
 import use_case.set_targetaudience.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Interactor for creating a new pitch and associating it with a user.
  */
@@ -51,13 +54,15 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         // Image is nice but not mandatory.
         // TODO: validate image somehow?
 
+        final List<String> targetAudienceList = parseTargetAudience(targetaudience);
+
         // Create a new Pitch
         final Pitch newPitch = new Pitch(
                 generatePitchID(),
                 createNewPitchInputData.getName(),
                 createNewPitchInputData.getImage(),
                 createNewPitchInputData.getDescription(),
-                targetaudience
+                targetAudienceList
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
@@ -68,6 +73,21 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
                 newPitch, userDataAccessObject.getCurrentUser().getName(),
                 userDataAccessObject.getCurrentUser().getPassword());
         userPresenter.prepareSuccessView(createNewPitchOutputData);
+    }
+
+    private static List<String> parseTargetAudience(String input) {
+        final List<String> result = new ArrayList<>();
+
+        final String[] lines = input.split("\\r?\\n");
+
+        for (String line : lines) {
+            final String cleanedLine = line.replace("-", "").replace(";", "").trim();
+            if (!cleanedLine.isEmpty()) {
+                result.add(cleanedLine);
+            }
+        }
+
+        return result;
     }
 
     @NotNull

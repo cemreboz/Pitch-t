@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -97,13 +98,17 @@ public class PitchView extends JPanel implements PropertyChangeListener {
                 final JLabel nameLabel = new JLabel("Pitch Name: " + newPitchName);
                 namePanel.add(nameLabel);
 
-                // Update target audience details
-                final String newTargetAudience = state.getPitch().getTargetAudienceList();
                 final JPanel targetAudiencePanel = new JPanel();
+                // Update target audience details
+                final List<String> newTargetAudience = state.getPitch().getTargetAudienceList();
                 targetAudiencePanel.removeAll();
                 if (newTargetAudience != null && !newTargetAudience.isEmpty()) {
-                    final JLabel targetAudienceLabel = new JLabel("Target Audience: " + newTargetAudience);
-                    targetAudiencePanel.add(targetAudienceLabel);
+                    targetAudiencePanel.setLayout(new BoxLayout(targetAudiencePanel, BoxLayout.Y_AXIS));
+                    targetAudiencePanel.add(new JLabel("Target Audience:"));
+                    for (String audience : newTargetAudience) {
+                        final JLabel audienceLabel = new JLabel("- " + audience);
+                        targetAudiencePanel.add(audienceLabel);
+                    }
                 }
                 else {
                     final JLabel targetAudienceLabel = new JLabel("Target Audience: Not available");
@@ -118,7 +123,6 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             }
         });
     }
-
 
     public String getViewName() {
         return viewName;

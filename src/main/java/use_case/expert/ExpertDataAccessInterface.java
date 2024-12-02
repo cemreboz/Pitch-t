@@ -3,7 +3,7 @@ package use_case.expert;
 import entity.User;
 
 /**
- * The Data access interface for expert
+ * The Data access interface for expert.
  */
 public interface ExpertDataAccessInterface {
 

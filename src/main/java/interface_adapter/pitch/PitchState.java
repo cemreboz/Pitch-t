@@ -14,7 +14,7 @@ import use_case.set_targetaudience.TargetAudienceOutputBoundary;
  * The state for the pitch view model.
  */
 public class PitchState {
-    private Pitch pitch = new Pitch("", "", "", "", "");
+    private Pitch pitch = new Pitch("", "", "", "", new ArrayList<>());
     private String username = "";
     private String password = "";
     private String pitchLoadError;

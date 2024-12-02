@@ -21,8 +21,11 @@ public class PitchitManager {
     private static final String API_URL = "http://vm003.teach.cs.toronto.edu:20112";
     private static final String API_TOKEN_KEY = "apiToken";
     private static final String CONTENT_TYPE_JSON = "application/json";
+    private static final String INFO_FIELD = "info";
 
     private static final OkHttpClient CLIENT = new OkHttpClient().newBuilder().build();
+
+    private static String cachedApiKey = "";
 
     /**
      * Static method to retrieve the API key for the "pitchit" user.
@@ -30,36 +33,46 @@ public class PitchitManager {
      * @return the API key as a string, empty string if not found
      */
     public static String getApiKey() {
-        String key = "";
-        try {
-            // Create a GET request to fetch the user info
-            final Request request = new Request.Builder()
-                    .url(API_URL + "/user?username=" + "pitchit" + "&password=" + "multiculturalism")
-                    .get()
-                    .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                    .build();
+        String apiKey = "";
 
-            try (Response response = CLIENT.newCall(request).execute()) {
-                if (!response.isSuccessful()) {
-                    System.err.println("Failed to fetch user info: " + response.body().string());
-                }
+        if (!cachedApiKey.isEmpty()) {
+            // Use cached API key
+            apiKey = cachedApiKey;
+        }
+        else {
+            // Fetch from the API
+            try {
+                final Request request = new Request.Builder()
+                        .url(API_URL + "/user?username=" + "pitchit" + "&password=" + "multiculturalism")
+                        .get()
+                        .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                        .build();
 
-                final JSONObject responseBody = new JSONObject(response.body().string());
-                final JSONObject userInfo = responseBody.getJSONObject("user").getJSONObject("info");
+                try (Response response = CLIENT.newCall(request).execute()) {
+                    if (response.isSuccessful()) {
+                        final JSONObject responseBody = new JSONObject(response.body().string());
+                        final JSONObject userInfo = responseBody.getJSONObject("user")
+                                .getJSONObject(INFO_FIELD);
 
-                if (userInfo.has(API_TOKEN_KEY)) {
-                    key = userInfo.getString(API_TOKEN_KEY);
-                }
-                else {
-                    System.err.println("API Token not set.");
+                        if (userInfo.has(API_TOKEN_KEY)) {
+                            cachedApiKey = userInfo.getString(API_TOKEN_KEY);
+                            apiKey = cachedApiKey;
+                        }
+                        else {
+                            System.err.println("API Token not set.");
+                        }
+                    }
+                    else {
+                        System.err.println("Failed to fetch user info: " + response.body().string());
+                    }
                 }
             }
+            catch (IOException | JSONException ex) {
+                System.err.println("Error retrieving API key: " + ex.getMessage());
+            }
+        }
 
-        }
-        catch (IOException | JSONException ex) {
-            System.err.println("Error retrieving API key: " + ex.getMessage());
-        }
-        return key;
+        return apiKey;
     }
 
     /**
@@ -100,7 +113,7 @@ public class PitchitManager {
             final JSONObject requestBody = new JSONObject();
             requestBody.put("username", "pitchit");
             requestBody.put("password", password);
-            requestBody.put("info", infoObject);
+            requestBody.put(INFO_FIELD, infoObject);
 
             // Send the API request
             final RequestBody body = RequestBody.create(requestBody.toString(), MediaType.parse(CONTENT_TYPE_JSON));
@@ -142,7 +155,7 @@ public class PitchitManager {
                 }
 
                 final JSONObject responseBody = new JSONObject(response.body().string());
-                final JSONObject userInfo = responseBody.getJSONObject("user").getJSONObject("info");
+                final JSONObject userInfo = responseBody.getJSONObject("user").getJSONObject(INFO_FIELD);
 
                 if (userInfo.has(API_TOKEN_KEY)) {
                     System.out.println("Current API Token: " + userInfo.getString(API_TOKEN_KEY));
@@ -159,6 +172,8 @@ public class PitchitManager {
 
     /**
      * Main method for managing the "pitchit" user's API token.
+     * Checkstyle note; this main method was left uncommented due to being a command line program for develoeprs
+     * of Pitchit.
      * @param args unused arguments
      */
     public static void main(String[] args) {
