@@ -32,6 +32,9 @@ public class VisualDataAccessObject {
      * @throws Exception If an error occurs during the API call.
      */
     public static String generateImage(String prompt, String model, int n, String size) throws Exception {
+        if (API_KEY == null || API_KEY.isEmpty()) {
+            throw new RuntimeException("API key is missing. Ensure the OPENAI_API_KEY environment variable is set.");
+        }
         final ObjectMapper objectMapper = new ObjectMapper();
         final String payload = objectMapper.writeValueAsString(new ImageGenerationRequest(model, prompt, n, size));
 

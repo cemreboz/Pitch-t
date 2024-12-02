@@ -10,6 +10,7 @@ import interface_adapter.vision.VisionViewModel;
 import data_access.VisualDataAccessObject;
 import data_access.FileVisualDataAccessObject;
 
+import javax.swing.*;
 import java.util.List;
 
 
@@ -53,6 +54,10 @@ public class VisionTest {
         visionView.setVisionController(visionController);
 
         // Display the VisionView
-        visionView.setVisible(true);
+        JFrame frame = new JFrame("Vision Test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(visionView);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
