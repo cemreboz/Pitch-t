@@ -31,7 +31,7 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ExpertChatDataAccessInterface,
         ChatPersonaDataAccessInterface,
         ComparePersonasGptAccessInterface,
-        TargetAudienceDataAccessInterface{
+        TargetAudienceDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -62,6 +62,49 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
 
     @Override
     public String utilizeApi(List<ChatMessage> messages) {
+        final String result;
+        try {
+            final String apiKey = PitchitManager.getApiKey();
+
+            if (apiKey == null || apiKey.isEmpty()) {
+                throw new IllegalArgumentException(
+                        "API key is missing. Please set the OPENAI_API_KEY environment variable.");
+            }
+
+            final JSONArray messagesJson = new JSONArray();
+            for (ChatMessage message : messages) {
+                final JSONObject messageJson = new JSONObject();
+                messageJson.put("role", message.getRole());
+                messageJson.put("content", message.getContent());
+                messagesJson.put(messageJson);
+            }
+
+            final JSONObject requestBody = new JSONObject();
+            requestBody.put("model", "gpt-4o-mini");
+            requestBody.put("messages", messagesJson);
+
+            final HttpClient client = HttpClient.newHttpClient();
+            final HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.openai.com/v1/chat/completions"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + apiKey)
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
+                    .build();
+
+            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            result = extractContent(response.body());
+
+            logApiCall(messages, result);
+
+        }
+        catch (IOException | InterruptedException | IllegalArgumentException | JSONException ex) {
+            throw new RuntimeException("Failed to utilize API.", ex);
+        }
+        return result;
+    }
+
+    @Override
+    public String getInteraction(List<ChatMessage> messages) {
         final String result;
         try {
             final String apiKey = PitchitManager.getApiKey();
