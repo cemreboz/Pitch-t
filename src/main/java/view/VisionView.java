@@ -23,7 +23,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private Pitch pitch;
     private VisionController controller;
 
-    // UI Components
     private JLabel adLabel;
     private JTextArea chatTextArea;
     private JTextField messageField;
@@ -36,7 +35,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     }
 
     private void initializeUserInterface() {
-
         setSize(800, 600);
         setLayout(new BorderLayout());
 
@@ -47,10 +45,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         headerPanel.add(headerLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Center Panel (Split into Visuals and Chat)
+        // Center Panel
         final JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-
-        // Left Panel: Generated AD Display
         final JPanel adPanel = new JPanel(new BorderLayout());
         adPanel.setBorder(BorderFactory.createTitledBorder("Generated Visual"));
         adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
@@ -58,7 +54,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         adPanel.add(adLabel, BorderLayout.CENTER);
         centerPanel.add(adPanel);
 
-        // Right Panel: Chatbox with Persona
         final JPanel chatPanel = new JPanel(new BorderLayout());
         chatPanel.setBorder(BorderFactory.createTitledBorder("Chat with Persona"));
         chatTextArea = new JTextArea();
@@ -68,11 +63,10 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         final JScrollPane chatScrollPane = new JScrollPane(chatTextArea);
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
-
         messageField = new JTextField();
         chatPanel.add(messageField, BorderLayout.SOUTH);
-
         centerPanel.add(chatPanel);
+
         add(centerPanel, BorderLayout.CENTER);
 
         // Footer Panel
@@ -81,12 +75,10 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         regenerateButton.addActionListener(e -> regenerateVisual());
         footerPanel.add(regenerateButton);
 
-        //  WILL BE IMPLEMENTED
         final JButton backButton = new JButton("Back");
         footerPanel.add(backButton);
 
         add(footerPanel, BorderLayout.SOUTH);
-
     }
 
     private void attachViewModelListeners() {
@@ -99,18 +91,26 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        // Set loading state and trigger the image generation process
+        if (persona == null || pitch == null) {
+            System.err.println("Persona or Pitch is not set yet");
+            return;
+        }
+
         final VisionState state = visionViewModel.getState();
         state.setLoading(true);
         visionViewModel.updateView(state);
 
-        final String prompt = "Create a visual tailored for persona: " + persona.getName() + "for the pitch" + pitch.getName();
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
         controller.generateImage(prompt, persona.getName(), pitch.getName());
     }
 
     private void regenerateVisual() {
-        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName()
-                + "for the pitch" + pitch.getName();
+        if (controller == null || persona == null || pitch == null) {
+            System.err.println("Cannot regenerate visual: controller, persona, or pitch is null");
+            return;
+        }
+
+        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
         controller.regenerateImage(prompt, persona.getName(), pitch.getName());
     }
 
@@ -118,18 +118,24 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         this.persona = persona;
         this.pitch = pitch;
 
-        generateInitialVisual();
+        if (controller != null) {
+            generateInitialVisual();
+        }
+    }
+
+    public void setVisionController(VisionController controller) {
+        this.controller = controller;
+
+        if (persona != null && pitch != null) {
+            generateInitialVisual();
+        }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("imagePath".equals(evt.getPropertyName())) {
-            // Update the UI with the generated image
-            final String newImagePath = (String) evt.getNewValue();
-            updateImageDisplay(newImagePath);
-        }
-        else if ("errorMessage".equals(evt.getPropertyName())) {
-            // Handle errors
+            updateImageDisplay((String) evt.getNewValue());
+        } else if ("errorMessage".equals(evt.getPropertyName())) {
             updateErrorMessage((String) evt.getNewValue());
         }
     }
@@ -138,11 +144,9 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         if (imagePath != null) {
             final ImageIcon imageIcon = new ImageIcon(imagePath);
             final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-
             adLabel.setIcon(new ImageIcon(image));
             adLabel.setText(null);
-        }
-        else {
+        } else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }
@@ -158,9 +162,4 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     public String getViewName() {
         return viewName;
     }
-
-    public void setVisionController(VisionController controller) {
-        this.controller = controller;
-    }
-
 }

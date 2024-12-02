@@ -12,6 +12,7 @@ import data_access.FileVisualDataAccessObject;
 
 import java.util.List;
 
+
 public class VisionTest {
     public static void main(String[] args) {
         // Create a mock Persona
@@ -29,31 +30,29 @@ public class VisionTest {
                 List.of("User-Friendly", "AI-Driven", "Scalable")
         );
 
+        // Create ViewModel, Presenter, and Interactor
         VisionViewModel visionViewModel = new VisionViewModel();
         VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
+
         GenerateVisualInteractor generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject() {
-
                     public void saveVisual(Visual visual) {
                         // Mock saving visual
                         System.out.println("Visual saved: " + visual.getImagePath());
                     }
                 },
                 new FileVisualDataAccessObject(),
-                visionPresenter // Pass the presenter here
+                visionPresenter
         );
 
         VisionController visionController = new VisionController(generateVisualInteractor);
 
-
-        // Print persona details to ensure getters are working
-        System.out.println("Testing Persona:");
-        System.out.println("Name: " + mockPersona.getName());
-        System.out.println("Age: " + mockPersona.getAge());
-        System.out.println("Occupation: " + mockPersona.getOccupation());
-
-        // Instantiate and display the VisionView
+        // Create and initialize the VisionView
         VisionView visionView = new VisionView(visionViewModel);
+        visionView.setPersonaAndPitch(mockPersona, mockPitch);
+        visionView.setVisionController(visionController);
+
+        // Display the VisionView
         visionView.setVisible(true);
     }
 }
