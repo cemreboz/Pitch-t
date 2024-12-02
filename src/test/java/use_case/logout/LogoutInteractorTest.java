@@ -20,6 +20,7 @@ class LogoutInteractorTest {
         User user = factory.create("Paul", "password");
         userRepository.save(user);
         userRepository.setCurrentUsername("Paul");
+        userRepository.setCurrentUser(user);
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         LogoutOutputBoundary successPresenter = new LogoutOutputBoundary() {
