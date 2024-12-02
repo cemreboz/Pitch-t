@@ -70,7 +70,7 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
         sb.append("    \"gender\": [Male/Female] The gender of the persona.\n");
         sb.append("    \"education\": [string] Maximum level of education achieved by the audience.\n");
         sb.append("    \"salaryRange\": [string] A representative salary range.\n");
-        //sb.append("    \"about\": [string] A creative but brief summary of the persona in 1 paragraphs.\n");
+        sb.append("    \"about\": [string] A creative but brief summary of the persona in 1 paragraphs.\n");
         sb.append("    \"stats\": [string] A D&D statistics block\n");
         sb.append("    \"location\": [string] A city and country name.\n");
         sb.append("    \"occupation\": [string] A typical occupation for the persona.\n");
