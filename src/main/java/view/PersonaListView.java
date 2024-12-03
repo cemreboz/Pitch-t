@@ -12,6 +12,7 @@ import entity.Persona;
 import entity.Pitch;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
+import interface_adapter.persona.PersonaController;
 import interface_adapter.view_personas.ViewPersonasState;
 import interface_adapter.view_personas.ViewPersonasViewModel;
 import use_case.compare_personas.ComparePersonasInputData;
@@ -30,6 +31,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
     private final JButton visionButton;
     private final JButton chatButton;
     private final List<JCheckBox> personaCheckBoxes = new ArrayList<>();
+    private PersonaController personaController;
 
     private ComparePersonasController comparePersonasController;
 
@@ -91,6 +93,10 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         comparePersonasController.comparePersonas(inputData);
     }
 
+    public void setPersonaController(PersonaController personaController) {
+        this.personaController = personaController;
+    }
+
     private void handleVisionButton() {
         // Collect the selected persona
         List<Persona> selectedPersonas = getSelectedPersonas();
@@ -113,8 +119,9 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        // TODO: Implement the chat feature
-        JOptionPane.showMessageDialog(this, "Chat with " + selectedPersonas.get(0).getName() + " is not yet implemented.");
+        Pitch pitch = viewModel.getState().getThisPitch();
+        personaController.execute(selectedPersonas.get(0), pitch,
+                viewModel.getState().getUsername(), viewModel.getState().getPassword());
     }
 
     /**
