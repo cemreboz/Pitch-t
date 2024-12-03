@@ -12,8 +12,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- public class PersonaComparisonViewTest {
-    /*
+public class PesonaComparisonViewTest {
+
     @Test
     void displayComparisonSuccessTest() throws InterruptedException {
         // Set up personas
@@ -63,6 +63,4 @@ import static org.junit.jupiter.api.Assertions.*;
         Thread.sleep(10000); // Keep the UI open for 10 seconds for visual inspection
 
     }
-
-     */
 }

@@ -23,8 +23,6 @@ import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
 import interface_adapter.chat_persona.ChatPersonaController;
 import interface_adapter.chat_persona.ChatPersonaPresenter;
-import interface_adapter.chat_vision.ChatVisionController;
-import interface_adapter.chat_vision.ChatVisionPresenter;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasPresenter;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
@@ -75,10 +73,6 @@ import use_case.chat_persona.ChatPersonaDataAccessInterface;
 import use_case.chat_persona.ChatPersonaInputBoundary;
 import use_case.chat_persona.ChatPersonaInteractor;
 import use_case.chat_persona.ChatPersonaOutputBoundary;
-import use_case.chat_vision.ChatVisionDataAccessInterface;
-import use_case.chat_vision.ChatVisionInputBoundary;
-import use_case.chat_vision.ChatVisionInteractor;
-import use_case.chat_vision.ChatVisionOutputBoundary;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.compare_personas.ComparePersonasInputBoundary;
 import use_case.compare_personas.ComparePersonasInteractor;
@@ -255,7 +249,7 @@ public class AppBuilder {
      */
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
-        visionView = new VisionView(visionViewModel, viewManagerModel);
+        visionView = new VisionView(visionViewModel);
         cardPanel.add(visionView, visionView.getViewName());
         return this;
     }
@@ -618,8 +612,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addVisionUseCase() {
-        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel,
-                viewManagerModel);
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
         final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject(),
                 userDataAccessObject,
@@ -628,28 +621,6 @@ public class AppBuilder {
 
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
-
-        // Set the controller for the Persona List View
-        personaListView.setVisionController(visionController);
-
-        return this;
-    }
-
-    /**
-     * Adds the chat with individual expert use case.
-     * @return this builder
-     */
-    public AppBuilder addChatVisionUseCase() {
-        final ChatVisionOutputBoundary chatVisionOutputBoundary = new ChatVisionPresenter(
-                visionViewModel, viewManagerModel);
-        final ChatVisionDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-
-        final ChatVisionInputBoundary chatVisionInteractor = new ChatVisionInteractor(
-                chatgptDataAccessObject, chatVisionOutputBoundary);
-
-        final ChatVisionController chatVisionController = new ChatVisionController(
-                chatVisionInteractor);
-        visionView.setChatVisionController(chatVisionController);
         return this;
     }
 

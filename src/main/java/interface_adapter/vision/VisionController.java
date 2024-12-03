@@ -1,7 +1,5 @@
 package interface_adapter.vision;
 
-import entity.Persona;
-import entity.Pitch;
 import use_case.generate_visuals.GenerateVisualInputBoundary;
 import use_case.generate_visuals.GenerateVisualInputData;
 
@@ -17,19 +15,19 @@ public class VisionController {
 
     /**
      * Generate image method.
-     * @param inputData generateVisualInputData
      */
-    public void generateImage(GenerateVisualInputData inputData) {
+    public void generateImage(String prompt, String personaName, String pitchName) {
+        System.out.println("VisionController: generateImage() called with prompt: " + prompt);
+        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, personaName, pitchName);
         generateVisualInteractor.execute(inputData);
     }
 
     /**
      * Regenerate image method.
-     * @param inputData generateVisualInputData
      */
-    public void regenerateImage(GenerateVisualInputData inputData) {
+    public void regenerateImage(String prompt, String personaName, String pitchName) {
         // Simply call generateImage with the same inputs
-        generateImage(inputData);
+        generateImage(prompt, personaName, pitchName);
     }
 
 }
