@@ -11,6 +11,7 @@ import interface_adapter.chat_vision.ChatVisionController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
+import interface_adapter.view_personas.ViewPersonasState;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
@@ -241,9 +242,11 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("imagePath".equals(evt.getPropertyName())) {
-            final String newImagePath = (String) evt.getNewValue();
+        if ("state".equals(evt.getPropertyName())) {
+            final VisionState state = (VisionState) evt.getNewValue();
+            final String newImagePath = state.getGeneratedImageUrl();
             System.out.println("Received Image Path: " + newImagePath);
+
             updateImageDisplay(newImagePath);
         }
         else if ("errorMessage".equals(evt.getPropertyName())) {

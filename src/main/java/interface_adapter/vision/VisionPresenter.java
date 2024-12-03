@@ -30,7 +30,12 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
         viewModel.updateView(currentState);
         // For testing purposes
         System.out.println("Presenter: Generated image path = " + outputData.getImagePath());
+
+        viewModel.setState(currentState);
         viewModel.firePropertyChanged();
+
+        this.viewManagerModel.setState(viewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
     }
 
     @Override
@@ -41,7 +46,11 @@ public class VisionPresenter implements GenerateVisualOutputBoundary {
         currentState.setErrorMessage(errorMessage);
 
         // Notify listeners that the state has been updated
+        viewModel.setState(currentState);
         viewModel.updateView(currentState);
+
+        this.viewManagerModel.setState(viewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
     }
 
 }
