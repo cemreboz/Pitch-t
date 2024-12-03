@@ -97,7 +97,7 @@ public class DetailedInteractor implements DetailedInputBoundary {
             final List<DetailedTargetAudience> parseDetailedTargetAudience = parseDetailedTargetAudience(response);
 
             final DBUser currentUser = (DBUser) dataObjectAccess.getCurrentUser();
-            final Pitch currentPitch = currentUser.getPitch(inputData.getPitchname());
+            final Pitch currentPitch = currentUser.getPitchByName(inputData.getPitchname());
             final List<String> generalTa = currentPitch.getTargetAudienceList();
             final Map<String, DetailedTargetAudience> newMap = new HashMap<String, DetailedTargetAudience>();
             final int size = Math.min(generalTa.size(), parseDetailedTargetAudience.size());
