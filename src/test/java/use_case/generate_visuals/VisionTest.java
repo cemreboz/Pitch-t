@@ -39,7 +39,7 @@ public class VisionTest {
         // Create ViewModel, Presenter, and Interactor
         VisionViewModel visionViewModel = new VisionViewModel();
         ViewManagerModel viewManagerModel = new ViewManagerModel();
-        VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
+        VisionPresenter visionPresenter = new VisionPresenter(visionViewModel, viewManagerModel);
 
         DBUser mockUser = new DBUser("testUser", "testPassword");
 

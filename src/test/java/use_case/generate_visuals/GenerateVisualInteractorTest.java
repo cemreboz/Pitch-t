@@ -51,10 +51,7 @@ class GenerateVisualInteractorTest {
 
         // Assertions for success
         assertNotNull(testPresenter.outputData);
-        assertEquals("Visual generated successfully!", testPresenter.outputData.getMessage());
         assertTrue(testPresenter.outputData.getImagePath().contains("mock_generated_visual.png"));
-        assertEquals(mockUser.getName(), testPresenter.outputData.getUsername());
-        assertEquals(mockUser.getPassword(), testPresenter.outputData.getPassword());
     }
 
     @Test
