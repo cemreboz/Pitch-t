@@ -10,21 +10,21 @@ import java.util.List;
 import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.targetaudience.DetailedController;
 import entity.DetailedTargetAudience;
+import interface_adapter.targetaudience.DetailedTargetAudienceState;
 
 /**
  * The view for displaying detailed target audience information.
  */
 public class DetailedView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "detailed target audience";
+    private final String viewName = "Detailed Target Audience";
     private final DetailedTargetAudiencePageViewModel viewModel;
     private DetailedController controller;
     private DetailedTargetAudience detailedTargetAudience;
 
     private final JPanel contentPanel;
 
-    private static final int FIELD_WIDTH = 300;
-    private static final int SIZE = 24;
+    private static final int TITLE_FONT_SIZE = 24;
     private static final int FIELD_HEIGHT = 20;
 
     public DetailedView(DetailedTargetAudiencePageViewModel viewModel) {
@@ -36,7 +36,7 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
 
         // Title Label
         final JLabel titleLabel = new JLabel("Detailed Target Audience", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, SIZE));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, TITLE_FONT_SIZE));
         add(titleLabel);
         add(Box.createVerticalStrut(FIELD_HEIGHT));
 
@@ -47,22 +47,22 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
 
         final JScrollPane contentScrollPane = new JScrollPane(contentPanel);
         add(contentScrollPane);
-
-        // Temporary call to check if the content gets displayed
-        populateContent();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("Property change detected for: " + evt.getPropertyName());
+        if ("state".equals(evt.getPropertyName())) {
+            System.out.println("Property change detected for: " + evt.getPropertyName());
 
-        if ("detailedTargetAudience".equals(evt.getPropertyName())) {
-            List<DetailedTargetAudience> audienceList = viewModel.getState().getDetailedTargetAudience();
-            if (audienceList == null || audienceList.isEmpty()) {
-                System.out.println("Audience list in property change is empty or null!");
+            // Get the updated state directly from the view model
+            final DetailedTargetAudienceState updatedState = viewModel.getState();
+            List<DetailedTargetAudience> detailedAudienceList = updatedState.getDetailedTargetAudience();
+
+            if (detailedAudienceList == null || detailedAudienceList.isEmpty()) {
+                System.out.println("Received updatedState is empty or null");
             } else {
-                System.out.println("Audience list in property change: " + audienceList);
-                final DetailedTargetAudience updatedTargetAudience = audienceList.get(0);
+                DetailedTargetAudience updatedTargetAudience = detailedAudienceList.get(0);
+                System.out.println("Received updatedTargetAudience: " + updatedTargetAudience);
                 updateDetailed(updatedTargetAudience);
             }
         }
@@ -71,18 +71,15 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
     // Updates the UI when new data is loaded
     public void updateDetailed(DetailedTargetAudience detailedTargetAudience) {
         SwingUtilities.invokeLater(() -> {
-            DetailedTargetAudience audienceToUse = detailedTargetAudience;
-            if (audienceToUse == null) {
-                System.out.println("DetailedTargetAudience is null! Using test data.");
-                audienceToUse = new DetailedTargetAudience("Default Name"); // Initialize with test data
-                audienceToUse.setMinAge(25);
-                audienceToUse.setMaxAge(40);
-                audienceToUse.setGender("All");
-                // Set other fields with test values as needed...
-            }
+            if (detailedTargetAudience == null) {
+                System.out.println("updateDetailed: Received null DetailedTargetAudience!");
+            } else {
+                System.out.println("updateDetailed: Received DetailedTargetAudience: " + detailedTargetAudience);
 
-            this.detailedTargetAudience = audienceToUse;
-            populateContent();
+                // Update the reference and populate content
+                this.detailedTargetAudience = detailedTargetAudience;
+                populateContent();
+            }
         });
     }
 
@@ -90,22 +87,18 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
         contentPanel.removeAll(); // Clear existing content
 
         if (detailedTargetAudience == null) {
-            System.out.println("populateContent: detailedTargetAudience is null!");
+            System.out.println("populateContent: No data available for detailed target audience.");
+            JLabel noDataLabel = new JLabel("No detailed target audience data available.", SwingConstants.CENTER);
+            noDataLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            contentPanel.add(noDataLabel);
         } else {
-            System.out.println("populateContent: populating with data: " + detailedTargetAudience);
-        }
+            System.out.println("populateContent: Populating with detailedTargetAudience: " + detailedTargetAudience);
 
-        JPanel demographicPanel = createAttributesPanel("Demographic Attributes", getDemographicAttributes());
-        if (demographicPanel == null) {
-            System.out.println("Demographic panel is null!");
-        } else {
-            System.out.println("Demographic panel created successfully.");
+            contentPanel.add(createAttributesPanel("Demographic Attributes", getDemographicAttributes()));
+            contentPanel.add(createAttributesPanel("Psychographic Attributes", getPsychographicAttributes()));
+            contentPanel.add(createAttributesPanel("Behavioral Attributes", getBehavioralAttributes()));
+            contentPanel.add(createAttributesPanel("Other Attributes", getOtherAttributes()));
         }
-        contentPanel.add(demographicPanel);
-
-        contentPanel.add(createAttributesPanel("Psychographic Attributes", getPsychographicAttributes()));
-        contentPanel.add(createAttributesPanel("Behavioral Attributes", getBehavioralAttributes()));
-        contentPanel.add(createAttributesPanel("Other Attributes", getOtherAttributes()));
 
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -152,8 +145,6 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
             attrs.add(new String[]{"Occupation", safeString(detailedTargetAudience.getOccupation())});
             attrs.add(new String[]{"Income Level", safeString(detailedTargetAudience.getIncomeLevel())});
             attrs.add(new String[]{"Geographic Location", safeString(detailedTargetAudience.getGeographicLocation())});
-        } else {
-            attrs.add(new String[]{"Loading", "Loading..."});
         }
         return attrs;
     }
@@ -165,8 +156,6 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
             attrs.add(new String[]{"Values", String.join(", ", safeList(detailedTargetAudience.getValues()))});
             attrs.add(new String[]{"Personality Traits", String.join(", ", safeList(detailedTargetAudience.getPersonalityTraits()))});
             attrs.add(new String[]{"Lifestyle", safeString(detailedTargetAudience.getLifestyle())});
-        } else {
-            attrs.add(new String[]{"Loading", "Loading..."});
         }
         return attrs;
     }
@@ -180,8 +169,6 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
             attrs.add(new String[]{"Media Consumption", String.join(", ", safeList(detailedTargetAudience.getMediaConsumption()))});
             attrs.add(new String[]{"Online Engagement", String.join(", ", safeList(detailedTargetAudience.getOnlineEngagement()))});
             attrs.add(new String[]{"Influencer", detailedTargetAudience.isInfluencer() ? "Yes" : "No"});
-        } else {
-            attrs.add(new String[]{"Loading", "Loading..."});
         }
         return attrs;
     }
@@ -195,15 +182,13 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
             attrs.add(new String[]{"Environmental Concerns", detailedTargetAudience.isEnvironmentalConcerns() ? "Yes" : "No"});
             attrs.add(new String[]{"Global Perspective", detailedTargetAudience.isGlobalPerspective() ? "Yes" : "No"});
             attrs.add(new String[]{"Multilingual Abilities", detailedTargetAudience.isMultilingualAbilities() ? "Yes" : "No"});
-        } else {
-            attrs.add(new String[]{"Loading", "Loading..."});
         }
         return attrs;
     }
 
     // Helper methods to handle null values
     private String safeString(String value) {
-        return value != null ? value : "Loading...";
+        return value != null ? value : "N/A";
     }
 
     private List<String> safeList(List<String> list) {
@@ -214,16 +199,21 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 
-    public void firePropertyChanged() {
-        System.out.println("Firing property change event for detailedTargetAudience");
-        firePropertyChange("detailedTargetAudience", null, viewModel.getState());
-    }
-
     /**
      * Method to set the detailed target audience controller.
+     *
      * @param controller detailed target audience controller
      */
     public void setController(DetailedController controller) {
         this.controller = controller;
+    }
+
+    /**
+     * Fires a property change event to inform listeners that the viewModel has updated.
+     */
+    public void firePropertyChanged() {
+        DetailedTargetAudienceState state = new DetailedTargetAudienceState();
+        System.out.println("Firing property change event for detailedTargetAudience");
+        firePropertyChange("state", null, state);
     }
 }

@@ -533,16 +533,24 @@ public class AppBuilder {
      * @return this builder.
      */
     public AppBuilder addDetailedTargetAudienceUseCase() {
+        // Instantiate output boundary
         final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
                 detailedTargetAudiencePageViewModel);
 
+        // Instantiate data access interface
         final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
-        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
-                detailedOutputBoundary);
+
+        // Create the interactor
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(
+                detailedDataAccessInterface, detailedOutputBoundary);
+
+        // Create the controller using the interactor
         final DetailedController detailedController = new DetailedController(detailedInteractor);
 
+        // Set the controller for the detailed view
         detailedView.setController(detailedController);
         pitchView.setDetailedController(detailedController);
+
         return this;
     }
 
