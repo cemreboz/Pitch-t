@@ -25,6 +25,7 @@ import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaViewModel;
+import interface_adapter.view_personas.ViewPersonasController;
 
 /**
  * View for chatting with a single defined persona.
@@ -36,6 +37,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private final ViewManagerModel viewManagerModel;
     private final PersonaViewModel personaViewModel;
     private ChatPersonaController chatPersonaController;
+    private ViewPersonasController viewPersonasController;
 
     private JLabel headerNameLabel;
     private JTextArea chatArea;
@@ -75,7 +77,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         // Left side: Back button and hamburger menu
         final JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         final JButton backButton = new JButton("Back");
-        backButton.addActionListener(evt -> JOptionPane.showMessageDialog(backButton, "Back button not implemented."));
+        backButton.addActionListener(evt -> viewPersonasController.execute(personaViewModel.getState().getPitch()));
         leftPanel.add(backButton);
 
         hamburgerMenu = new HamburgerMenu(personaViewModel);
@@ -221,6 +223,14 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    /**
+     * Method to set back button.
+     * @param viewPersonasController view personas controller
+     */
+    public void setViewPersonasController(ViewPersonasController viewPersonasController) {
+        this.viewPersonasController = viewPersonasController;
     }
 
 }

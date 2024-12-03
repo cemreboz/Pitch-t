@@ -590,6 +590,7 @@ public class AppBuilder {
 
         // Set Controller in View
         pitchView.setViewPersonasController(controller);
+        personaChatView.setViewPersonasController(controller);
 
         return this;
     }
