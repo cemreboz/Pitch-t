@@ -14,6 +14,8 @@ public class ComparePersonasState {
     private List<String> similarities;
     private List<String> differences;
     private String errorMessage;
+    private String username;
+    private String password;
 
     // Getters
     public Persona getPersona1() {
@@ -44,6 +46,14 @@ public class ComparePersonasState {
         return errorMessage;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     // Setters
     public void setPersona1(Persona persona1) {
         this.persona1 = persona1;
@@ -71,5 +81,13 @@ public class ComparePersonasState {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

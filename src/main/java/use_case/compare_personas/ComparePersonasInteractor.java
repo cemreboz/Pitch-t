@@ -18,17 +18,21 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
     private final ComparePersonasOutputBoundary outputBoundary;
     private final ComparePersonasGptAccessInterface chatgptDataAccessObject;
+    private final ComparePersonasDataAccessInterface comparePersonasDataAccessObject;
 
     /**
      * Constructs a ComparePersonasInteractor object.
      *
      * @param chatgptDataAccessObject The ChatGPT DAO interface.
      * @param outputBoundary          The output boundary interface.
+     * @param comparePersonasDataAccessObject current user DAO.
      */
     public ComparePersonasInteractor(ComparePersonasGptAccessInterface chatgptDataAccessObject,
-                                     ComparePersonasOutputBoundary outputBoundary) {
+                                     ComparePersonasOutputBoundary outputBoundary,
+                                     ComparePersonasDataAccessInterface comparePersonasDataAccessObject) {
         this.chatgptDataAccessObject = chatgptDataAccessObject;
         this.outputBoundary = outputBoundary;
+        this.comparePersonasDataAccessObject = comparePersonasDataAccessObject;
     }
 
     /**
@@ -75,8 +79,10 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
             List<String> differences = jsonArrayToList(differencesJson);
 
             // Create output data
-            ComparePersonasOutputData outputData = new ComparePersonasOutputData(
-                    persona1, persona2, p1Opinion, p2Opinion, similarities, differences);
+            final ComparePersonasOutputData outputData = new ComparePersonasOutputData(
+                    persona1, persona2, p1Opinion, p2Opinion, similarities, differences,
+                    comparePersonasDataAccessObject.getCurrentUser().getName(),
+                    comparePersonasDataAccessObject.getCurrentUser().getPassword());
 
             // Present the comparison result
             outputBoundary.prepareSuccessView(outputData);
