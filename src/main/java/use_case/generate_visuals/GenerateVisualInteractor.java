@@ -1,10 +1,10 @@
 package use_case.generate_visuals;
 
-import data_access.VisualDataAccessObject;
-import entity.Visual;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import data_access.VisualDataAccessObject;
+import entity.Visual;
 
 /**
  * The Generate Visual Interactor for handling the visual generation use case.
@@ -34,6 +34,7 @@ public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
      */
 
     public void execute(GenerateVisualInputData inputData) {
+
         try {
             System.out.println("Interactor execution started with prompt: " + inputData.getPrompt());
             // Generate the visual prompt
