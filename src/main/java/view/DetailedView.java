@@ -84,24 +84,26 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
     }
 
     private void populateContent() {
-        contentPanel.removeAll(); // Clear existing content
+        SwingUtilities.invokeLater(() -> {
+            contentPanel.removeAll(); // Clear existing content
 
-        if (detailedTargetAudience == null) {
-            System.out.println("populateContent: No data available for detailed target audience.");
-            JLabel noDataLabel = new JLabel("No detailed target audience data available.", SwingConstants.CENTER);
-            noDataLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
-            contentPanel.add(noDataLabel);
-        } else {
-            System.out.println("populateContent: Populating with detailedTargetAudience: " + detailedTargetAudience);
+            if (detailedTargetAudience == null) {
+                System.out.println("populateContent: No data available for detailed target audience.");
+                JLabel noDataLabel = new JLabel("No detailed target audience data available.", SwingConstants.CENTER);
+                noDataLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+                contentPanel.add(noDataLabel);
+            } else {
+                System.out.println("populateContent: Populating with detailedTargetAudience: " + detailedTargetAudience);
 
-            contentPanel.add(createAttributesPanel("Demographic Attributes", getDemographicAttributes()));
-            contentPanel.add(createAttributesPanel("Psychographic Attributes", getPsychographicAttributes()));
-            contentPanel.add(createAttributesPanel("Behavioral Attributes", getBehavioralAttributes()));
-            contentPanel.add(createAttributesPanel("Other Attributes", getOtherAttributes()));
-        }
+                contentPanel.add(createAttributesPanel("Demographic Attributes", getDemographicAttributes()));
+                contentPanel.add(createAttributesPanel("Psychographic Attributes", getPsychographicAttributes()));
+                contentPanel.add(createAttributesPanel("Behavioral Attributes", getBehavioralAttributes()));
+                contentPanel.add(createAttributesPanel("Other Attributes", getOtherAttributes()));
+            }
 
-        contentPanel.revalidate();
-        contentPanel.repaint();
+            contentPanel.revalidate(); // Revalidate the content panel to refresh its layout
+            contentPanel.repaint();    // Repaint the content panel to show the new data
+        });
     }
 
     private JPanel createAttributesPanel(String title, List<String[]> attributes) {
@@ -118,13 +120,21 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         for (String[] attr : attributes) {
+            if (attr == null || attr.length < 2) {
+                continue; // Ensure attr has both key and value
+            }
+
             JLabel label = new JLabel(attr[0] + ": ");
             label.setFont(new Font("SansSerif", Font.BOLD, 14));
             panel.add(label, gbc);
 
             gbc.gridx++;
             gbc.weightx = 0.7;
-            JLabel value = new JLabel(attr[1]);
+
+            // Create a label for the attribute value (concatenate array values if there are multiple)
+            String valueText = String.join(", ", attr);
+            System.out.println("Formatted attribute value: " + valueText);  // Debug output
+            JLabel value = new JLabel(valueText);
             value.setFont(new Font("SansSerif", Font.PLAIN, 14));
             panel.add(value, gbc);
 
