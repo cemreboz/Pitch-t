@@ -24,8 +24,13 @@ public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
      */
     @Override
     public void prepareSuccessView(DetailedOutputData outputData) {
+        if (outputData.getDetailedTargetAudience() == null || outputData.getDetailedTargetAudience().isEmpty()) {
+            System.out.println("DetailedTargetAudience list is empty or null!");
+        } else {
+            System.out.println("DetailedTargetAudience received: " + outputData.getDetailedTargetAudience());
+        }
+
         final DetailedTargetAudienceState detailedState = viewModel.getState();
-        // Update the state with the detailed target audience data
         detailedState.setDetailedTargetAudience(outputData.getDetailedTargetAudience());
 
         viewModel.setState(detailedState);

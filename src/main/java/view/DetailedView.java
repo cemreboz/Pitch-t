@@ -47,21 +47,41 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
 
         final JScrollPane contentScrollPane = new JScrollPane(contentPanel);
         add(contentScrollPane);
+
+        // Temporary call to check if the content gets displayed
+        populateContent();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("Property change detected for: " + evt.getPropertyName());
+
         if ("detailedTargetAudience".equals(evt.getPropertyName())) {
-            // Update the UI when ViewModel's state changes
-            final DetailedTargetAudience updatedTargetAudience = viewModel.getState().getDetailedTargetAudience().get(0); // Assuming the list contains a single target audience
-            updateDetailedTA(updatedTargetAudience);
+            List<DetailedTargetAudience> audienceList = viewModel.getState().getDetailedTargetAudience();
+            if (audienceList == null || audienceList.isEmpty()) {
+                System.out.println("Audience list in property change is empty or null!");
+            } else {
+                System.out.println("Audience list in property change: " + audienceList);
+                final DetailedTargetAudience updatedTargetAudience = audienceList.get(0);
+                updateDetailed(updatedTargetAudience);
+            }
         }
     }
 
     // Updates the UI when new data is loaded
-    public void updateDetailedTA(DetailedTargetAudience detailedTA) {
+    public void updateDetailed(DetailedTargetAudience detailedTargetAudience) {
         SwingUtilities.invokeLater(() -> {
-            this.detailedTargetAudience = detailedTA;
+            DetailedTargetAudience audienceToUse = detailedTargetAudience;
+            if (audienceToUse == null) {
+                System.out.println("DetailedTargetAudience is null! Using test data.");
+                audienceToUse = new DetailedTargetAudience("Default Name"); // Initialize with test data
+                audienceToUse.setMinAge(25);
+                audienceToUse.setMaxAge(40);
+                audienceToUse.setGender("All");
+                // Set other fields with test values as needed...
+            }
+
+            this.detailedTargetAudience = audienceToUse;
             populateContent();
         });
     }
@@ -69,7 +89,20 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
     private void populateContent() {
         contentPanel.removeAll(); // Clear existing content
 
-        contentPanel.add(createAttributesPanel("Demographic Attributes", getDemographicAttributes()));
+        if (detailedTargetAudience == null) {
+            System.out.println("populateContent: detailedTargetAudience is null!");
+        } else {
+            System.out.println("populateContent: populating with data: " + detailedTargetAudience);
+        }
+
+        JPanel demographicPanel = createAttributesPanel("Demographic Attributes", getDemographicAttributes());
+        if (demographicPanel == null) {
+            System.out.println("Demographic panel is null!");
+        } else {
+            System.out.println("Demographic panel created successfully.");
+        }
+        contentPanel.add(demographicPanel);
+
         contentPanel.add(createAttributesPanel("Psychographic Attributes", getPsychographicAttributes()));
         contentPanel.add(createAttributesPanel("Behavioral Attributes", getBehavioralAttributes()));
         contentPanel.add(createAttributesPanel("Other Attributes", getOtherAttributes()));
@@ -179,6 +212,11 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
 
     public String getViewName() {
         return viewName;
+    }
+
+    public void firePropertyChanged() {
+        System.out.println("Firing property change event for detailedTargetAudience");
+        firePropertyChange("detailedTargetAudience", null, viewModel.getState());
     }
 
     /**

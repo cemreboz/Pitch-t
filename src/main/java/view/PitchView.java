@@ -38,6 +38,8 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     private final int hundred = 100;
     private final int threeHundred = 300;
     private final int thousand = 1000;
+    private final int fourHundred = 400;
+    private final int sixHundred = 600;
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
@@ -100,23 +102,22 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             // Handle error scenario - pitch not loaded properly
             final String error = pitchState.getPitchLoadError();
             JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        else {
+        } else {
             // Get the selected target audience category from the JComboBox
             final String selectedAudienceCategory = (String) audienceDropdown.getSelectedItem();
 
             if (selectedAudienceCategory == null || selectedAudienceCategory.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please select a target audience category.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            }
-            else {
+            } else {
                 // Create DetailedInputData with the selected audience category
                 final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(), selectedAudienceCategory);
                 if (detailedController != null) {
                     // Generate the detailed target audience data
                     detailedController.generateDetailed(inputData);
 
+                    // Assuming detailedController correctly updates the ViewModel
                     // Create an instance of DetailedView and display it in a pop-up
-                    showDetailedViewPopup();
+                    SwingUtilities.invokeLater(() -> showDetailedViewPopup());
                 }
             }
         }
@@ -124,14 +125,14 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private void showDetailedViewPopup() {
         // Create an instance of DetailedView
-        final DetailedTargetAudiencePageViewModel audiencePageViewModel = new DetailedTargetAudiencePageViewModel();
-        final DetailedView detailedView = new DetailedView(audiencePageViewModel);
+        DetailedTargetAudiencePageViewModel detailedViewModel = new DetailedTargetAudiencePageViewModel();
+        DetailedView detailedView = new DetailedView(detailedViewModel);
         detailedView.setController(detailedController);
 
         // Create a dialog to wrap the DetailedView
-        final JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Detailed Target Audience", true);
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Detailed Target Audience", true);
         dialog.getContentPane().add(detailedView);
-        dialog.setSize(600, 400);
+        dialog.setSize(sixHundred, fourHundred);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
