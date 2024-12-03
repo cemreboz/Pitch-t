@@ -42,7 +42,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private JTextField messageInput;
     private JTextArea chatArea;
 
-
     public VisionView(VisionViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.visionViewModel = viewModel;
         this.visionViewModel.addPropertyChangeListener(this);
@@ -210,7 +209,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         state.setLoading(true);
         visionViewModel.updateView(state);
 
-        final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + persona.getAbout()
+                + " for the pitch " + pitch.getName() + pitch.getDescription();
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
         controller.generateImage(inputData);
     }
