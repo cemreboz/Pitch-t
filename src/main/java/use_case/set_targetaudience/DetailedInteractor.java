@@ -30,75 +30,91 @@ public class DetailedInteractor implements DetailedInputBoundary {
     @Override
     public void execute(DetailedInputData inputData) throws Exception {
         final String systemMessage = """
-                Provide a detailed analysis of the pitch name and description and the target audience category "%s".\s
-                Structure your response in JSON format with the following fields:
-                {
-                  "Name": "",
-                  "DemographicAttributes": {
-                    "MinAge": 0,
-                    "MaxAge": 0,
-                    "Gender": "",
-                    "EducationLevel": "",
-                    "Occupation": "",
-                    "IncomeLevel": "",
-                    "GeographicLocation": ""
-                  },
-                  "PsychographicAttributes": {
-                    "InterestsAndPassions": [],
-                    "Values": [],
-                    "PersonalityTraits": [],
-                    "Lifestyle": ""
-                  },
-                  "BehavioralAttributes": {
-                    "IsEarlyAdopter": false,
-                    "TechSavviness": "",
-                    "GadgetOwnership": [],
-                    "MediaConsumption": [],
-                    "OnlineEngagement": [],
-                    "IsInfluencer": false
-                  },
-                  "OtherAttributes": {
-                    "EventParticipation": [],
-                    "Hobbies": [],
-                    "BrandAffinity": [],
-                    "EnvironmentalConcerns": false,
-                    "GlobalPerspective": false,
-                    "MultilingualAbilities": false
-                  }
-                }""".formatted(inputData.getAudiencecategory());
+            Provide a detailed analysis of the pitch name and description and the target audience category "%s".\s
+            Structure your response in JSON format with the following fields:
+            {
+              "Name": "",
+              "DemographicAttributes": {
+                "MinAge": 0,
+                "MaxAge": 0,
+                "Gender": "",
+                "EducationLevel": "",
+                "Occupation": "",
+                "IncomeLevel": "",
+                "GeographicLocation": ""
+              },
+              "PsychographicAttributes": {
+                "InterestsAndPassions": [],
+                "Values": [],
+                "PersonalityTraits": [],
+                "Lifestyle": ""
+              },
+              "BehavioralAttributes": {
+                "IsEarlyAdopter": false,
+                "TechSavviness": "",
+                "GadgetOwnership": [],
+                "MediaConsumption": [],
+                "OnlineEngagement": [],
+                "IsInfluencer": false
+              },
+              "OtherAttributes": {
+                "EventParticipation": [],
+                "Hobbies": [],
+                "BrandAffinity": [],
+                "EnvironmentalConcerns": false,
+                "GlobalPerspective": false,
+                "MultilingualAbilities": false
+              }
+            }""".formatted(inputData.getAudiencecategory());
 
         try {
-            final String response = dataAccess.utilizeApi(systemMessage, inputData.getPitchname() + " "
+            String response = dataAccess.utilizeApi(systemMessage, inputData.getPitchname() + " "
                     + inputData.getPitchdescription() + " " + inputData.getAudiencecategory());
+            response = response.trim();
+
+            if (response.startsWith("```") && response.endsWith("```")) {
+                response = response.substring(3, response.length() - 3).trim();
+            }
+
+            if (response.startsWith("json")) {
+                response = response.substring(4).trim();
+            }
+
+            response = response.replace("\\\"", "\"");
+
+            response = response.replaceAll("[^\\x20-\\x7E]", "");
+            if (!response.startsWith("{")) {
+                throw new IllegalArgumentException("Unexpected response format: Response does not start with '{'");
+            }
+
             final List<DetailedTargetAudience> parseDetailedTargetAudience = parseDetailedTargetAudience(response);
             final DetailedOutputData outputData = new DetailedOutputData(parseDetailedTargetAudience);
             outputBoundary.prepareSuccessView(outputData);
         }
         catch (JSONException exception) {
             outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
+            throw new IllegalArgumentException("Error parsing DetailedTargetAudience JSON response: "
+                    + exception.getMessage(), exception);
         }
-
     }
 
-    /**
-     * Parses the output of the API call.
-     * @param response what the API call returns.
-     * @return the parsed response of the API call.
-     * @throws IllegalArgumentException if the argument is invalid.
-     */
     private List<DetailedTargetAudience> parseDetailedTargetAudience(String response) {
         final List<DetailedTargetAudience> audienceList = new ArrayList<>();
 
         try {
-            // Trim the response
+            // Trim the response again to be sure
             final String trimmedResponse = response.trim();
             final JSONObject jsonResponse = new JSONObject(trimmedResponse);
 
-            // Directly parse the attributes
+            // You might need to check if jsonResponse has "detailedTargetAudiences"
+            // depending on your original parsing logic.
+            // However, based on your provided response, it doesn't have that field.
+
+            // Create DetailedTargetAudience object directly from the response JSON
             final String name = jsonResponse.optString("Name", "unknown Audience");
             final DetailedTargetAudience audience = new DetailedTargetAudience(name);
 
-            // Handle demographic attributes
+            // Parse Demographic Attributes
             final JSONObject demographicAttributes = jsonResponse.optJSONObject("DemographicAttributes");
             if (demographicAttributes != null) {
                 audience.setMinAge(demographicAttributes.optInt("MinAge", 0));
@@ -110,29 +126,27 @@ public class DetailedInteractor implements DetailedInputBoundary {
                 audience.setGeographicLocation(demographicAttributes.optString("GeographicLocation", "unknown"));
             }
 
-            // Handle psychographic attributes
+            // Parse Psychographic Attributes
             final JSONObject psychographicAttributes = jsonResponse.optJSONObject("PsychographicAttributes");
             if (psychographicAttributes != null) {
-                audience.setInterestsAndPassions(jsonArrayToList(psychographicAttributes
-                        .optJSONArray("InterestsAndPassions")));
+                audience.setInterestsAndPassions(jsonArrayToList(psychographicAttributes.optJSONArray("InterestsAndPassions")));
                 audience.setValues(jsonArrayToList(psychographicAttributes.optJSONArray("Values")));
-                audience.setPersonalityTraits(jsonArrayToList(psychographicAttributes
-                        .optJSONArray("PersonalityTraits")));
-                audience.setLifestyle(psychographicAttributes.optString("Lifestyle", "unknown"));
+                audience.setPersonalityTraits(jsonArrayToList(psychographicAttributes.optJSONArray("PersonalityTraits")));
+                audience.setLifestyle(psychographicAttributes.optString("Lifestyle", ""));
             }
 
-            // Handle behavioral attributes
+            // Parse Behavioral Attributes
             final JSONObject behavioralAttributes = jsonResponse.optJSONObject("BehavioralAttributes");
             if (behavioralAttributes != null) {
                 audience.setEarlyAdopter(behavioralAttributes.optBoolean("IsEarlyAdopter", false));
-                audience.setTechSavviness(behavioralAttributes.optString("TechSavviness", "unknown"));
+                audience.setTechSavviness(behavioralAttributes.optString("TechSavviness", ""));
                 audience.setGadgetOwnership(jsonArrayToList(behavioralAttributes.optJSONArray("GadgetOwnership")));
                 audience.setMediaConsumption(jsonArrayToList(behavioralAttributes.optJSONArray("MediaConsumption")));
                 audience.setOnlineEngagement(jsonArrayToList(behavioralAttributes.optJSONArray("OnlineEngagement")));
                 audience.setInfluencer(behavioralAttributes.optBoolean("IsInfluencer", false));
             }
 
-            // Handle other attributes
+            // Parse Other Attributes
             final JSONObject otherAttributes = jsonResponse.optJSONObject("OtherAttributes");
             if (otherAttributes != null) {
                 audience.setEventParticipation(jsonArrayToList(otherAttributes.optJSONArray("EventParticipation")));
@@ -143,9 +157,7 @@ public class DetailedInteractor implements DetailedInputBoundary {
                 audience.setMultilingualAbilities(otherAttributes.optBoolean("MultilingualAbilities", false));
             }
 
-            // Add the parsed audience to the list
             audienceList.add(audience);
-
         }
         catch (JSONException exception) {
             throw new IllegalArgumentException("Error parsing DetailedTargetAudience JSON response: "
@@ -157,9 +169,12 @@ public class DetailedInteractor implements DetailedInputBoundary {
 
     private List<String> jsonArrayToList(JSONArray jsonArray) {
         final List<String> list = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            list.add(jsonArray.getString(i));
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                list.add(jsonArray.optString(i, ""));
+            }
         }
         return list;
     }
+
 }
