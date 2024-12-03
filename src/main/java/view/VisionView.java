@@ -1,22 +1,5 @@
 package view;
 
-import entity.ChatMessage;
-import entity.Persona;
-import entity.Pitch;
-import entity.Visual;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.account_settings.AccountSettingsController;
-import interface_adapter.chat_persona.ChatPersonaController;
-import interface_adapter.chat_vision.ChatVisionController;
-import interface_adapter.expert.ExpertController;
-import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.ShowNewPitchController;
-import interface_adapter.view_personas.ViewPersonasState;
-import interface_adapter.vision.VisionController;
-import interface_adapter.vision.VisionState;
-import interface_adapter.vision.VisionViewModel;
-import use_case.generate_visuals.GenerateVisualInputData;
-
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,11 +7,27 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
 
+import entity.ChatMessage;
+import entity.Persona;
+import entity.Pitch;
+import entity.Visual;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.chat_vision.ChatVisionController;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.ShowNewPitchController;
+import interface_adapter.vision.VisionController;
+import interface_adapter.vision.VisionState;
+import interface_adapter.vision.VisionViewModel;
+import use_case.generate_visuals.GenerateVisualInputData;
+
 /**
  * The View for the Vision Page.
  */
 public class VisionView extends JPanel implements PropertyChangeListener {
     private final String viewName = "vision";
+    private final String fontArial = "Arial";
 
     private final VisionViewModel visionViewModel;
     private Persona persona;
@@ -42,6 +41,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private HamburgerMenu hamburgerMenu;
     private JTextField messageInput;
     private JTextArea chatArea;
+
 
     public VisionView(VisionViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.visionViewModel = viewModel;
@@ -62,13 +62,13 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         final JPanel headerPanel = new JPanel(new BorderLayout());
         final JLabel headerLabel = new JLabel("Vision for Chosen Persona", SwingConstants.CENTER);
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headerLabel.setFont(new Font(fontArial, Font.BOLD, 24));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
 
         // Left side: Hamburger menu and logo
         hamburgerMenu = createHamburgerMenu();
         final JLabel logo = new JLabel("Pitch!t");
-        logo.setFont(new Font("Arial", Font.BOLD, 24));
+        logo.setFont(new Font(fontArial, Font.BOLD, 24));
 
         final JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         logoPanel.add(hamburgerMenu);
@@ -100,7 +100,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         visionPanel.setBorder(BorderFactory.createTitledBorder("Generated Visual"));
 
         adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
-        adLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+        adLabel.setFont(new Font(fontArial, Font.ITALIC, 16));
 
         final JButton regenerateButton = new JButton("Regenerate Visual");
         regenerateButton.addActionListener(e -> regenerateVisual());
@@ -122,7 +122,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
-        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        chatArea.setFont(new Font(fontArial, Font.PLAIN, 14));
 
         final JScrollPane chatScrollPane = new JScrollPane(chatArea);
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
@@ -137,7 +137,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         // Footer Panel: Chat Bar
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageInput.setFont(new Font(fontArial, Font.PLAIN, 14));
 
         // Allow sending message with Enter key
         messageInput.addActionListener(event -> sendMessage());
@@ -169,7 +169,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             final String sender;
             if ("user".equals(message.getRole())) {
                 sender = "You";
-            } else {
+            }
+            else {
                 sender = "System";
             }
             final String time = message.getTimestamp().format(DateTimeFormatter.ofPattern("hh:mm a"));
@@ -181,6 +182,9 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         chatArea.setText(chatContent.toString());
     }
 
+    /**
+     * Generates the initial visual.
+     */
     private void generateInitialVisual() {
         if (controller == null) {
             System.err.println("Controller is not set yet");
@@ -201,18 +205,24 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         controller.generateImage(inputData);
     }
 
+    /**
+     * Regenerates the visual.
+     */
     private void regenerateVisual() {
         if (controller == null || persona == null || pitch == null) {
             System.err.println("Cannot regenerate visual: controller, persona, or pitch is null");
             return;
         }
 
-        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName() + " for the pitch "
+        final String prompt = "Generate another visual tailored for persona: " + persona.getName() + " for the pitch "
                 + pitch.getName();
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
         controller.generateImage(inputData);
     }
 
+    /**
+     * Set persona and pitch.
+     */
     public void setPersonaAndPitch(Persona persona, Pitch pitch) {
         this.persona = persona;
         this.pitch = pitch;
@@ -226,6 +236,9 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         this.visual = visual;
     }
 
+    /**
+     * Sets vision controller.
+     */
     public void setVisionController(VisionController controller) {
         this.controller = controller;
 

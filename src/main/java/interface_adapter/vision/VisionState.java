@@ -1,11 +1,11 @@
 package interface_adapter.vision;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.ChatMessage;
 import entity.Persona;
 import entity.Pitch;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The state for the vision view model.

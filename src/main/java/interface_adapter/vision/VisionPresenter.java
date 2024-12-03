@@ -1,8 +1,6 @@
 package interface_adapter.vision;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.persona.PersonaState;
-import use_case.chat_persona.ChatPersonaOutputData;
 import use_case.generate_visuals.GenerateVisualOutputBoundary;
 import use_case.generate_visuals.GenerateVisualOutputData;
 

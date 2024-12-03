@@ -1,12 +1,10 @@
 package use_case.generate_visuals;
 
-import data_access.VisualDataAccessObject;
-import entity.Visual;
-import use_case.chat_persona.ChatPersonaOutputData;
-
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import data_access.VisualDataAccessObject;
+import entity.Visual;
 
 /**
  * The Generate Visual Interactor for handling the visual generation use case.
