@@ -238,7 +238,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addPersonaComparisonView() {
-        PersonaComparisonView personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
+        personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
         cardPanel.add(personaComparisonView, personaComparisonView.getViewName());
         return this;
     }
@@ -398,13 +398,16 @@ public class AppBuilder {
                 userDataAccessObject, loginOutputBoundary);
 
         final LoginController loginController = new LoginController(loginInteractor);
+
+        createNewPitchView.setLoginController(loginController);
+        // Methods for hamburger menu
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
         expertChatView.setLoginController(loginController);
         personaChatView.setLoginController(loginController);
         visionView.setLoginController(loginController);
-        createNewPitchView.setLoginController(loginController);
+        personaComparisonView.setLoginController(loginController);
         return this;
     }
 
@@ -420,12 +423,15 @@ public class AppBuilder {
 
         final AccountSettingsController accountSettingsController = new AccountSettingsController(
                 accountSettingsInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
         expertChatView.setAccountSettingsController(accountSettingsController);
         personaChatView.setAccountSettingsController(accountSettingsController);
         visionView.setAccountSettingsController(accountSettingsController);
+        personaComparisonView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -448,6 +454,7 @@ public class AppBuilder {
         final DashboardController dashboardController = new DashboardController(
                 dashboardInteractor);
         dashboardView.setDashboardController(dashboardController);
+        personaListView.setDashboardController(dashboardController);
         return this;
     }
 
@@ -463,12 +470,15 @@ public class AppBuilder {
 
         final ShowNewPitchController showNewPitchController = new ShowNewPitchController(
                 showNewPitchInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setNewPitchController(showNewPitchController);
         accountSettingsView.setNewPitchController(showNewPitchController);
         pitchView.setNewPitchController(showNewPitchController);
         expertChatView.setNewPitchController(showNewPitchController);
         personaChatView.setNewPitchController(showNewPitchController);
         visionView.setNewPitchController(showNewPitchController);
+        personaComparisonView.setNewPitchController(showNewPitchController);
         return this;
     }
 
@@ -500,12 +510,15 @@ public class AppBuilder {
 
         final ExpertController expertController = new ExpertController(
                 expertInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setExpertController(expertController);
         accountSettingsView.setExpertController(expertController);
         pitchView.setExpertController(expertController);
         expertChatView.setExpertController(expertController);
         personaChatView.setExpertController(expertController);
         visionView.setExpertController(expertController);
+        personaComparisonView.setExpertController(expertController);
         return this;
     }
 
@@ -533,21 +546,14 @@ public class AppBuilder {
      * @return this builder.
      */
     public AppBuilder addDetailedTargetAudienceUseCase() {
-        // Instantiate output boundary
         final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
                 detailedTargetAudiencePageViewModel);
 
-        // Instantiate data access interface
         final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
-
-        // Create the interactor
-        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(
-                detailedDataAccessInterface, detailedOutputBoundary);
-
-        // Create the controller using the interactor
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary, userDataAccessObject);
         final DetailedController detailedController = new DetailedController(detailedInteractor);
 
-        // Set the controller for the detailed view
         detailedView.setController(detailedController);
         pitchView.setDetailedController(detailedController);
 
@@ -568,7 +574,7 @@ public class AppBuilder {
 
         // Create the Interactor, providing it the GPT data access object and output boundary
         final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
-                chatgptDataAccessObject, comparePersonasOutputBoundary);
+                chatgptDataAccessObject, comparePersonasOutputBoundary, userDataAccessObject);
 
         // Create the controller using the Interactor
         final ComparePersonasController comparePersonasController = new ComparePersonasController(

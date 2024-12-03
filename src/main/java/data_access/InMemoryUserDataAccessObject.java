@@ -9,6 +9,7 @@ import entity.User;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.compare_personas.ComparePersonasDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
@@ -16,6 +17,7 @@ import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.persona.PersonaDataAccessInterface;
+import use_case.set_targetaudience.DetailedDataObjectAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.view_personas.ViewPersonasDataAccessInterface;
@@ -36,7 +38,9 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         ExpertDataAccessInterface,
         PersonaDataAccessInterface,
         VisionDBDataAccessObject,
-        ViewPersonasDataAccessInterface {
+        ViewPersonasDataAccessInterface,
+        ComparePersonasDataAccessInterface,
+        DetailedDataObjectAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

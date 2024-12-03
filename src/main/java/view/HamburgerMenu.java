@@ -18,6 +18,7 @@ import javax.swing.JPopupMenu;
 import interface_adapter.ViewModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.account_settings.AccountSettingsState;
+import interface_adapter.compare_personas.ComparePersonasState;
 import interface_adapter.dashboard.DashboardState;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.expert.ExpertState;
@@ -90,6 +91,10 @@ public class HamburgerMenu extends JPanel {
                     final VisionState currentState = (VisionState) viewModel.getState();
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof ComparePersonasState) {
+                    final ComparePersonasState currentState = (ComparePersonasState) viewModel.getState();
+                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, ERROR_FIELD);
                 }
@@ -122,6 +127,10 @@ public class HamburgerMenu extends JPanel {
                 }
                 else if (viewModel.getState() instanceof VisionState) {
                     final VisionState currentState = (VisionState) viewModel.getState();
+                    newPitchController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ComparePersonasState) {
+                    final ComparePersonasState currentState = (ComparePersonasState) viewModel.getState();
                     newPitchController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
@@ -158,6 +167,10 @@ public class HamburgerMenu extends JPanel {
                     final VisionState currentState = (VisionState) viewModel.getState();
                     expertController.execute(currentState.getUsername(), currentState.getPassword());
                 }
+                else if (viewModel.getState() instanceof ComparePersonasState) {
+                    final ComparePersonasState currentState = (ComparePersonasState) viewModel.getState();
+                    expertController.execute(currentState.getUsername(), currentState.getPassword());
+                }
                 else {
                     JOptionPane.showMessageDialog(expertsItem, ERROR_FIELD);
                 }
@@ -190,6 +203,10 @@ public class HamburgerMenu extends JPanel {
                 }
                 else if (viewModel.getState() instanceof VisionState) {
                     final VisionState currentState = (VisionState) viewModel.getState();
+                    accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
+                }
+                else if (viewModel.getState() instanceof ComparePersonasState) {
+                    final ComparePersonasState currentState = (ComparePersonasState) viewModel.getState();
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {

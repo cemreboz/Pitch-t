@@ -27,7 +27,10 @@ public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
         state.setPersona2Opinion(outputData.getPersona2Opinion());
         state.setSimilarities(outputData.getSimilarities());
         state.setDifferences(outputData.getDifferences());
-        state.setErrorMessage(null); // No error in the success case
+        state.setErrorMessage(null);
+        // No error in the success case
+        state.setUsername(outputData.getUsername());
+        state.setPassword(outputData.getPassword());
 
         // Update the view model state and notify the UI components
         compareViewModel.setState(state);
