@@ -1,5 +1,6 @@
 package use_case.view_personas;
 
+import entity.DBUser;
 import entity.Persona;
 import entity.Pitch;
 import org.json.JSONArray;
@@ -17,23 +18,36 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
 
     private final ViewPersonasOutputBoundary viewPersonasOutputBoundary;
     private final ViewPersonasGptDataAccessInterface gptAccessInterface;
+    private final ViewPersonasDataAccessInterface personaAccessInterface;
 
     public ViewPersonasInteractor(ViewPersonasGptDataAccessInterface gptAccessInterface,
-                                  ViewPersonasOutputBoundary outputBoundary) {
+                                  ViewPersonasOutputBoundary outputBoundary,
+                                  ViewPersonasDataAccessInterface personaAccessInterface) {
         this.gptAccessInterface = gptAccessInterface;
         this.viewPersonasOutputBoundary = outputBoundary;
+        this.personaAccessInterface = personaAccessInterface;
     }
 
     @Override
     public void execute(ViewPersonasInputData inputData) {
-        Pitch pitch = inputData.getPitch();
-        List<Persona> personas = populateFakePersonas(pitch);
+        final Pitch pitch = inputData.getPitch();
+        List<Persona> personas = pitch.getPersonas();
+
+        if (personas == null || personas.isEmpty()) {
+            personas = populateFakePersonas(pitch);
+            final DBUser user = (DBUser) personaAccessInterface.getCurrentUser();
+            final Pitch tempPitch = user.getPitch(pitch.getPitchID());
+            tempPitch.setPersonas(personas);
+        }
 
         if (personas == null || personas.isEmpty()) {
             // Personas failed to generate -- treat as a failure, since we won't have anything to display.
             viewPersonasOutputBoundary.prepareFailView("No personas generated.");
-        } else {
-            ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas, pitch);
+        }
+        else {
+            final ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas, pitch,
+                    personaAccessInterface.getCurrentUser().getName(),
+                    personaAccessInterface.getCurrentUser().getPassword());
             viewPersonasOutputBoundary.prepareSuccessView(outputData);
         }
     }

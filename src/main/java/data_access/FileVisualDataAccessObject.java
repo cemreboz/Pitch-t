@@ -1,16 +1,18 @@
 package data_access;
 
-import use_case.generate_visuals.ImageGeneratorInterface;
-
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 
+import use_case.generate_visuals.ImageGeneratorInterface;
+
 /**
  * Handles image generation and downloading.
  */
 public class FileVisualDataAccessObject implements ImageGeneratorInterface {
+
+    private static final int BUFFER_SIZE = 1024;
 
     @Override
     public String generateImage(String prompt, String filePath) throws Exception {
@@ -49,7 +51,7 @@ public class FileVisualDataAccessObject implements ImageGeneratorInterface {
         try (InputStream inputStream = connection.getInputStream();
              FileOutputStream outputStream = new FileOutputStream(filePath)) {
 
-            final byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[BUFFER_SIZE];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);

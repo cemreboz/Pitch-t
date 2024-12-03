@@ -34,6 +34,18 @@ public class DBUser implements User {
         return pitches;
     }
 
+    /**
+     * Method to get a single pitch by its ID.
+     * @param pitchId the unique identifier of the pitch to be retrieved
+     * @return the pitch if found; otherwise, null
+     */
+    public Pitch getPitch(String pitchId) {
+        return pitches.stream()
+                .filter(pitch -> pitch.getPitchID().equals(pitchId))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void setPitches(List<Pitch> pitches) {
         this.pitches = pitches;
     }

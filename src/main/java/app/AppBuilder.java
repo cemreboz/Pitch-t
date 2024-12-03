@@ -244,7 +244,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addPersonaComparisonView() {
-        PersonaComparisonView personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
+        personaComparisonView = new PersonaComparisonView(comparePersonasViewModel);
         cardPanel.add(personaComparisonView, personaComparisonView.getViewName());
         return this;
     }
@@ -404,12 +404,16 @@ public class AppBuilder {
                 userDataAccessObject, loginOutputBoundary);
 
         final LoginController loginController = new LoginController(loginInteractor);
+
+        createNewPitchView.setLoginController(loginController);
+        // Methods for hamburger menu
         dashboardView.setLoginController(loginController);
         accountSettingsView.setLoginController(loginController);
         pitchView.setLoginController(loginController);
         expertChatView.setLoginController(loginController);
         personaChatView.setLoginController(loginController);
         visionView.setLoginController(loginController);
+        personaComparisonView.setLoginController(loginController);
         return this;
     }
 
@@ -425,12 +429,15 @@ public class AppBuilder {
 
         final AccountSettingsController accountSettingsController = new AccountSettingsController(
                 accountSettingsInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setAccountSettingsController(accountSettingsController);
         accountSettingsView.setAccountSettingsController(accountSettingsController);
         pitchView.setAccountSettingsController(accountSettingsController);
         expertChatView.setAccountSettingsController(accountSettingsController);
         personaChatView.setAccountSettingsController(accountSettingsController);
         visionView.setAccountSettingsController(accountSettingsController);
+        personaComparisonView.setAccountSettingsController(accountSettingsController);
         return this;
     }
 
@@ -444,15 +451,16 @@ public class AppBuilder {
         final DashboardInputBoundary dashboardInteractor = new DashboardInteractor(
                 userDataAccessObject, dashboardOutputBoundary);
 
-//        // Block for the ViewPersonasController
-//        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-//        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
-//        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
-//        pitchView.setViewPersonasController(viewPersonasController);
+        //        // Block for the ViewPersonasController
+        //        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        //        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
+        //        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
+        //        pitchView.setViewPersonasController(viewPersonasController);
 
         final DashboardController dashboardController = new DashboardController(
                 dashboardInteractor);
         dashboardView.setDashboardController(dashboardController);
+        personaListView.setDashboardController(dashboardController);
         return this;
     }
 
@@ -468,12 +476,15 @@ public class AppBuilder {
 
         final ShowNewPitchController showNewPitchController = new ShowNewPitchController(
                 showNewPitchInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setNewPitchController(showNewPitchController);
         accountSettingsView.setNewPitchController(showNewPitchController);
         pitchView.setNewPitchController(showNewPitchController);
         expertChatView.setNewPitchController(showNewPitchController);
         personaChatView.setNewPitchController(showNewPitchController);
         visionView.setNewPitchController(showNewPitchController);
+        personaComparisonView.setNewPitchController(showNewPitchController);
         return this;
     }
 
@@ -486,8 +497,6 @@ public class AppBuilder {
                 createNewPitchViewModel, pitchViewModel, viewManagerModel);
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary);
-
-        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
@@ -507,12 +516,15 @@ public class AppBuilder {
 
         final ExpertController expertController = new ExpertController(
                 expertInteractor);
+
+        // Methods for hamburger menu
         dashboardView.setExpertController(expertController);
         accountSettingsView.setExpertController(expertController);
         pitchView.setExpertController(expertController);
         expertChatView.setExpertController(expertController);
         personaChatView.setExpertController(expertController);
         visionView.setExpertController(expertController);
+        personaComparisonView.setExpertController(expertController);
         return this;
     }
 
@@ -558,14 +570,15 @@ public class AppBuilder {
      */
     public AppBuilder addComparePersonasUseCase() {
         // Instantiate Output Boundary
-        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(comparePersonasViewModel, viewManagerModel);
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel, viewManagerModel);
 
         // Instantiate GPT Data Access Interface
         final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         // Create the Interactor, providing it the GPT data access object and output boundary
         final ComparePersonasInputBoundary comparePersonasInteractor = new ComparePersonasInteractor(
-                chatgptDataAccessObject, comparePersonasOutputBoundary);
+                chatgptDataAccessObject, comparePersonasOutputBoundary, userDataAccessObject);
 
         // Create the controller using the Interactor
         final ComparePersonasController comparePersonasController = new ComparePersonasController(
@@ -583,17 +596,19 @@ public class AppBuilder {
      */
     public AppBuilder addViewPersonasUseCase() {
         // Instantiate Output Boundary (Presenter)
-        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
+        final ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
 
         // Instantiate Interactor
-        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
+        final ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter,
+                userDataAccessObject);
 
         // Instantiate Controller
-        ViewPersonasController controller = new ViewPersonasController(interactor);
+        final ViewPersonasController controller = new ViewPersonasController(interactor);
 
         // Set Controller in View
         pitchView.setViewPersonasController(controller);
+        personaChatView.setViewPersonasController(controller);
 
         return this;
     }
@@ -651,7 +666,7 @@ public class AppBuilder {
         final PersonaController personaController = new PersonaController(
                 personaInteractor);
 
-        // dashboardView.setPersonaController(personaController);
+        personaListView.setPersonaController(personaController);
         // instead of dashboardView, set it in persona list view, this was for my testing purposes and i have
         // removed any possible way of activating this screen from dashboard view so dont uncomment or it wont work
         return this;

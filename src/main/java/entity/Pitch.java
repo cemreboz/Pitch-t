@@ -66,4 +66,8 @@ public class Pitch {
     public void setDetailedTargetAudienceMap(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
         this.detailedTargetAudienceMap = detailedTargetAudienceMap;
     }
+
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
+    }
 }

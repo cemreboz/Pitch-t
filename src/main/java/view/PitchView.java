@@ -3,20 +3,20 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.*;
 
 import entity.Pitch;
 import interface_adapter.ViewManagerModel;
@@ -40,6 +40,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
     private final int fifty = 50;
     private final int hundred = 100;
+    private final int threeHundred = 300;
     private final int thousand = 1000;
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
@@ -69,7 +70,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         this.add(namePanel);
 
         // Add the "View Personas" button
-        JButton viewPersonasButton = new JButton("View Personas");
+        final JButton viewPersonasButton = new JButton("View Personas");
         viewPersonasButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,7 +157,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
 
             final String newPitchDescription = state.getPitch().getDescription();
             final JLabel descriptionLabel = new JLabel(newPitchDescription);
-            descriptionLabel.setPreferredSize(new Dimension(300, descriptionLabel.getPreferredSize().height));
+            descriptionLabel.setPreferredSize(new Dimension(threeHundred, descriptionLabel.getPreferredSize().height));
             namePanel.add(descriptionLabel);
 
             final String newPitchImage = state.getPitch().getImage();
@@ -168,7 +169,8 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             final JPanel audiencePanel = new JPanel();
             audiencePanel.setLayout(new BoxLayout(audiencePanel, BoxLayout.Y_AXIS));
             audiencePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Target Audiences"));
-            final JComboBox<String> audienceDropdown = new JComboBox<>(state.getPitch().getTargetAudienceList().toArray(new String[0]));
+            final JComboBox<String> audienceDropdown = new JComboBox<>(state.getPitch()
+                    .getTargetAudienceList().toArray(new String[0]));
 
             audiencePanel.add(new JLabel("Select Audience:"));
             audiencePanel.add(audienceDropdown);
@@ -184,17 +186,17 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     // Start of View Personas user flow
     private void handleViewPersonasButton() {
         // Assuming you have an instance of PitchState
-        PitchState pitchState = pitchViewModel.getState();
-        Pitch pitch = pitchState.getPitch();
+        final PitchState pitchState = pitchViewModel.getState();
+        final Pitch pitch = pitchState.getPitch();
 
         if (pitch == null) {
             // Handle error scenario - pitch not loaded properly
-            String error = pitchState.getPitchLoadError();
+            final String error = pitchState.getPitchLoadError();
             JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
-            return;
         }
-
-        this.viewPersonasController.execute(pitch);
+        else {
+            this.viewPersonasController.execute(pitch);
+        }
     }
 
     public String getViewName() {

@@ -22,6 +22,8 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
         ViewPersonasState state = new ViewPersonasState();
         state.setPersonas(outputData.getPersonas());
         state.setThisPitch(outputData.getPitch());
+        state.setUsername(outputData.getUsername());
+        state.setPassword(outputData.getPassword());
         state.setErrorMessage(null); // No error in the success case
 
         // Update the view model with the successful output
