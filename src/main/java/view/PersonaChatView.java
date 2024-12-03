@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -32,6 +31,10 @@ import interface_adapter.view_personas.ViewPersonasController;
  * Combines the hamburger menu, chat area, and message input, with a back button.
  */
 public class PersonaChatView extends JPanel implements PropertyChangeListener {
+
+    private static final String FONT = "Arial";
+    private static final int FONT_SIZE_14 = 14;
+    private static final int FONT_SIZE_18 = 18;
 
     private final String viewName = "chat persona";
     private final ViewManagerModel viewManagerModel;
@@ -88,7 +91,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
 
         // Center: Persona name
         headerNameLabel = new JLabel(personaName, SwingConstants.CENTER);
-        headerNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerNameLabel.setFont(new Font(FONT, Font.BOLD, FONT_SIZE_18));
         headerPanel.add(headerNameLabel, BorderLayout.CENTER);
 
         add(headerPanel, BorderLayout.NORTH);
@@ -102,7 +105,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
-        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        chatArea.setFont(new Font(FONT, Font.PLAIN, FONT_SIZE_14));
 
         final JScrollPane chatScrollPane = new JScrollPane(chatArea);
         add(chatScrollPane, BorderLayout.CENTER);
@@ -114,7 +117,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private void buildMessageInputArea() {
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageInput.setFont(new Font(FONT, Font.PLAIN, FONT_SIZE_14));
 
         // Allow sending messages with Enter key
         messageInput.addActionListener(event -> sendMessage());

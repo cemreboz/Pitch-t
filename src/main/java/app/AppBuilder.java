@@ -439,11 +439,11 @@ public class AppBuilder {
         final DashboardInputBoundary dashboardInteractor = new DashboardInteractor(
                 userDataAccessObject, dashboardOutputBoundary);
 
-//        // Block for the ViewPersonasController
-//        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-//        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
-//        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
-//        pitchView.setViewPersonasController(viewPersonasController);
+        //        // Block for the ViewPersonasController
+        //        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        //        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
+        //        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
+        //        pitchView.setViewPersonasController(viewPersonasController);
 
         final DashboardController dashboardController = new DashboardController(
                 dashboardInteractor);
@@ -481,8 +481,6 @@ public class AppBuilder {
                 createNewPitchViewModel, pitchViewModel, viewManagerModel);
         final CreateNewPitchInputBoundary createNewPitchInteractor = new CreateNewPitchInteractor(
                 userDataAccessObject, createNewPitchOutputBoundary);
-
-        final ChatgptDataAccessObject chatgptDataAccessObject = new ChatgptDataAccessObject();
 
         final CreateNewPitchController createNewPitchController = new CreateNewPitchController(
                 createNewPitchInteractor);
@@ -553,7 +551,8 @@ public class AppBuilder {
      */
     public AppBuilder addComparePersonasUseCase() {
         // Instantiate Output Boundary
-        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(comparePersonasViewModel, viewManagerModel);
+        final ComparePersonasOutputBoundary comparePersonasOutputBoundary = new ComparePersonasPresenter(
+                comparePersonasViewModel, viewManagerModel);
 
         // Instantiate GPT Data Access Interface
         final ComparePersonasGptAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
@@ -578,15 +577,15 @@ public class AppBuilder {
      */
     public AppBuilder addViewPersonasUseCase() {
         // Instantiate Output Boundary (Presenter)
-        ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
+        final ViewPersonasOutputBoundary presenter = new ViewPersonasPresenter(viewPersonasViewModel, viewManagerModel);
 
         // Instantiate Interactor
-        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter,
+        final ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+        final ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter,
                 userDataAccessObject);
 
         // Instantiate Controller
-        ViewPersonasController controller = new ViewPersonasController(interactor);
+        final ViewPersonasController controller = new ViewPersonasController(interactor);
 
         // Set Controller in View
         pitchView.setViewPersonasController(controller);

@@ -70,6 +70,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String PITCHES_KEY = "pitches";
     private static final String EXPERTS_KEY = "experts";
     private static final String PREFIX = "pitchit:";
+    private static final String ROLE_FIELD = "role";
+    private static final String CONTENT_FIELD = "content";
+    private static final String TIMESTAMP_FIELD = "timestamp";
+    private static final String UNKNOWN_FIELD = "unknown";
 
     private final UserFactory userFactory;
     private String currentUsername;
@@ -316,9 +320,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             final JSONArray chatHistoryArray = new JSONArray();
             for (ChatMessage message : expert.getChatHistory()) {
                 final JSONObject messageJson = new JSONObject();
-                messageJson.put("role", message.getRole());
-                messageJson.put("content", message.getContent());
-                messageJson.put("timestamp", message.getTimestamp().toString());
+                messageJson.put(ROLE_FIELD, message.getRole());
+                messageJson.put(CONTENT_FIELD, message.getContent());
+                messageJson.put(TIMESTAMP_FIELD, message.getTimestamp().toString());
                 chatHistoryArray.put(messageJson);
             }
             expertJson.put(CHATHISTORY_FIELD, chatHistoryArray);
@@ -341,17 +345,23 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 if (chatItem instanceof JSONObject) {
                     // The chat item is a JSONObject, parse it as ChatMessage
                     final JSONObject chatMessageJson = (JSONObject) chatItem;
-                    final String role = chatMessageJson.optString("role", "unknown");
-                    final String content = chatMessageJson.optString("content", "");
-                    final String timestampStr = chatMessageJson.optString("timestamp", null);
-                    final LocalDateTime timestamp = timestampStr != null ? LocalDateTime.parse(timestampStr) : LocalDateTime.now();
+                    final String role = chatMessageJson.optString(ROLE_FIELD, UNKNOWN_FIELD);
+                    final String content = chatMessageJson.optString(CONTENT_FIELD, "");
+                    final String timestampStr = chatMessageJson.optString(TIMESTAMP_FIELD, null);
+                    final LocalDateTime timestamp;
+                    if (timestampStr != null) {
+                        timestamp = LocalDateTime.parse(timestampStr);
+                    }
+                    else {
+                        timestamp = LocalDateTime.now();
+                    }
                     final ChatMessage chatMessage = new ChatMessage(role, content, timestamp);
                     chatHistory.add(chatMessage);
                 }
                 else if (chatItem instanceof String) {
                     // The chat item is a String, create ChatMessage with default values
                     final String content = (String) chatItem;
-                    final ChatMessage chatMessage = new ChatMessage("unknown", content, LocalDateTime.now());
+                    final ChatMessage chatMessage = new ChatMessage(UNKNOWN_FIELD, content, LocalDateTime.now());
                     chatHistory.add(chatMessage);
                 }
             }
@@ -415,7 +425,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return pitches;
     }
 
-    protected JSONObject detailedTargetAudienceMapToJson(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
+    protected JSONObject detailedTargetAudienceMapToJson(
+            Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
         final JSONObject detailedTargetAudienceMapJson = new JSONObject();
         for (Map.Entry<String, DetailedTargetAudience> entry : detailedTargetAudienceMap.entrySet()) {
             final DetailedTargetAudience detailedTargetAudience = entry.getValue();
@@ -528,9 +539,9 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final JSONArray chatHistoryArray = new JSONArray();
         for (ChatMessage message : persona.getChatHistory()) {
             final JSONObject messageJson = new JSONObject();
-            messageJson.put("role", message.getRole());
-            messageJson.put("content", message.getContent());
-            messageJson.put("timestamp", message.getTimestamp().toString());
+            messageJson.put(ROLE_FIELD, message.getRole());
+            messageJson.put(CONTENT_FIELD, message.getContent());
+            messageJson.put(TIMESTAMP_FIELD, message.getTimestamp().toString());
             chatHistoryArray.put(messageJson);
         }
         personaJson.put(CHATHISTORY_FIELD, chatHistoryArray);
@@ -567,16 +578,22 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final Object chatItem = chatHistoryArray.get(i);
                 if (chatItem instanceof JSONObject) {
                     final JSONObject chatMessageJson = (JSONObject) chatItem;
-                    final String role = chatMessageJson.optString("role", "unknown");
-                    final String content = chatMessageJson.optString("content", "");
-                    final String timestampStr = chatMessageJson.optString("timestamp", null);
-                    final LocalDateTime timestamp = timestampStr != null ? LocalDateTime.parse(timestampStr) : LocalDateTime.now();
+                    final String role = chatMessageJson.optString(ROLE_FIELD, UNKNOWN_FIELD);
+                    final String content = chatMessageJson.optString(CONTENT_FIELD, "");
+                    final String timestampStr = chatMessageJson.optString(TIMESTAMP_FIELD, null);
+                    final LocalDateTime timestamp;
+                    if (timestampStr != null) {
+                        timestamp = LocalDateTime.parse(timestampStr);
+                    }
+                    else {
+                        timestamp = LocalDateTime.now();
+                    }
                     final ChatMessage chatMessage = new ChatMessage(role, content, timestamp);
                     chatHistory.add(chatMessage);
                 }
                 else if (chatItem instanceof String) {
                     final String content = (String) chatItem;
-                    final ChatMessage chatMessage = new ChatMessage("unknown", content, LocalDateTime.now());
+                    final ChatMessage chatMessage = new ChatMessage(UNKNOWN_FIELD, content, LocalDateTime.now());
                     chatHistory.add(chatMessage);
                 }
             }

@@ -3,6 +3,9 @@ package use_case.persona;
 import entity.Persona;
 import entity.Pitch;
 
+/**
+ * The output data for presenting the persona chat.
+ */
 public class PersonaOutputData {
 
     private final String username;
