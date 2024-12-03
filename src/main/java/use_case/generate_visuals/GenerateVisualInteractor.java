@@ -2,7 +2,9 @@ package use_case.generate_visuals;
 
 import data_access.VisualDataAccessObject;
 import entity.Visual;
+import use_case.chat_persona.ChatPersonaOutputData;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +36,7 @@ public class GenerateVisualInteractor implements GenerateVisualInputBoundary {
      */
 
     public void execute(GenerateVisualInputData inputData) {
+
         try {
             System.out.println("Interactor execution started with prompt: " + inputData.getPrompt());
             // Generate the visual prompt

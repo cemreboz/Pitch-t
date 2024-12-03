@@ -603,7 +603,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addVisionUseCase() {
-        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel,
+                viewManagerModel);
         final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject(),
                 userDataAccessObject,
