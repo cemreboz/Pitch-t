@@ -66,7 +66,8 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
-            ((DBUser) userDataAccessObject.getCurrentUser()).addPitch(newPitch);
+            final DBUser tempuser = (DBUser) userDataAccessObject.getCurrentUser();
+            tempuser.addPitch(newPitch);
         }
 
         final CreateNewPitchOutputData createNewPitchOutputData = new CreateNewPitchOutputData(false,

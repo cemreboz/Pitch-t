@@ -32,6 +32,8 @@ import interface_adapter.vision.VisionState;
  */
 public class HamburgerMenu extends JPanel {
 
+    private static final String ERROR_FIELD = "error";
+
     private LoginController loginController;
     private AccountSettingsController accountSettingsController;
     private ExpertController expertController;
@@ -89,7 +91,7 @@ public class HamburgerMenu extends JPanel {
                     loginController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
-                    JOptionPane.showMessageDialog(dashboardItem, "error");
+                    JOptionPane.showMessageDialog(dashboardItem, ERROR_FIELD);
                 }
             }
         });
@@ -123,7 +125,7 @@ public class HamburgerMenu extends JPanel {
                     newPitchController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
-                    JOptionPane.showMessageDialog(newPitchItem, "error");
+                    JOptionPane.showMessageDialog(newPitchItem, ERROR_FIELD);
                 }
             }
         });
@@ -157,7 +159,7 @@ public class HamburgerMenu extends JPanel {
                     expertController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
-                    JOptionPane.showMessageDialog(expertsItem, "error");
+                    JOptionPane.showMessageDialog(expertsItem, ERROR_FIELD);
                 }
             }
         });
@@ -191,7 +193,7 @@ public class HamburgerMenu extends JPanel {
                     accountSettingsController.execute(currentState.getUsername(), currentState.getPassword());
                 }
                 else {
-                    JOptionPane.showMessageDialog(accountSettingsItem, "error");
+                    JOptionPane.showMessageDialog(accountSettingsItem, ERROR_FIELD);
                 }
             }
         });

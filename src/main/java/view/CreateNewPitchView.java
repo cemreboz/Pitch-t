@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import interface_adapter.create_pitch.CreateNewPitchController;
 import interface_adapter.create_pitch.CreateNewPitchState;
 import interface_adapter.create_pitch.CreateNewPitchViewModel;
+import interface_adapter.login.LoginController;
 
 /**
  * The view for creating a new pitch.
@@ -30,6 +31,7 @@ public class CreateNewPitchView extends JPanel implements PropertyChangeListener
     private final String viewName = "new pitch";
     private final CreateNewPitchViewModel newPitchViewModel;
     private CreateNewPitchController createNewPitchController;
+    private LoginController loginController;
 
     private final JTextField nameField;
     private final JTextArea descriptionArea;
@@ -137,6 +139,8 @@ public class CreateNewPitchView extends JPanel implements PropertyChangeListener
         descriptionArea.setText("");
         imageField.setText("");
 
+        loginController.execute(newPitchViewModel.getState().getCurrentUser().getName(),
+                newPitchViewModel.getState().getCurrentUser().getName());
         // Optionally, close the view or navigate elsewhere
         // For example, calling a method to switch back to the DashboardView
     }
@@ -169,5 +173,13 @@ public class CreateNewPitchView extends JPanel implements PropertyChangeListener
      */
     public void setCreateNewPitchController(CreateNewPitchController createNewPitchController) {
         this.createNewPitchController = createNewPitchController;
+    }
+
+    /**
+     * Method to set the login view controller.
+     * @param loginController new pitch controller
+     */
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 }
