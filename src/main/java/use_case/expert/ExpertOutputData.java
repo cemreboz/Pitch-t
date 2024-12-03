@@ -1,6 +1,5 @@
 package use_case.expert;
 
-
 /**
  * Output data for the Expert use case.
  */

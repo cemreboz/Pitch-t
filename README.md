@@ -1,35 +1,60 @@
-# Pitch !t Blueprint
+# 📦 My Package
 
-## Domain
-An AI-powered platform designed for entrepreneurs and business professionals to receive feedback on their products, 
-pitches, and advertisements by interacting with simulated personas representing target audiences or specific individuals.
-
-## Software Specification
-The purpose of Pitch!t is to help users refine their business ideas and marketing strategies by engaging in real-time 
-dialogues with AI-generated personas. Users can create custom personas or select from a library of predefined ones to 
-simulate conversations with their target audience. The platform leverages the GPT-4 API to provide context-aware 
-feedback on products, pitches, and even visual advertisements through file submissions. This interactive experience 
-aims to assist users in improving their offerings by understanding how different audiences might perceive them.
+Repository: https://github.com/cemreboz/Pitch-t
 
 
-## User stories
-- Samantha has created a product that she wants to sell. Samantha opens the program and creates a new 
-‘persona’ with the general characteristics of her target audience. She can then converse with this persona to receive 
-feedback on her product. [Team Story]
 
-- Samantha logs out, and wants to check what she previously worked on, and when she logs back in, she can check the 
-chat history to see each of her pitches and how each persona reacts to them. [Allan]
+## 🌟 Highlights
 
-- Samantha wonders about who would be interested in the product she wants to sell. She can get specific target 
-audience(s) based on the information she gives about her product. [Rainy]
+- Team Story: Generate and interact with AI-powered personas tailored to specific target audiences.
+- User Story #1: Save and review session histories for iteration and improvement.
+- User Story #2: Get contextual, real-time feedback on product ideas, pitches, and ads from experts.
+- User Story #3: Compare personas to identify the best fit for your envisioned audience.
+- User Story #4: Get detailed information on which audiences would be targeted by your pitch.
+- User Story #5: Generate visuals for your products for AI analysis and feedback.
 
-- Samantha wants to know which persona would fit better with her envisioned target audience. She can compare two 
-different personas to see which one would be a better fit for her envisioned target audience. [Viktor]
 
-- Samantha is a fan of the famous TV Show Shark Tank, and she wonders if Mark Cuban would be interested in her 
-product. She decides to search through the library of available personas, selects the Mark Cuban one, and pitches 
-her product. [Jad]
 
-- Samantha wants to know if the AD for her product will be appealing to her target audience. She uses the 
-“Vision” feature to upload the visual for her AD to the persona’s chat, and gets feedback on it. [Cemre]
- 
+## ℹ️ Overview
+
+Pitch!t is an AI-powered platform designed to help entrepreneurs, marketers, and business professionals refine
+their ideas and strategies by simulating conversations with AI personas. Whether you're testing a product idea,
+pitching a business, or gauging the impact of a marketing campaign, Pitch!t helps you gain valuable insights from
+personas crafted to reflect your target audience. We created this platform to empower aspiring entrepreneurs to better
+understand their customers, validate their ideas, and refine their pitches — all with the help of cutting-edge AI.
+
+
+## ✍️ Authors
+
+This project was created by Team Pitch!t as part of Group #159.
+
+- Allan - https://github.com/just2ghosts
+- Rainy - https://github.com/rainycore
+- Viktor - https://github.com/vdomash
+- Jad - https://github.com/lebgdecasa
+- Cemre - https://github.com/cemreboz
+
+
+## 🚀 Usage
+
+*Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
+
+```py
+>>> import mypackage
+>>> mypackage.do_stuff()
+'Oh yeah!'
+```
+**This will be completed after the whole program is implemented.**
+
+
+## ⬇️ Installation
+
+No installation steps required.
+
+
+## 💭 Feedback and Contributing
+
+Here's the link to our repository: https://github.com/cemreboz/Pitch-t
+
+You can take a look at the commits, pull requests, and code reviews done by our team members. 
+

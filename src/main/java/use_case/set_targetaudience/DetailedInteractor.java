@@ -80,69 +80,72 @@ public class DetailedInteractor implements DetailedInputBoundary {
 
     }
 
+    /**
+     * Parses the output of the API call.
+     * @param response what the API call returns.
+     * @return the parsed response of the API call.
+     * @throws IllegalArgumentException if the argument is invalid.
+     */
     private List<DetailedTargetAudience> parseDetailedTargetAudience(String response) {
         final List<DetailedTargetAudience> audienceList = new ArrayList<>();
 
         try {
-            final JSONObject jsonResponse = new JSONObject(response);
+            // Trim the response
+            final String trimmedResponse = response.trim();
+            final JSONObject jsonResponse = new JSONObject(trimmedResponse);
 
-            if (!jsonResponse.has("detailedTargetAudiences")) {
-                throw new IllegalArgumentException("JSON response does not contain 'detailedTargetAudiences'.");
+            // Directly parse the attributes
+            final String name = jsonResponse.optString("Name", "unknown Audience");
+            final DetailedTargetAudience audience = new DetailedTargetAudience(name);
+
+            // Handle demographic attributes
+            final JSONObject demographicAttributes = jsonResponse.optJSONObject("DemographicAttributes");
+            if (demographicAttributes != null) {
+                audience.setMinAge(demographicAttributes.optInt("MinAge", 0));
+                audience.setMaxAge(demographicAttributes.optInt("MaxAge", 0));
+                audience.setGender(demographicAttributes.optString("Gender", "unknown"));
+                audience.setEducationLevel(demographicAttributes.optString("EducationLevel", "unknown"));
+                audience.setOccupation(demographicAttributes.optString("Occupation", "unknown"));
+                audience.setIncomeLevel(demographicAttributes.optString("IncomeLevel", "unknown"));
+                audience.setGeographicLocation(demographicAttributes.optString("GeographicLocation", "unknown"));
             }
 
-            final JSONArray audienceArray = jsonResponse.getJSONArray("detailedTargetAudiences");
-
-            for (int i = 0; i < audienceArray.length(); i++) {
-                final JSONObject audienceJson = audienceArray.getJSONObject(i);
-
-                final String name = audienceJson.optString("Name", "unknown Audience");
-
-                final DetailedTargetAudience audience = new DetailedTargetAudience(name);
-
-                // Handle demographic attributes
-                final JSONObject demographicAttributes = audienceJson.optJSONObject("DemographicAttributes");
-                if (demographicAttributes != null) {
-                    audience.setMinAge(demographicAttributes.optInt("MinAge", 0));
-                    audience.setMaxAge(demographicAttributes.optInt("MaxAge", 0));
-                    final String unknown = "unknown";
-                    audience.setGender(demographicAttributes.optString("Gender", unknown));
-                    audience.setEducationLevel(demographicAttributes.optString("EducationLevel", unknown));
-                    audience.setOccupation(demographicAttributes.optString("Occupation", unknown));
-                    audience.setIncomeLevel(demographicAttributes.optString("IncomeLevel", unknown));
-                    audience.setGeographicLocation(demographicAttributes.optString("GeographicLocation", unknown));
-                }
-
-                final JSONObject psychographicAttributes = audienceJson
-                        .getJSONObject("PsychographicAttributes");
+            // Handle psychographic attributes
+            final JSONObject psychographicAttributes = jsonResponse.optJSONObject("PsychographicAttributes");
+            if (psychographicAttributes != null) {
                 audience.setInterestsAndPassions(jsonArrayToList(psychographicAttributes
-                        .getJSONArray("InterestsAndPassions")));
-                audience.setValues(jsonArrayToList(psychographicAttributes.getJSONArray("Values")));
+                        .optJSONArray("InterestsAndPassions")));
+                audience.setValues(jsonArrayToList(psychographicAttributes.optJSONArray("Values")));
                 audience.setPersonalityTraits(jsonArrayToList(psychographicAttributes
-                        .getJSONArray("PersonalityTraits")));
-                audience.setLifestyle(psychographicAttributes.getString("Lifestyle"));
-
-                final JSONObject behavioralAttributes = audienceJson.getJSONObject("BehavioralAttributes");
-                audience.setEarlyAdopter(behavioralAttributes.getBoolean("IsEarlyAdopter"));
-                audience.setTechSavviness(behavioralAttributes.getString("TechSavviness"));
-                audience.setGadgetOwnership(jsonArrayToList(behavioralAttributes
-                        .getJSONArray("GadgetOwnership")));
-                audience.setMediaConsumption(jsonArrayToList(behavioralAttributes
-                        .getJSONArray("MediaConsumption")));
-                audience.setOnlineEngagement(jsonArrayToList(behavioralAttributes
-                        .getJSONArray("OnlineEngagement")));
-                audience.setInfluencer(behavioralAttributes.getBoolean("IsInfluencer"));
-
-                final JSONObject otherAttributes = audienceJson.getJSONObject("OtherAttributes");
-                audience.setEventParticipation(jsonArrayToList(otherAttributes
-                        .getJSONArray("EventParticipation")));
-                audience.setHobbies(jsonArrayToList(otherAttributes.getJSONArray("Hobbies")));
-                audience.setBrandAffinity(jsonArrayToList(otherAttributes.getJSONArray("BrandAffinity")));
-                audience.setEnvironmentalConcerns(otherAttributes.getBoolean("EnvironmentalConcerns"));
-                audience.setGlobalPerspective(otherAttributes.getBoolean("GlobalPerspective"));
-                audience.setMultilingualAbilities(otherAttributes.getBoolean("MultilingualAbilities"));
-
-                audienceList.add(audience);
+                        .optJSONArray("PersonalityTraits")));
+                audience.setLifestyle(psychographicAttributes.optString("Lifestyle", "unknown"));
             }
+
+            // Handle behavioral attributes
+            final JSONObject behavioralAttributes = jsonResponse.optJSONObject("BehavioralAttributes");
+            if (behavioralAttributes != null) {
+                audience.setEarlyAdopter(behavioralAttributes.optBoolean("IsEarlyAdopter", false));
+                audience.setTechSavviness(behavioralAttributes.optString("TechSavviness", "unknown"));
+                audience.setGadgetOwnership(jsonArrayToList(behavioralAttributes.optJSONArray("GadgetOwnership")));
+                audience.setMediaConsumption(jsonArrayToList(behavioralAttributes.optJSONArray("MediaConsumption")));
+                audience.setOnlineEngagement(jsonArrayToList(behavioralAttributes.optJSONArray("OnlineEngagement")));
+                audience.setInfluencer(behavioralAttributes.optBoolean("IsInfluencer", false));
+            }
+
+            // Handle other attributes
+            final JSONObject otherAttributes = jsonResponse.optJSONObject("OtherAttributes");
+            if (otherAttributes != null) {
+                audience.setEventParticipation(jsonArrayToList(otherAttributes.optJSONArray("EventParticipation")));
+                audience.setHobbies(jsonArrayToList(otherAttributes.optJSONArray("Hobbies")));
+                audience.setBrandAffinity(jsonArrayToList(otherAttributes.optJSONArray("BrandAffinity")));
+                audience.setEnvironmentalConcerns(otherAttributes.optBoolean("EnvironmentalConcerns", false));
+                audience.setGlobalPerspective(otherAttributes.optBoolean("GlobalPerspective", false));
+                audience.setMultilingualAbilities(otherAttributes.optBoolean("MultilingualAbilities", false));
+            }
+
+            // Add the parsed audience to the list
+            audienceList.add(audience);
+
         }
         catch (JSONException exception) {
             throw new IllegalArgumentException("Error parsing DetailedTargetAudience JSON response: "

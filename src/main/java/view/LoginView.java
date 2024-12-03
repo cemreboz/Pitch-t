@@ -1,17 +1,14 @@
 package view;
 
-import java.awt.Component;
+// Too many jswing elements to import at once
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+// Too many jswing elements to import at once
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -23,37 +20,56 @@ import interface_adapter.login.LoginViewModel;
  * The View for when the user is logging into the program.
  */
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
-
     private final String viewName = "log in";
-    private final LoginViewModel loginViewModel;
 
+    private final LoginViewModel loginViewModel;
+    private LoginController loginController;
+
+    // Input elements
     private final JTextField usernameInputField = new JTextField(15);
     private final JLabel usernameErrorField = new JLabel();
-
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JLabel passwordErrorField = new JLabel();
 
+    // UI Elements
     private final JButton logIn;
     private final JButton cancel;
-    private LoginController loginController;
+    private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
 
     public LoginView(LoginViewModel loginViewModel) {
-
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Login Screen");
+        // Title
+        final JLabel title = new JLabel(LoginViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial", Font.BOLD, LoginViewModel.TITLE_FONT));
 
+        // Logo
+        final JLabel logo = new JLabel(logoIcon);
+        logo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Input fields
         final LabelTextPanel usernameInfo = new LabelTextPanel(
                 new JLabel("Username"), usernameInputField);
+        usernameInfo.setBackground(Color.WHITE);
+
         final LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel("Password"), passwordInputField);
+        passwordInfo.setBackground(Color.WHITE);
 
+        // Buttons
         final JPanel buttons = new JPanel();
-        logIn = new JButton("log in");
+        logIn = new JButton("Log in");
+        cancel = new JButton("Cancel");
+        final Dimension buttonSize = new Dimension(
+                LoginViewModel.DEFUALT_WIDTH,
+                LoginViewModel.DEFUALT_HEIGHT
+        );
+        logIn.setPreferredSize(buttonSize);
+        cancel.setPreferredSize(buttonSize);
+        buttons.setBackground(Color.WHITE);
         buttons.add(logIn);
-        cancel = new JButton("cancel");
         buttons.add(cancel);
 
         logIn.addActionListener(
@@ -129,7 +145,12 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
             }
         });
 
+        // Construct Panel
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBackground(Color.WHITE);
+        this.add(logo);
         this.add(title);
+        this.add(Box.createVerticalStrut(LoginViewModel.DEFUALT_HEIGHT));
         this.add(usernameInfo);
         this.add(usernameErrorField);
         this.add(passwordInfo);

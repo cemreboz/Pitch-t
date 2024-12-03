@@ -7,18 +7,14 @@ import use_case.compare_personas.ComparePersonasInputData;
  * Controller for the Compare Personas Use Case.
  */
 public class ComparePersonasController {
-    private final ComparePersonasInputBoundary inputBoundary;
 
-    public ComparePersonasController(ComparePersonasInputBoundary inputBoundary) {
-        this.inputBoundary = inputBoundary;
+    private final ComparePersonasInputBoundary interactor;
+
+    public ComparePersonasController(ComparePersonasInputBoundary interactor) {
+        this.interactor = interactor;
     }
 
-    /**
-     * Executes the compare personas use case.
-     *
-     * @param inputData the input data containing personas to be compared
-     */
-    public void compare(ComparePersonasInputData inputData) {
-        inputBoundary.execute(inputData);
+    public void comparePersonas(ComparePersonasInputData inputData) {
+        interactor.execute(inputData);
     }
 }

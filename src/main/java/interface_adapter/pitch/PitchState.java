@@ -2,19 +2,13 @@ package interface_adapter.pitch;
 
 import java.util.ArrayList;
 
-import data_access.ChatgptDataAccessObject;
 import entity.Pitch;
-import interface_adapter.targetaudience.TargetAudiencePresenter;
-import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
-import use_case.set_targetaudience.TargetAudienceInputData;
-import use_case.set_targetaudience.TargetAudienceInteractor;
-import use_case.set_targetaudience.TargetAudienceOutputBoundary;
 
 /**
  * The state for the pitch view model.
  */
 public class PitchState {
-    private Pitch pitch = new Pitch("", "", "", "", "");
+    private Pitch pitch = new Pitch("", "", "", "", new ArrayList<>());
     private String username = "";
     private String password = "";
     private String pitchLoadError;

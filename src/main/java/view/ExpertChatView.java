@@ -1,20 +1,35 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
 import entity.ChatMessage;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.expert.ExpertController;
-import interface_adapter.expert.ExpertState;
 import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.login.LoginController;
-import interface_adapter.new_pitch.NewPitchController;
-
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.time.format.DateTimeFormatter;
+import interface_adapter.new_pitch.ShowNewPitchController;
 
 /**
  * Unified view for selecting an expert and chatting.
@@ -138,7 +153,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         }
 
         final JScrollPane expertScrollPane = new JScrollPane(expertListPanel);
-        expertScrollPane.setPreferredSize(new Dimension(200, 0));
+        expertScrollPane.setPreferredSize(new Dimension(280, 0));
         add(expertScrollPane, BorderLayout.WEST);
     }
 
@@ -187,12 +202,14 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
                 chatExpertController.startChat(selectedExpertId, userMessage);
                 updateChatArea();
                 messageInput.setText("");
-            } else {
+            }
+            else {
                 JOptionPane.showMessageDialog(this, "Please select an expert before sending a message.",
                         "No Expert Selected", JOptionPane.WARNING_MESSAGE);
             }
         }
-        messageInput.requestFocusInWindow(); // Set focus back to the input field
+        messageInput.requestFocusInWindow();
+        // Set focus back to the input field
     }
 
     /**
@@ -311,7 +328,8 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
      *
      * @param newPitchController new pitch controller
      */
-    public void setNewPitchController(NewPitchController newPitchController) {
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
+
 }

@@ -8,7 +8,7 @@ import interface_adapter.ViewModel;
 public class ComparePersonasViewModel extends ViewModel<ComparePersonasState> {
 
     public ComparePersonasViewModel() {
-        super("compare personas");
+        super("persona comparison");
         setState(new ComparePersonasState());
     }
 }
