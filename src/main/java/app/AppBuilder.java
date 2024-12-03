@@ -551,10 +551,12 @@ public class AppBuilder {
 
         final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
         final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
-                detailedOutputBoundary);
+                detailedOutputBoundary, userDataAccessObject);
         final DetailedController detailedController = new DetailedController(detailedInteractor);
 
         detailedView.setController(detailedController);
+        pitchView.setDetailedController(detailedController);
+
         return this;
     }
 

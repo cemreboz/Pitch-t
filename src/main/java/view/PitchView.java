@@ -9,14 +9,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import entity.Pitch;
 import interface_adapter.ViewManagerModel;
@@ -26,7 +19,10 @@ import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.targetaudience.DetailedController;
+import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
+import use_case.set_targetaudience.DetailedInputData;
 
 /**
  * The view for when a user wants to view the details of a specific pitch.
@@ -42,11 +38,14 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     private final int hundred = 100;
     private final int threeHundred = 300;
     private final int thousand = 1000;
+    private final int fourHundred = 400;
+    private final int sixHundred = 600;
 
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private JPanel namePanel;
     private ViewPersonasController viewPersonasController;
-
+    private DetailedController detailedController;
+    private JComboBox<String> audienceDropdown;
     private ExpertController expertController;
 
     public PitchView(PitchViewModel pitchViewModel, ViewManagerModel viewManagerModel) {
@@ -79,6 +78,63 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         });
 
         this.add(viewPersonasButton);
+
+        final JButton viewTargetAudienceButton = new JButton("View Detailed Target Audience");
+        viewTargetAudienceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    handleViewTargetAudienceButton();
+                }
+                catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        this.add(viewTargetAudienceButton);
+    }
+
+    private void handleViewTargetAudienceButton() throws Exception {
+        final PitchState pitchState = pitchViewModel.getState();
+        final Pitch pitch = pitchState.getPitch();
+
+        if (pitch == null) {
+            // Handle error scenario - pitch not loaded properly
+            final String error = pitchState.getPitchLoadError();
+            JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Get the selected target audience category from the JComboBox
+            final String selectedAudienceCategory = (String) audienceDropdown.getSelectedItem();
+
+            if (selectedAudienceCategory == null || selectedAudienceCategory.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please select a target audience category.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            } else {
+                // Create DetailedInputData with the selected audience category
+                final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(), selectedAudienceCategory);
+                if (detailedController != null) {
+                    // Generate the detailed target audience data
+                    detailedController.generateDetailed(inputData);
+
+                    // Assuming detailedController correctly updates the ViewModel
+                    // Create an instance of DetailedView and display it in a pop-up
+                    SwingUtilities.invokeLater(() -> showDetailedViewPopup());
+                }
+            }
+        }
+    }
+
+    private void showDetailedViewPopup() {
+        // Create an instance of DetailedView
+        DetailedTargetAudiencePageViewModel detailedViewModel = new DetailedTargetAudiencePageViewModel();
+        DetailedView detailedView = new DetailedView(detailedViewModel);
+        detailedView.setController(detailedController);
+
+        // Create a dialog to wrap the DetailedView
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Detailed Target Audience", true);
+        dialog.getContentPane().add(detailedView);
+        dialog.setSize(sixHundred, fourHundred);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
@@ -169,13 +225,12 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             final JPanel audiencePanel = new JPanel();
             audiencePanel.setLayout(new BoxLayout(audiencePanel, BoxLayout.Y_AXIS));
             audiencePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Target Audiences"));
-            final JComboBox<String> audienceDropdown = new JComboBox<>(state.getPitch()
-                    .getTargetAudienceList().toArray(new String[0]));
 
+            // Create a JComboBox for the target audiences
+            audienceDropdown = new JComboBox<>(state.getPitch().getTargetAudienceList().toArray(new String[0]));
             audiencePanel.add(new JLabel("Select Audience:"));
             audiencePanel.add(audienceDropdown);
             namePanel.add(audiencePanel);
-
         }
 
         namePanel.revalidate();
@@ -238,6 +293,10 @@ public class PitchView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    public void setDetailedController(DetailedController controller) {
+        this.detailedController = controller;
     }
 
 }

@@ -13,8 +13,4 @@ public class TargetAudienceOuputData {
     public String getTargetAudience() {
         return targetAudience;
     }
-
-    public void setTargetAudience(String targetAudience) {
-        this.targetAudience = targetAudience;
-    }
 }

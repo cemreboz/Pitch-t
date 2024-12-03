@@ -44,8 +44,9 @@ public class TargetAudienceInteractor implements TargetAudienceInputBoundary {
         }
         catch (JSONException exception) {
             outputBoundary.prepareFailView("Error with getting the Detailed Target Audience");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
         return response;
     }

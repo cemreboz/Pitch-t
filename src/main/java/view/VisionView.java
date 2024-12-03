@@ -218,6 +218,3 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
 }
-
-
-
