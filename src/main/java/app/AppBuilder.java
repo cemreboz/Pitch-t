@@ -404,6 +404,7 @@ public class AppBuilder {
         expertChatView.setLoginController(loginController);
         personaChatView.setLoginController(loginController);
         visionView.setLoginController(loginController);
+        createNewPitchView.setLoginController(loginController);
         return this;
     }
 
