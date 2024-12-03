@@ -4,6 +4,8 @@ import entity.DBUser;
 import entity.Persona;
 import entity.Pitch;
 import entity.Visual;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.ViewModel;
 import interface_adapter.vision.VisionPresenter;
 import view.VisionView;
 import interface_adapter.vision.VisionController;
@@ -37,6 +39,7 @@ public class VisionTest {
 
         // Create ViewModel, Presenter, and Interactor
         VisionViewModel visionViewModel = new VisionViewModel();
+        ViewManagerModel viewManagerModel = new ViewManagerModel();
         VisionPresenter visionPresenter = new VisionPresenter(visionViewModel);
 
         DBUser mockUser = new DBUser("testUser", "testPassword");
@@ -70,7 +73,7 @@ public class VisionTest {
         VisionController visionController = new VisionController(generateVisualInteractor);
 
         // Create and initialize the VisionView
-        VisionView visionView = new VisionView(visionViewModel);
+        VisionView visionView = new VisionView(visionViewModel, viewManagerModel);
         visionView.setPersonaAndPitch(mockPersona, mockPitch);
         visionView.setVisionController(visionController);
 

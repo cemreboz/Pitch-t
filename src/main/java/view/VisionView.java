@@ -1,8 +1,13 @@
 package view;
 
+import entity.ChatMessage;
 import entity.Persona;
 import entity.Pitch;
+import entity.Visual;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.chat_persona.ChatPersonaController;
+import interface_adapter.chat_vision.ChatVisionController;
 import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
@@ -13,6 +18,7 @@ import interface_adapter.vision.VisionViewModel;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.*;
 
@@ -25,30 +31,37 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private final VisionViewModel visionViewModel;
     private Persona persona;
     private Pitch pitch;
+    private Visual visual;
     private VisionController controller;
+    private final ViewManagerModel viewManagerModel;
+    private ChatVisionController chatVisionController;
 
     private JLabel adLabel;
-    private JTextArea chatTextArea;
-    private JTextField messageField;
     private HamburgerMenu hamburgerMenu;
+    private JTextField messageInput;
+    private JTextArea chatArea;
 
-    public VisionView(VisionViewModel viewModel) {
+    public VisionView(VisionViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.visionViewModel = viewModel;
+        this.visionViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
 
-        initializeUserInterface();
-        attachViewModelListeners();
-    }
-
-    private void initializeUserInterface() {
-        setSize(800, 600);
         setLayout(new BorderLayout());
 
-        // Header Panel
+        // Build the header
+        buildHeader();
+
+        // Build the main content area
+        buildMainContent();
+    }
+
+    private void buildHeader() {
+        setSize(800, 600);
+
         final JPanel headerPanel = new JPanel(new BorderLayout());
-        final JLabel headerLabel = new JLabel("Vision for Persona", SwingConstants.CENTER);
+        final JLabel headerLabel = new JLabel("Vision for Chosen Persona", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
-        add(headerPanel, BorderLayout.NORTH);
 
         // Left side: Hamburger menu and logo
         hamburgerMenu = createHamburgerMenu();
@@ -61,41 +74,109 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         headerPanel.add(logoPanel, BorderLayout.WEST);
 
-        // Center Panel
-        final JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        final JPanel adPanel = new JPanel(new BorderLayout());
-        adPanel.setBorder(BorderFactory.createTitledBorder("Generated Visual"));
-        adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
-        adLabel.setFont(new Font("Arial", Font.ITALIC, 16));
-        adPanel.add(adLabel, BorderLayout.CENTER);
-        centerPanel.add(adPanel);
-
-        final JPanel chatPanel = new JPanel(new BorderLayout());
-        chatPanel.setBorder(BorderFactory.createTitledBorder("Chat with Persona"));
-        chatTextArea = new JTextArea();
-        chatTextArea.setEditable(false);
-        chatTextArea.setLineWrap(true);
-        chatTextArea.setWrapStyleWord(true);
-
-        final JScrollPane chatScrollPane = new JScrollPane(chatTextArea);
-        chatPanel.add(chatScrollPane, BorderLayout.CENTER);
-        messageField = new JTextField();
-        chatPanel.add(messageField, BorderLayout.SOUTH);
-        centerPanel.add(chatPanel);
-
-        add(centerPanel, BorderLayout.CENTER);
-
-        // Footer Panel
-        final JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        final JButton regenerateButton = new JButton("Regenerate Visual");
-        regenerateButton.addActionListener(e -> regenerateVisual());
-        footerPanel.add(regenerateButton);
-
-        add(footerPanel, BorderLayout.SOUTH);
+        add(headerPanel, BorderLayout.NORTH);
     }
 
-    private void attachViewModelListeners() {
-        visionViewModel.addPropertyChangeListener(this);
+    private void buildMainContent() {
+        // Main content panel with two columns (visionPanel and chatPanel)
+        final JPanel mainContent = new JPanel(new GridLayout(1, 2, 10, 10));
+
+        // Vision Panel
+        final JPanel visionPanel = buildVisionPanel();
+        mainContent.add(visionPanel);
+
+        // Chat Panel
+        final JPanel chatPanel = buildChatPanel();
+        mainContent.add(chatPanel);
+
+        // Add main content to the center of the layout
+        add(mainContent, BorderLayout.CENTER);
+    }
+
+    private JPanel buildVisionPanel() {
+        final JPanel visionPanel = new JPanel(new BorderLayout());
+        visionPanel.setBorder(BorderFactory.createTitledBorder("Generated Visual"));
+
+        adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
+        adLabel.setFont(new Font("Arial", Font.ITALIC, 16));
+
+        final JButton regenerateButton = new JButton("Regenerate Visual");
+        regenerateButton.addActionListener(e -> regenerateVisual());
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(regenerateButton);
+        visionPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        visionPanel.add(adLabel, BorderLayout.CENTER);
+
+        return visionPanel;
+    }
+
+    private JPanel buildChatPanel() {
+        final JPanel chatPanel = new JPanel(new BorderLayout());
+        chatPanel.setBorder(BorderFactory.createTitledBorder("Chat with Persona"));
+
+        // Chat area
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        chatArea.setLineWrap(true);
+        chatArea.setWrapStyleWord(true);
+        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        final JScrollPane chatScrollPane = new JScrollPane(chatArea);
+        chatPanel.add(chatScrollPane, BorderLayout.CENTER);
+
+        // Message input area
+        buildMessageInputArea(chatPanel);
+
+        return chatPanel;
+    }
+
+    private void buildMessageInputArea(JPanel chatPanel) {
+        // Footer Panel: Chat Bar
+        final JPanel footerPanel = new JPanel(new BorderLayout());
+        messageInput = new JTextField();
+        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        // Allow sending message with Enter key
+        messageInput.addActionListener(event -> sendMessage());
+
+        final JButton sendButton = new JButton("Send");
+        sendButton.addActionListener(event -> sendMessage());
+
+        footerPanel.add(messageInput, BorderLayout.CENTER);
+        footerPanel.add(sendButton, BorderLayout.EAST);
+        chatPanel.add(footerPanel, BorderLayout.SOUTH);
+    }
+
+    private void sendMessage() {
+        final String userMessage = messageInput.getText().trim();
+        if (!userMessage.isEmpty()) {
+            if (persona != null && pitch != null && chatVisionController != null) {
+                // Call the chat controller to send the message
+                chatVisionController.startChat(userMessage, persona, pitch, visual);
+                updateChatArea();
+            }
+            messageInput.setText("");
+        }
+        messageInput.requestFocusInWindow();
+    }
+
+    private void updateChatArea() {
+        final StringBuilder chatContent = new StringBuilder();
+        for (ChatMessage message : visionViewModel.getState().getChatHistory()) {
+            final String sender;
+            if ("user".equals(message.getRole())) {
+                sender = "You";
+            } else {
+                sender = "System";
+            }
+            final String time = message.getTimestamp().format(DateTimeFormatter.ofPattern("hh:mm a"));
+            chatContent.append(sender)
+                    .append(" [").append(time).append("]: ")
+                    .append(message.getContent())
+                    .append("\n");
+        }
+        chatArea.setText(chatContent.toString());
     }
 
     private void generateInitialVisual() {
@@ -136,6 +217,10 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         }
     }
 
+    public void setVisual(Visual visual) {
+        this.visual = visual;
+    }
+
     public void setVisionController(VisionController controller) {
         this.controller = controller;
 
@@ -168,8 +253,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             adLabel.setIcon(new ImageIcon(image));
             adLabel.setText(null);
-        }
-        else {
+        } else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }
@@ -217,7 +301,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
+
+    public void setChatVisionController(ChatVisionController chatVisionController) {
+        this.chatVisionController = chatVisionController;
+    }
 }
-
-
-
