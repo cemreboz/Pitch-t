@@ -35,7 +35,6 @@ public class Main {
                 .addDashboardUseCase()
                 .addAccountSettingsUseCase()
                 .addVisionUseCase()
-                .addChatVisionUseCase()
                 .addPitchUseCase()
                 .addShowNewPitchUseCase()
                 .addCreateNewPitchUseCase()

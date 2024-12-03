@@ -1,9 +1,5 @@
 package interface_adapter.vision;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import entity.ChatMessage;
 import entity.Persona;
 import entity.Pitch;
 
@@ -19,8 +15,6 @@ public class VisionState {
     private String username;
     private String password;
     private boolean isSuccess;
-    private String visionResponse = "";
-    private List<ChatMessage> chatHistory = new ArrayList<>();
 
     // Getters and Setters
     public String getUsername() {
@@ -86,28 +80,5 @@ public class VisionState {
     public void setSuccess(boolean isSuccess) {
         this.isSuccess = isSuccess;
     }
-
-    public void setVisionResponse(String visionResponse) {
-        this.visionResponse = visionResponse;
-    }
-
-    /**
-     * Gets the chat history.
-     *
-     * @return The chat history.
-     */
-    public List<ChatMessage> getChatHistory() {
-        return chatHistory;
-    }
-
-    /**
-     * Sets the chat history.
-     *
-     * @param chatHistory The updated chat history.
-     */
-    public void setChatHistory(List<ChatMessage> chatHistory) {
-        this.chatHistory = chatHistory;
-    }
-
 }
 

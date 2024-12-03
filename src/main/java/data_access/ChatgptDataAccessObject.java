@@ -18,7 +18,6 @@ import app.PitchitManager;
 import entity.ChatMessage;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
 import use_case.chat_persona.ChatPersonaDataAccessInterface;
-import use_case.chat_vision.ChatVisionDataAccessInterface;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.set_targetaudience.DetailedtaDataAccessInterface;
 import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
@@ -32,7 +31,6 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ChatPersonaDataAccessInterface,
         ComparePersonasGptAccessInterface,
         TargetAudienceDataAccessInterface,
-        ChatVisionDataAccessInterface,
         ViewPersonasGptDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
