@@ -30,6 +30,8 @@ import interface_adapter.vision.VisionController;
 import use_case.compare_personas.ComparePersonasInputData;
 import use_case.generate_visuals.GenerateVisualInputData;
 
+import static java.lang.reflect.Array.get;
+
 /**
  * The View for listing personas and comparing them.
  */
@@ -143,7 +145,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
 
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt,
-                selectedPersonas.getFirst(),
+                selectedPersonas.get(0),
                 pitch);
         visionController.generateImage(inputData);
     }
