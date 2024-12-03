@@ -1,22 +1,22 @@
-package interface_adapter.new_pitch;
+package interface_adapter.create_pitch;
 
 import interface_adapter.ViewModel;
 
 /**
  * The ViewModel for the New Pitch View.
  */
-public class NewPitchViewModel extends ViewModel<NewPitchState> {
+public class CreateNewPitchViewModel extends ViewModel<CreateNewPitchState> {
 
-    public NewPitchViewModel() {
+    public CreateNewPitchViewModel() {
         super("new pitch");
-        setState(new NewPitchState());
+        setState(new CreateNewPitchState());
     }
 
     /**
      * Updates the view with the current state.
      * @param state the updated state.
      */
-    public void updateView(NewPitchState state) {
+    public void updateView(CreateNewPitchState state) {
         setState(state);
     }
 

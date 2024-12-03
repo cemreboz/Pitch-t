@@ -1,10 +1,8 @@
 package interface_adapter.chat_persona;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.expert.ExpertViewModel;
 import interface_adapter.persona.PersonaState;
 import interface_adapter.persona.PersonaViewModel;
-import use_case.chat_expert.ChatExpertOutputData;
 import use_case.chat_persona.ChatPersonaOutputBoundary;
 import use_case.chat_persona.ChatPersonaOutputData;
 

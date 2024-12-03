@@ -1,31 +1,40 @@
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import interface_adapter.create_pitch.CreateNewPitchController;
-import interface_adapter.new_pitch.NewPitchController;
-import interface_adapter.new_pitch.NewPitchViewModel;
-import interface_adapter.new_pitch.NewPitchState;
+import interface_adapter.create_pitch.CreateNewPitchState;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
+import interface_adapter.login.LoginController;
 
 /**
  * The view for creating a new pitch.
  */
-public class NewPitchView extends JPanel implements PropertyChangeListener {
+public class CreateNewPitchView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "new pitch";
-    private final NewPitchViewModel newPitchViewModel;
+    private final CreateNewPitchViewModel newPitchViewModel;
     private CreateNewPitchController createNewPitchController;
+    private LoginController loginController;
 
     private final JTextField nameField;
     private final JTextArea descriptionArea;
-    private final JTextField targetAudienceField;
     private final JTextField imageField;
     private final JButton saveButton;
     private final JButton cancelButton;
@@ -34,7 +43,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private static final int BUTTON_WIDTH = 150;
     private static final int BUTTON_HEIGHT = 40;
 
-    public NewPitchView(NewPitchViewModel newPitchViewModel) {
+    public CreateNewPitchView(CreateNewPitchViewModel newPitchViewModel) {
         this.newPitchViewModel = newPitchViewModel;
         this.newPitchViewModel.addPropertyChangeListener(this);
 
@@ -56,11 +65,6 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
         descriptionArea.setLineWrap(true);
         descriptionArea.setWrapStyleWord(true);
         JScrollPane descriptionScroll = new JScrollPane(descriptionArea);
-
-        // Target Audience Field
-        JLabel targetAudienceLabel = new JLabel("Target Audience:");
-        targetAudienceField = new JTextField();
-        targetAudienceField.setPreferredSize(new Dimension(FIELD_WIDTH, 30));
 
         // Image Field
         JLabel imageLabel = new JLabel("Image URL:");
@@ -86,9 +90,6 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
         add(Box.createVerticalStrut(10));
         add(descriptionLabel);
         add(descriptionScroll);
-        add(Box.createVerticalStrut(10));
-        add(targetAudienceLabel);
-        add(targetAudienceField);
         add(Box.createVerticalStrut(10));
         add(imageLabel);
         add(imageField);
@@ -124,12 +125,8 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void savePitch() throws Exception {
         String name = nameField.getText();
         String description = descriptionArea.getText();
-        String targetAudience = targetAudienceField.getText();
         String image = imageField.getText();
-        // TODO Rainy when you add your generating target audience you should be able to remove this field and parameter
-        // the target audience field should be removed from the view too but its their temporarily for IDk what reason
-        // viktor put it there
-        // i.e. the controller below shouldnt't need to take targetAudience, it should be generated in the interactor
+        String targetAudience = "";
 
         createNewPitchController.execute(name, description, image, targetAudience);
     }
@@ -140,9 +137,10 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     private void cancelPitch() {
         nameField.setText("");
         descriptionArea.setText("");
-        targetAudienceField.setText("");
         imageField.setText("");
 
+        loginController.execute(newPitchViewModel.getState().getCurrentUser().getName(),
+                newPitchViewModel.getState().getCurrentUser().getName());
         // Optionally, close the view or navigate elsewhere
         // For example, calling a method to switch back to the DashboardView
     }
@@ -150,7 +148,7 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if ("state".equals(evt.getPropertyName())) {
-            NewPitchState state = (NewPitchState) evt.getNewValue();
+            CreateNewPitchState state = (CreateNewPitchState) evt.getNewValue();
             setViewModelState(state);
         }
     }
@@ -159,10 +157,9 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
      * Updates the view with the current state.
      * @param state The state to be displayed in the view.
      */
-    private void setViewModelState(NewPitchState state) {
+    private void setViewModelState(CreateNewPitchState state) {
         nameField.setText(state.getName());
         descriptionArea.setText(state.getDescription());
-        targetAudienceField.setText(String.valueOf(state.getTargetAudience()));
         imageField.setText(state.getImage());
     }
 
@@ -176,5 +173,13 @@ public class NewPitchView extends JPanel implements PropertyChangeListener {
      */
     public void setCreateNewPitchController(CreateNewPitchController createNewPitchController) {
         this.createNewPitchController = createNewPitchController;
+    }
+
+    /**
+     * Method to set the login view controller.
+     * @param loginController new pitch controller
+     */
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 }

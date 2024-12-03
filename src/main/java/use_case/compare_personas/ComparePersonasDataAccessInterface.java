@@ -1,12 +1,11 @@
-package use_case.new_pitch;
+package use_case.compare_personas;
 
 import entity.User;
 
 /**
- * Gateway interface for handling pitch-related data access.
+ * Access interface for compare personas to access the DAO.
  */
-public interface NewPitchDataAccessInterface {
-
+public interface ComparePersonasDataAccessInterface {
     /**
      * Provides the current user to the dashboard.
      * @return the user currently logged in.

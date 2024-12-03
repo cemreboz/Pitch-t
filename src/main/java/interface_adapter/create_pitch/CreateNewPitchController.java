@@ -1,14 +1,7 @@
 package interface_adapter.create_pitch;
 
-import interface_adapter.new_pitch.NewPitchPresenter;
-import interface_adapter.new_pitch.NewPitchState;
-import interface_adapter.new_pitch.NewPitchViewModel;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInputData;
-import use_case.create_pitch.CreateNewPitchOutputData;
-import use_case.new_pitch.NewPitchInputBoundary;
-import use_case.new_pitch.NewPitchInputData;
-import use_case.new_pitch.NewPitchOutputData;
 
 import java.util.List;
 

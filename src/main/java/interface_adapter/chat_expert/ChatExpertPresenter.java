@@ -5,8 +5,6 @@ import interface_adapter.expert.ExpertViewModel;
 import use_case.chat_expert.ChatExpertOutputBoundary;
 import use_case.chat_expert.ChatExpertOutputData;
 
-import javax.swing.text.View;
-
 /**
  * Presenter for the Chat with Expert use case.
  * Prepares data for display in the view.

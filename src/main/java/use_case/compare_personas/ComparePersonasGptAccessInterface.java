@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ComparePersonasGptAccessInterface {
 
-    String getInteraction(List<ChatMessage> messages);
+    String utilizeApi(String message) throws IOException, InterruptedException;
 }

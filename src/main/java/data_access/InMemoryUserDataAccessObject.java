@@ -9,14 +9,17 @@ import entity.User;
 import use_case.account_settings.AccountSettingsDataAccessInterface;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.chat_expert.ChatExpertDataAccessInterface;
+import use_case.compare_personas.ComparePersonasDataAccessInterface;
 import use_case.create_pitch.CreateNewPitchDataAccessInterface;
 import use_case.dashboard_show_pitch.DashboardDataAccessInterface;
 import use_case.expert.ExpertDataAccessInterface;
+import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
-import use_case.new_pitch.NewPitchDataAccessInterface;
 import use_case.persona.PersonaDataAccessInterface;
+import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.view_personas.ViewPersonasDataAccessInterface;
 
 /**
  * In-memory implementation of the DAO for storing user data. This implementation does
@@ -28,11 +31,14 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         LogoutUserDataAccessInterface,
         DashboardDataAccessInterface,
         AccountSettingsDataAccessInterface,
-        NewPitchDataAccessInterface,
+        ShowNewPitchDataAccessInterface,
         CreateNewPitchDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
-        PersonaDataAccessInterface {
+        PersonaDataAccessInterface,
+        VisionDBDataAccessObject,
+        ViewPersonasDataAccessInterface,
+        ComparePersonasDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

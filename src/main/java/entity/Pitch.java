@@ -55,7 +55,19 @@ public class Pitch {
         return detailedTargetAudienceMap;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setDetailedTargetAudienceMap(Map<String, DetailedTargetAudience> detailedTargetAudienceMap) {
         this.detailedTargetAudienceMap = detailedTargetAudienceMap;
+    }
+
+    public void setPersonas(List<Persona> personas) {
+        this.personas = personas;
     }
 }

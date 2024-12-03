@@ -13,16 +13,15 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import use_case.chat_expert.ChatExpertGptAccessInterface;
-import use_case.compare_personas.ComparePersonasGptAccessInterface;
-import use_case.set_targetaudience.DetailedtaDataAccessInterface;
-import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
 
 import app.PitchitManager;
 import entity.ChatMessage;
 import use_case.chat_expert.ExpertChatDataAccessInterface;
 import use_case.chat_persona.ChatPersonaDataAccessInterface;
+import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.set_targetaudience.DetailedtaDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
+import use_case.view_personas.ViewPersonasGptDataAccessInterface;
 
 /**
  * Main application class to send a request to OpenAI's API.
@@ -31,7 +30,8 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ExpertChatDataAccessInterface,
         ChatPersonaDataAccessInterface,
         ComparePersonasGptAccessInterface,
-        TargetAudienceDataAccessInterface {
+        TargetAudienceDataAccessInterface,
+        ViewPersonasGptDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
 
@@ -104,6 +104,21 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
     }
 
     @Override
+    public String utilizeApi(String systemMessage) throws IOException, InterruptedException {
+        final String apiKey = PitchitManager.getApiKey();
+
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new IllegalArgumentException("API key is missing. Please set the OPENAI_API_KEY environment variable.");
+        }
+
+        // Construct the request body for the API call
+        List<ChatMessage> messages = new ArrayList<>();
+        messages.add(new ChatMessage("system", systemMessage));
+
+        // Make the API call and get response
+        return getInteraction(messages);
+    }
+
     public String getInteraction(List<ChatMessage> messages) {
         final String result;
         try {

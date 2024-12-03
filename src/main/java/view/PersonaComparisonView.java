@@ -1,84 +1,84 @@
 package view;
 
-import interface_adapter.compare_personas.ComparePersonasState;
-import interface_adapter.compare_personas.ComparePersonasViewModel;
-
-import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
-public class ComparePersonasView extends JPanel implements PropertyChangeListener {
-    private final ComparePersonasViewModel viewModel;
+import javax.swing.*;
+
+import interface_adapter.account_settings.AccountSettingsController;
+import interface_adapter.compare_personas.ComparePersonasState;
+import interface_adapter.compare_personas.ComparePersonasViewModel;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.ShowNewPitchController;
+
+/**
+ * View for comparing two personas.
+ */
+public class PersonaComparisonView extends JPanel implements PropertyChangeListener {
+
+    private final ComparePersonasViewModel compareViewModel;
+
     private JLabel persona1NameLabel;
-    private JTextArea persona1AboutArea;
     private JTextArea persona1OpinionArea;
+
     private JLabel persona2NameLabel;
-    private JTextArea persona2AboutArea;
     private JTextArea persona2OpinionArea;
+
     private JTextArea similaritiesArea;
     private JTextArea differencesArea;
+    private HamburgerMenu hamburgerMenu;
 
-    public ComparePersonasView(ComparePersonasViewModel viewModel) {
-        this.viewModel = viewModel;
-        this.viewModel.addPropertyChangeListener(this);
+    public PersonaComparisonView(ComparePersonasViewModel viewModel) {
+        this.compareViewModel = viewModel;
+        this.compareViewModel.addPropertyChangeListener(this);
 
         setLayout(new BorderLayout());
 
-        // Panel for personas
+        // Panel for persona information
         JPanel personasPanel = new JPanel(new GridLayout(1, 2, 10, 10));
 
-        // Persona 1 Panel
+        // Persona 1 panel
         JPanel persona1Panel = new JPanel();
         persona1Panel.setLayout(new BoxLayout(persona1Panel, BoxLayout.Y_AXIS));
         persona1NameLabel = new JLabel();
-        persona1AboutArea = new JTextArea(3, 20);
-        persona1AboutArea.setWrapStyleWord(true);
-        persona1AboutArea.setLineWrap(true);
-        persona1AboutArea.setEditable(false);
         persona1OpinionArea = new JTextArea(5, 20);
         persona1OpinionArea.setWrapStyleWord(true);
         persona1OpinionArea.setLineWrap(true);
         persona1OpinionArea.setEditable(false);
 
         persona1Panel.add(persona1NameLabel);
-        persona1Panel.add(new JLabel("About:"));
-        persona1Panel.add(persona1AboutArea);
         persona1Panel.add(new JLabel("Opinion:"));
-        persona1Panel.add(persona1OpinionArea);
+        persona1Panel.add(new JScrollPane(persona1OpinionArea));
 
-        // Persona 2 Panel
+        // Persona 2 panel
         JPanel persona2Panel = new JPanel();
         persona2Panel.setLayout(new BoxLayout(persona2Panel, BoxLayout.Y_AXIS));
         persona2NameLabel = new JLabel();
-        persona2AboutArea = new JTextArea(3, 20);
-        persona2AboutArea.setWrapStyleWord(true);
-        persona2AboutArea.setLineWrap(true);
-        persona2AboutArea.setEditable(false);
         persona2OpinionArea = new JTextArea(5, 20);
         persona2OpinionArea.setWrapStyleWord(true);
         persona2OpinionArea.setLineWrap(true);
         persona2OpinionArea.setEditable(false);
 
         persona2Panel.add(persona2NameLabel);
-        persona2Panel.add(new JLabel("About:"));
-        persona2Panel.add(persona2AboutArea);
         persona2Panel.add(new JLabel("Opinion:"));
-        persona2Panel.add(persona2OpinionArea);
+        persona2Panel.add(new JScrollPane(persona2OpinionArea));
 
         personasPanel.add(persona1Panel);
         personasPanel.add(persona2Panel);
-
+        hamburgerMenu = new HamburgerMenu(compareViewModel);
+        personasPanel.add(hamburgerMenu);
         add(personasPanel, BorderLayout.CENTER);
 
-        // Similarities and Differences Panel
+        // Panel for similarities and differences
         JPanel comparisonPanel = new JPanel();
         comparisonPanel.setLayout(new BoxLayout(comparisonPanel, BoxLayout.Y_AXIS));
         similaritiesArea = new JTextArea(3, 40);
         similaritiesArea.setWrapStyleWord(true);
         similaritiesArea.setLineWrap(true);
         similaritiesArea.setEditable(false);
+
         differencesArea = new JTextArea(3, 40);
         differencesArea.setWrapStyleWord(true);
         differencesArea.setLineWrap(true);
@@ -97,24 +97,58 @@ public class ComparePersonasView extends JPanel implements PropertyChangeListene
         if ("state".equals(evt.getPropertyName())) {
             ComparePersonasState state = (ComparePersonasState) evt.getNewValue();
 
-            if (state.getErrorMessage() != null && !state.getErrorMessage().isEmpty()) {
-                // Display the error message in a dialog box
+            if (state.getErrorMessage() != null) {
                 JOptionPane.showMessageDialog(this, state.getErrorMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Update the UI with the personas' details
+            // Update persona 1
             persona1NameLabel.setText(state.getPersona1().getName());
-            persona1AboutArea.setText(state.getPersona1().getAbout());
             persona1OpinionArea.setText(state.getPersona1Opinion());
 
+            // Update persona 2
             persona2NameLabel.setText(state.getPersona2().getName());
-            persona2AboutArea.setText(state.getPersona2().getAbout());
             persona2OpinionArea.setText(state.getPersona2Opinion());
 
-            // Set similarities and differences areas
+            // Update similarities and differences
             similaritiesArea.setText(String.join("\n", state.getSimilarities()));
             differencesArea.setText(String.join("\n", state.getDifferences()));
         }
+    }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
+    }
+
+    /**
+     * Method to set hamburger menu expert controller.
+     * @param expertController expert controller
+     */
+    public void setExpertController(ExpertController expertController) {
+        hamburgerMenu.setExpertController(expertController);
+    }
+
+    /**
+     * Method to set hamburger menu new pitch controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
+        hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    public String getViewName() {
+        return "persona comparison";
     }
 }

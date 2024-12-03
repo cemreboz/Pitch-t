@@ -8,7 +8,7 @@ import interface_adapter.targetaudience.TargetAudienceController;
 import interface_adapter.targetaudience.TargetAudiencePresenter;
 import org.jetbrains.annotations.NotNull;
 import use_case.dashboard_show_pitch.DashboardOutputData;
-import use_case.new_pitch.NewPitchInputData;
+import use_case.show_new_pitch.ShowNewPitchOutputBoundary;
 import use_case.set_targetaudience.*;
 
 import java.util.ArrayList;
@@ -66,7 +66,8 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         );
 
         if (userDataAccessObject.getCurrentUser() instanceof DBUser) {
-            ((DBUser) userDataAccessObject.getCurrentUser()).addPitch(newPitch);
+            final DBUser tempuser = (DBUser) userDataAccessObject.getCurrentUser();
+            tempuser.addPitch(newPitch);
         }
 
         final CreateNewPitchOutputData createNewPitchOutputData = new CreateNewPitchOutputData(false,
