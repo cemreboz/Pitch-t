@@ -581,7 +581,8 @@ public class AppBuilder {
 
         // Instantiate Interactor
         ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter);
+        ViewPersonasInputBoundary interactor = new ViewPersonasInteractor(chatgptDataAccessObject, presenter,
+                userDataAccessObject);
 
         // Instantiate Controller
         ViewPersonasController controller = new ViewPersonasController(interactor);
@@ -622,7 +623,7 @@ public class AppBuilder {
         final PersonaController personaController = new PersonaController(
                 personaInteractor);
 
-        // dashboardView.setPersonaController(personaController);
+        personaListView.setPersonaController(personaController);
         // instead of dashboardView, set it in persona list view, this was for my testing purposes and i have
         // removed any possible way of activating this screen from dashboard view so dont uncomment or it wont work
         return this;

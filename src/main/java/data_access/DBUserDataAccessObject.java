@@ -36,6 +36,7 @@ import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.persona.PersonaDataAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.view_personas.ViewPersonasDataAccessInterface;
 
 /**
  * The DAO for user data.
@@ -51,7 +52,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
         PersonaDataAccessInterface,
-        VisionDBDataAccessObject {
+        VisionDBDataAccessObject,
+        ViewPersonasDataAccessInterface {
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";

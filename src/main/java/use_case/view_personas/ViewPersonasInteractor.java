@@ -17,23 +17,29 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
 
     private final ViewPersonasOutputBoundary viewPersonasOutputBoundary;
     private final ViewPersonasGptDataAccessInterface gptAccessInterface;
+    private final ViewPersonasDataAccessInterface personaAccessInterface;
 
     public ViewPersonasInteractor(ViewPersonasGptDataAccessInterface gptAccessInterface,
-                                  ViewPersonasOutputBoundary outputBoundary) {
+                                  ViewPersonasOutputBoundary outputBoundary,
+                                  ViewPersonasDataAccessInterface personaAccessInterface) {
         this.gptAccessInterface = gptAccessInterface;
         this.viewPersonasOutputBoundary = outputBoundary;
+        this.personaAccessInterface = personaAccessInterface;
     }
 
     @Override
     public void execute(ViewPersonasInputData inputData) {
-        Pitch pitch = inputData.getPitch();
-        List<Persona> personas = populateFakePersonas(pitch);
+        final Pitch pitch = inputData.getPitch();
+        final List<Persona> personas = populateFakePersonas(pitch);
 
         if (personas == null || personas.isEmpty()) {
             // Personas failed to generate -- treat as a failure, since we won't have anything to display.
             viewPersonasOutputBoundary.prepareFailView("No personas generated.");
-        } else {
-            ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas, pitch);
+        }
+        else {
+            final ViewPersonasOutputData outputData = new ViewPersonasOutputData(personas, pitch,
+                    personaAccessInterface.getCurrentUser().getName(),
+                    personaAccessInterface.getCurrentUser().getPassword());
             viewPersonasOutputBoundary.prepareSuccessView(outputData);
         }
     }

@@ -11,15 +11,22 @@ import entity.Pitch;
 public class ViewPersonasOutputData {
     private final List<Persona> personas;
     private final Pitch pitch;
+    private final String username;
+    private final String password;
 
     /**
      * Constructs the output data with the list of personas.
      *
      * @param personas the list of personas.
+     * @param thisPitch current pitch
+     * @param username current username
+     * @param password current password
      */
-    public ViewPersonasOutputData(List<Persona> personas, Pitch thisPitch) {
+    public ViewPersonasOutputData(List<Persona> personas, Pitch thisPitch, String username, String password) {
         this.personas = personas;
         this.pitch = thisPitch;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -34,5 +41,13 @@ public class ViewPersonasOutputData {
 
     public Pitch getPitch() {
         return pitch;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
