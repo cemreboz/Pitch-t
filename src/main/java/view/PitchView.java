@@ -9,14 +9,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import entity.Pitch;
 import interface_adapter.ViewManagerModel;
@@ -27,6 +20,7 @@ import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.targetaudience.DetailedController;
+import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
 import use_case.set_targetaudience.DetailedInputData;
 
@@ -118,10 +112,28 @@ public class PitchView extends JPanel implements PropertyChangeListener {
                 // Create DetailedInputData with the selected audience category
                 final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(), selectedAudienceCategory);
                 if (detailedController != null) {
+                    // Generate the detailed target audience data
                     detailedController.generateDetailed(inputData);
+
+                    // Create an instance of DetailedView and display it in a pop-up
+                    showDetailedViewPopup();
                 }
             }
         }
+    }
+
+    private void showDetailedViewPopup() {
+        // Create an instance of DetailedView
+        final DetailedTargetAudiencePageViewModel audiencePageViewModel = new DetailedTargetAudiencePageViewModel();
+        final DetailedView detailedView = new DetailedView(audiencePageViewModel);
+        detailedView.setController(detailedController);
+
+        // Create a dialog to wrap the DetailedView
+        final JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Detailed Target Audience", true);
+        dialog.getContentPane().add(detailedView);
+        dialog.setSize(600, 400);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
