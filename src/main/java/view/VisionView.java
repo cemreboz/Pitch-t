@@ -210,7 +210,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         state.setLoading(true);
         visionViewModel.updateView(state);
 
-        final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch "
+                + pitch.getName() + pitch.getName() + pitch.getDescription();
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
         controller.generateImage(inputData);
     }
