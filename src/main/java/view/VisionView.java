@@ -14,6 +14,7 @@ import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.vision.VisionController;
 import interface_adapter.vision.VisionState;
 import interface_adapter.vision.VisionViewModel;
+import use_case.generate_visuals.GenerateVisualInputData;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
@@ -195,7 +196,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         visionViewModel.updateView(state);
 
         final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
-        controller.generateImage(prompt, persona.getName(), pitch.getName());
+        final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
+        controller.generateImage(inputData);
     }
 
     private void regenerateVisual() {
@@ -204,8 +206,10 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
-        controller.regenerateImage(prompt, persona.getName(), pitch.getName());
+        final String prompt = "Regenerate a visual tailored for persona: " + persona.getName() + " for the pitch "
+                + pitch.getName();
+        final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
+        controller.generateImage(inputData);
     }
 
     public void setPersonaAndPitch(Persona persona, Pitch pitch) {

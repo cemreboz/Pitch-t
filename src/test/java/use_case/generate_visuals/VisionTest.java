@@ -5,7 +5,6 @@ import entity.Persona;
 import entity.Pitch;
 import entity.Visual;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.ViewModel;
 import interface_adapter.vision.VisionPresenter;
 import view.VisionView;
 import interface_adapter.vision.VisionController;
@@ -55,7 +54,7 @@ public class VisionTest {
             @Override
             public String generateAndDownloadImage(String prompt, String outputFilePath) {
                 System.out.println("Mock Image Generated for Prompt: " + prompt);
-                return "mocked_generated_visual.png"; // Simulated file path for the generated image
+                return "logo.png"; // Simulated file path for the generated image
             }
         };
 

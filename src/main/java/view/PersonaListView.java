@@ -14,7 +14,9 @@ import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
 import interface_adapter.view_personas.ViewPersonasState;
 import interface_adapter.view_personas.ViewPersonasViewModel;
+import interface_adapter.vision.VisionController;
 import use_case.compare_personas.ComparePersonasInputData;
+import use_case.generate_visuals.GenerateVisualInputData;
 
 /**
  * The View for listing personas and comparing them.
@@ -32,6 +34,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
     private final List<JCheckBox> personaCheckBoxes = new ArrayList<>();
 
     private ComparePersonasController comparePersonasController;
+    private VisionController visionController;
 
     public PersonaListView(ViewPersonasViewModel viewModel,
                            ComparePersonasViewModel compareViewModel) {
@@ -86,22 +89,29 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
 
         // Trigger comparison using the comparePersonasController
-        Pitch pitch = viewModel.getState().getThisPitch();
-        ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas.get(0), selectedPersonas.get(1), pitch);
+        final Pitch pitch = viewModel.getState().getThisPitch();
+        final ComparePersonasInputData inputData = new ComparePersonasInputData(selectedPersonas.get(0), selectedPersonas.get(1), pitch);
         comparePersonasController.comparePersonas(inputData);
     }
 
     private void handleVisionButton() {
         // Collect the selected persona
-        List<Persona> selectedPersonas = getSelectedPersonas();
+        final List<Persona> selectedPersonas = getSelectedPersonas();
+
+        final Pitch pitch = viewModel.getState().getThisPitch();
+
+        final String prompt = "Generate an advertisement for " + pitch.getName() + " targeting "
+                + selectedPersonas.getFirst().getName();
 
         if (selectedPersonas.size() != 1) {
             JOptionPane.showMessageDialog(this, "Please select exactly one persona to generate a vision.");
             return;
         }
 
-        // TODO: Implement the vision generation feature
-        JOptionPane.showMessageDialog(this, "Vision generation for " + selectedPersonas.get(0).getName() + " is not yet implemented.");
+        final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt,
+                selectedPersonas.getFirst(),
+                pitch);
+        visionController.generateImage(inputData);
     }
 
     private void handleChatButton() {
@@ -136,6 +146,10 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
 
     public void setComparePersonasController(ComparePersonasController comparePersonasController) {
         this.comparePersonasController = comparePersonasController;
+    }
+
+    public void setVisionController(VisionController visionController) {
+        this.visionController = visionController;
     }
 
     public String getViewName() {

@@ -613,6 +613,9 @@ public class AppBuilder {
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
 
+        // Set the controller for the Persona List View
+        personaListView.setVisionController(visionController);
+
         return this;
     }
 
