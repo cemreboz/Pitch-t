@@ -16,7 +16,6 @@ public class SignupViewModel extends ViewModel<SignupState> {
     public static final int DEFUALT_WIDTH = 90;
 
     public static final String SIGNUP_BUTTON_LABEL = "Sign up";
-
     public static final String TO_LOGIN_BUTTON_LABEL = "Log in";
 
     public SignupViewModel() {

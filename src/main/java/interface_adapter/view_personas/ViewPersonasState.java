@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ViewPersonasState {
     private List<Persona> personas = new ArrayList<Persona>();
+    private String username;
+    private String password;
     private String errorMessage;
     private Pitch thisPitch;
 
@@ -48,5 +50,21 @@ public class ViewPersonasState {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

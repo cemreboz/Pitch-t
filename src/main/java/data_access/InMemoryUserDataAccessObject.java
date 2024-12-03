@@ -18,6 +18,7 @@ import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.persona.PersonaDataAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.view_personas.ViewPersonasDataAccessInterface;
 
 /**
  * In-memory implementation of the DAO for storing user data. This implementation does
@@ -34,7 +35,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         ChatExpertDataAccessInterface,
         ExpertDataAccessInterface,
         PersonaDataAccessInterface,
-        VisionDBDataAccessObject {
+        VisionDBDataAccessObject,
+        ViewPersonasDataAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 

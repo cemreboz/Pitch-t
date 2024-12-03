@@ -1,6 +1,5 @@
 package use_case.show_new_pitch;
 
-
 /**
  * Input data for the Show New Pitch use case.
  * Contains the necessary information to view a pitch.

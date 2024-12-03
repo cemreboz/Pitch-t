@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -25,6 +24,7 @@ import interface_adapter.expert.ExpertController;
 import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaViewModel;
+import interface_adapter.view_personas.ViewPersonasController;
 
 /**
  * View for chatting with a single defined persona.
@@ -32,10 +32,15 @@ import interface_adapter.persona.PersonaViewModel;
  */
 public class PersonaChatView extends JPanel implements PropertyChangeListener {
 
+    private static final String FONT = "Arial";
+    private static final int FONT_SIZE_14 = 14;
+    private static final int FONT_SIZE_18 = 18;
+
     private final String viewName = "chat persona";
     private final ViewManagerModel viewManagerModel;
     private final PersonaViewModel personaViewModel;
     private ChatPersonaController chatPersonaController;
+    private ViewPersonasController viewPersonasController;
 
     private JLabel headerNameLabel;
     private JTextArea chatArea;
@@ -75,7 +80,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         // Left side: Back button and hamburger menu
         final JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         final JButton backButton = new JButton("Back");
-        backButton.addActionListener(evt -> JOptionPane.showMessageDialog(backButton, "Back button not implemented."));
+        backButton.addActionListener(evt -> viewPersonasController.execute(personaViewModel.getState().getPitch()));
         leftPanel.add(backButton);
 
         hamburgerMenu = new HamburgerMenu(personaViewModel);
@@ -86,7 +91,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
 
         // Center: Persona name
         headerNameLabel = new JLabel(personaName, SwingConstants.CENTER);
-        headerNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerNameLabel.setFont(new Font(FONT, Font.BOLD, FONT_SIZE_18));
         headerPanel.add(headerNameLabel, BorderLayout.CENTER);
 
         add(headerPanel, BorderLayout.NORTH);
@@ -100,7 +105,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
-        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        chatArea.setFont(new Font(FONT, Font.PLAIN, FONT_SIZE_14));
 
         final JScrollPane chatScrollPane = new JScrollPane(chatArea);
         add(chatScrollPane, BorderLayout.CENTER);
@@ -112,7 +117,7 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
     private void buildMessageInputArea() {
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageInput.setFont(new Font(FONT, Font.PLAIN, FONT_SIZE_14));
 
         // Allow sending messages with Enter key
         messageInput.addActionListener(event -> sendMessage());
@@ -221,6 +226,14 @@ public class PersonaChatView extends JPanel implements PropertyChangeListener {
      */
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
+    }
+
+    /**
+     * Method to set back button.
+     * @param viewPersonasController view personas controller
+     */
+    public void setViewPersonasController(ViewPersonasController viewPersonasController) {
+        this.viewPersonasController = viewPersonasController;
     }
 
 }
