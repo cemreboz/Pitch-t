@@ -1,5 +1,6 @@
 package use_case.view_personas;
 
+import entity.DBUser;
 import entity.Persona;
 import entity.Pitch;
 import org.json.JSONArray;
@@ -30,7 +31,14 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
     @Override
     public void execute(ViewPersonasInputData inputData) {
         final Pitch pitch = inputData.getPitch();
-        final List<Persona> personas = populateFakePersonas(pitch);
+        List<Persona> personas = pitch.getPersonas();
+
+        if (personas == null || personas.isEmpty()) {
+            personas = populateFakePersonas(pitch);
+            final DBUser user = (DBUser) personaAccessInterface.getCurrentUser();
+            final Pitch tempPitch = user.getPitch(pitch.getPitchID());
+            tempPitch.setPersonas(personas);
+        }
 
         if (personas == null || personas.isEmpty()) {
             // Personas failed to generate -- treat as a failure, since we won't have anything to display.
