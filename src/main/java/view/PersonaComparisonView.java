@@ -6,8 +6,12 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.*;
 
+import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.compare_personas.ComparePersonasState;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
+import interface_adapter.expert.ExpertController;
+import interface_adapter.login.LoginController;
+import interface_adapter.new_pitch.ShowNewPitchController;
 
 /**
  * View for comparing two personas.
@@ -24,6 +28,7 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
 
     private JTextArea similaritiesArea;
     private JTextArea differencesArea;
+    private HamburgerMenu hamburgerMenu;
 
     public PersonaComparisonView(ComparePersonasViewModel viewModel) {
         this.compareViewModel = viewModel;
@@ -62,7 +67,8 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
 
         personasPanel.add(persona1Panel);
         personasPanel.add(persona2Panel);
-
+        hamburgerMenu = new HamburgerMenu(compareViewModel);
+        personasPanel.add(hamburgerMenu);
         add(personasPanel, BorderLayout.CENTER);
 
         // Panel for similarities and differences
@@ -108,6 +114,38 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
             similaritiesArea.setText(String.join("\n", state.getSimilarities()));
             differencesArea.setText(String.join("\n", state.getDifferences()));
         }
+    }
+
+    /**
+     * Method to set hamburger menu login controller.
+     * @param loginController login controller
+     */
+    public void setLoginController(LoginController loginController) {
+        hamburgerMenu.setLoginController(loginController);
+    }
+
+    /**
+     * Method to set hamburger menu account settings controller.
+     * @param accountSettingsController account settings.
+     */
+    public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
+        hamburgerMenu.setAccountSettingsController(accountSettingsController);
+    }
+
+    /**
+     * Method to set hamburger menu expert controller.
+     * @param expertController expert controller
+     */
+    public void setExpertController(ExpertController expertController) {
+        hamburgerMenu.setExpertController(expertController);
+    }
+
+    /**
+     * Method to set hamburger menu new pitch controller.
+     * @param newPitchController new pitch controller
+     */
+    public void setNewPitchController(ShowNewPitchController newPitchController) {
+        hamburgerMenu.setNewPitchController(newPitchController);
     }
 
     public String getViewName() {
