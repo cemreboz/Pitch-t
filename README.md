@@ -4,6 +4,17 @@ Repository: https://github.com/cemreboz/Pitch-t
 
 
 
+## 📖 Table of Contents
+1. [🌟 Highlights](#-highlights)
+2. [ℹ️ Overview](#-overview)
+3. [✍️ Authors](#-authors)
+4. [🚀 Usage](-#usage)
+5. [⬇️ Installation](#-installation)
+6. [💭 Feedback and Contributing](#-feedback-and-contributing)
+7. [📜 License](#-license)
+
+
+
 ## 🌟 Highlights
 
 - Team Story: Generate and interact with AI-powered personas tailored to specific target audiences.
@@ -58,3 +69,8 @@ Here's the link to our repository: https://github.com/cemreboz/Pitch-t
 
 You can take a look at the commits, pull requests, and code reviews done by our team members. 
 
+
+
+## 📜 License
+
+This project is licensed under a **Public Domain Dedication** license. The **CC0 1.0 Universal** license explicitly waives all copyright and related rights, allowing the work to be freely used, shared, modified, and distributed by anyone, even for commercial purposes, without requiring permission or attribution.
