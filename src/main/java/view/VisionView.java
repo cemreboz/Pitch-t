@@ -42,7 +42,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     private JTextField messageInput;
     private JTextArea chatArea;
 
-
     public VisionView(VisionViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.visionViewModel = viewModel;
         this.visionViewModel.addPropertyChangeListener(this);
@@ -55,6 +54,10 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         // Build the main content area
         buildMainContent();
+
+        if (persona != null && pitch != null) {
+            setPersonaAndPitch(persona, pitch);
+        }
     }
 
     private void buildHeader() {
@@ -101,12 +104,6 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
         adLabel.setFont(new Font(fontArial, Font.ITALIC, 16));
-
-        final JButton regenerateButton = new JButton("Regenerate Visual");
-        regenerateButton.addActionListener(e -> regenerateVisual());
-        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(regenerateButton);
-        visionPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         visionPanel.add(adLabel, BorderLayout.CENTER);
 
@@ -183,6 +180,18 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     }
 
     /**
+     * Set persona and pitch.
+     */
+    public void setPersonaAndPitch(Persona persona, Pitch pitch) {
+        this.persona = persona;
+        this.pitch = pitch;
+
+        if (controller != null) {
+            generateInitialVisual();
+        }
+    }
+
+    /**
      * Generates the initial visual.
      */
     private void generateInitialVisual() {
@@ -200,7 +209,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         state.setLoading(true);
         visionViewModel.updateView(state);
 
-        final String prompt = "Create a visual tailored for persona: " + persona.getName() + " for the pitch " + pitch.getName();
+        final String prompt = "Create a visual tailored for persona: " + persona.getName() + persona.getAbout()
+                + " for the pitch " + pitch.getName() + pitch.getDescription();
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
         controller.generateImage(inputData);
     }
@@ -209,27 +219,27 @@ public class VisionView extends JPanel implements PropertyChangeListener {
      * Regenerates the visual.
      */
     private void regenerateVisual() {
-        if (controller == null || persona == null || pitch == null) {
-            System.err.println("Cannot regenerate visual: controller, persona, or pitch is null");
+        if (controller == null) {
+            System.err.println("Cannot regenerate visual: controller is null");
             return;
         }
+        if (persona == null) {
+            System.err.println("Cannot regenerate visual: persona is null");
+            return;
+        }
+        if (pitch == null) {
+            System.err.println("Cannot regenerate visual: pitch is null");
+            return;
+        }
+
+        final VisionState state = visionViewModel.getState();
+        state.setLoading(true);
+        visionViewModel.updateView(state);
 
         final String prompt = "Generate another visual tailored for persona: " + persona.getName() + " for the pitch "
                 + pitch.getName();
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
         controller.generateImage(inputData);
-    }
-
-    /**
-     * Set persona and pitch.
-     */
-    public void setPersonaAndPitch(Persona persona, Pitch pitch) {
-        this.persona = persona;
-        this.pitch = pitch;
-
-        if (controller != null) {
-            generateInitialVisual();
-        }
     }
 
     public void setVisual(Visual visual) {
@@ -244,6 +254,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
         if (persona != null && pitch != null) {
             generateInitialVisual();
+            regenerateVisual();
         }
     }
 
