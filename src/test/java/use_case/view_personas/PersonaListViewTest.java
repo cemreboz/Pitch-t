@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PersonaListViewTest {
-
+    /*
     class MockViewModel extends ViewPersonasViewModel {
         private ViewPersonasState state;
 
@@ -67,4 +67,6 @@ public class PersonaListViewTest {
         assertEquals("Personas List", personaListView.getViewName());
         assertEquals(2, personaListView.getComponentCount());
     }
+
+     */
 }

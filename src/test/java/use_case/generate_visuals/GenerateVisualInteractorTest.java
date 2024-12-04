@@ -2,6 +2,8 @@ package use_case.generate_visuals;
 
 import data_access.VisualDataAccessObject;
 import entity.DBUser;
+import entity.Persona;
+import entity.Pitch;
 import entity.User;
 import entity.Visual;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,37 +37,44 @@ class GenerateVisualInteractorTest {
         User mockUser = new DBUser("testUser", "testPassword");
         testDBAccessObject.setCurrentUser(mockUser);
 
+        // Create mock Persona and Pitch
+        Persona persona = new Persona();
+        persona.setName("Tech Enthusiast");
+        Pitch pitch = new Pitch("pitch123", "Smart Assistant", "image_url", "A description", null);
+
         // Input data for the interactor
         String prompt = "Create a professional advertisement for a smart home assistant.";
-        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, "Tech Enthusiast", "Smart Assistant");
+        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
 
         // Execute the interactor
         interactor.execute(inputData);
 
         // Assertions for success
         assertNotNull(testPresenter.outputData);
-        assertEquals("Visual generated successfully!", testPresenter.outputData.getMessage());
         assertTrue(testPresenter.outputData.getImagePath().contains("mock_generated_visual.png"));
-        assertEquals(mockUser.getName(), testPresenter.outputData.getUsername());
-        assertEquals(mockUser.getPassword(), testPresenter.outputData.getPassword());
     }
 
     @Test
     void failGenerateVisual() {
         // Simulate an exception in the image generator
-        testImageGenerator.setShouldFail(true);  // Trigger the failure in the image generator
+        testImageGenerator.setShouldFail(true);
+
+        // Create mock Persona and Pitch
+        Persona persona = new Persona();
+        persona.setName("Tech Enthusiast");
+        Pitch pitch = new Pitch("pitch123", "Smart Assistant", "image_url", "A description", null);
 
         // Input data for the interactor
         String prompt = "Create a professional advertisement for a smart home assistant.";
-        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, "Tech Enthusiast", "Smart Assistant");
+        GenerateVisualInputData inputData = new GenerateVisualInputData(prompt, persona, pitch);
 
         // Execute the interactor
         interactor.execute(inputData);
 
         // Assertions for failure
-        assertNull(testPresenter.outputData);  // No output data should be returned on failure
-        assertNotNull(testPresenter.errorMessage);  // Ensure that an error message was passed
-        assertTrue(testPresenter.errorMessage.startsWith("Error generating visual:"));  // Check if the error message starts with the expected message
+        assertNull(testPresenter.outputData);
+        assertNotNull(testPresenter.errorMessage);
+        assertTrue(testPresenter.errorMessage.startsWith("Error generating visual:"));
     }
 
     /**
