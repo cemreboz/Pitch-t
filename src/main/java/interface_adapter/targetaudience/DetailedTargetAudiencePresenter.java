@@ -1,9 +1,5 @@
 package interface_adapter.targetaudience;
 
-import java.util.List;
-
-import entity.DetailedTargetAudience;
-import use_case.set_targetaudience.DetailedInteractor;
 import use_case.set_targetaudience.DetailedOutputBoundary;
 import use_case.set_targetaudience.DetailedOutputData;
 
@@ -24,12 +20,15 @@ public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
      */
     @Override
     public void prepareSuccessView(DetailedOutputData outputData) {
+        System.out.println("Presenter: Preparing success view with data: " + outputData.getDetailedTargetAudience());
+
         final DetailedTargetAudienceState detailedState = viewModel.getState();
-        // Update the state with the detailed target audience data
         detailedState.setDetailedTargetAudience(outputData.getDetailedTargetAudience());
 
         viewModel.setState(detailedState);
         viewModel.firePropertyChanged();
+
+        System.out.println("Presenter: State after setting data: " + viewModel.getState().getDetailedTargetAudience());
     }
 
     /**
@@ -45,5 +44,4 @@ public class DetailedTargetAudiencePresenter implements DetailedOutputBoundary {
         viewModel.setState(detailedState);
         viewModel.firePropertyChanged();
     }
-
 }

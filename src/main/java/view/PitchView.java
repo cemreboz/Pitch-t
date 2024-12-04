@@ -3,12 +3,14 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.Box;
@@ -28,7 +30,11 @@ import interface_adapter.login.LoginController;
 import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
+import interface_adapter.targetaudience.DetailedController;
+import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
+import org.json.JSONException;
+import use_case.set_targetaudience.DetailedInputData;
 
 /**
  * The view for displaying the details of a specific pitch.
@@ -50,6 +56,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
     private ViewPersonasController viewPersonasController;
     private ExpertController expertController;
+    private DetailedController detailedController;
 
     private JPanel contentPanel;
 
@@ -180,8 +187,16 @@ public class PitchView extends JPanel implements PropertyChangeListener {
                 handleViewPersonasButton();
             }
         });
+        final JButton viewDetailedButton = new JButton("View Detailed Target Audiences");
+        viewDetailedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleDetailedTaButton();
+            }
+        });
 
         contentPanel.add(viewPersonasButton);
+        contentPanel.add(viewDetailedButton);
 
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -201,6 +216,31 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         }
         else {
             this.viewPersonasController.execute(pitch);
+        }
+    }
+
+    // Handle View Personas Button Click
+    private void handleDetailedTaButton() {
+        final PitchState pitchState = pitchViewModel.getState();
+        final Pitch pitch = pitchState.getPitch();
+
+        if (pitch == null) {
+            final String error = pitchState.getPitchLoadError();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error loading pitch: " + error,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(),
+                    pitch.getTargetAudienceList().toString());
+            try {
+                this.detailedController.generateDetailed(inputData);
+            }
+            catch (Exception error) {
+                JOptionPane.showMessageDialog(this, error.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -248,4 +288,9 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);
     }
+
+    public void setDetailedController(DetailedController controller) {
+        this.detailedController = controller;
+    }
+
 }

@@ -26,7 +26,9 @@ import interface_adapter.dashboard.DashboardController;
 import interface_adapter.persona.PersonaController;
 import interface_adapter.view_personas.ViewPersonasState;
 import interface_adapter.view_personas.ViewPersonasViewModel;
+import interface_adapter.vision.VisionController;
 import use_case.compare_personas.ComparePersonasInputData;
+import use_case.generate_visuals.GenerateVisualInputData;
 
 /**
  * The View for listing personas and comparing them.
@@ -48,6 +50,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
     private DashboardController dashboardController;
 
     private ComparePersonasController comparePersonasController;
+    private VisionController visionController;
 
     public PersonaListView(ViewPersonasViewModel viewModel,
                            ComparePersonasViewModel compareViewModel) {
@@ -128,16 +131,21 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         // Collect the selected persona
         final List<Persona> selectedPersonas = getSelectedPersonas();
 
+        final Pitch pitch = viewModel.getState().getThisPitch();
+
         if (selectedPersonas.size() != 1) {
             JOptionPane.showMessageDialog(
                     this, "Please select exactly one persona to generate a vision.");
             return;
         }
 
-        // TODO: Implement the vision generation feature
-        JOptionPane.showMessageDialog(
-                this, "Vision generation for "
-                        + selectedPersonas.get(0).getName() + " is not yet implemented.");
+        final String prompt = "Generate an advertisement for " + pitch.getName() + " targeting "
+                + selectedPersonas.get(0).getName();
+
+        final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt,
+                selectedPersonas.get(0),
+                pitch);
+        visionController.generateImage(inputData);
     }
 
     private void handleChatButton() {
@@ -178,6 +186,10 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
 
     public void setDashboardController(DashboardController dashboardController) {
         this.dashboardController = dashboardController;
+    }
+
+    public void setVisionController(VisionController visionController) {
+        this.visionController = visionController;
     }
 
     public String getViewName() {

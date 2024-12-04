@@ -46,6 +46,18 @@ public class DBUser implements User {
                 .orElse(null);
     }
 
+    /**
+     * Method to get a single pitch by its name.
+     * @param name the name of the pitch to be retrieved
+     * @return the pitch if found; otherwise, null
+     */
+    public Pitch getPitchByName(String name) {
+        return pitches.stream()
+                .filter(pitch -> pitch.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void setPitches(List<Pitch> pitches) {
         this.pitches = pitches;
     }
