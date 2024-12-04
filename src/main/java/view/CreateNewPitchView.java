@@ -168,7 +168,7 @@ public class CreateNewPitchView extends JPanel implements PropertyChangeListener
 
         // Navigate back to the dashboard or previous view
         loginController.execute(newPitchViewModel.getState().getCurrentUser().getName(),
-                newPitchViewModel.getState().getCurrentUser().getPassword());
+                newPitchViewModel.getState().getCurrentUser().getPassword(), newPitchViewModel);
     }
 
     @Override

@@ -80,7 +80,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
                             loginController.execute(
                                     currentState.getUsername(),
-                                    currentState.getPassword()
+                                    currentState.getPassword(), loginViewModel
                             );
                         }
                     }
