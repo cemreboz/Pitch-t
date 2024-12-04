@@ -134,7 +134,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         final Pitch pitch = viewModel.getState().getThisPitch();
 
         final String prompt = "Generate an advertisement for " + pitch.getName() + " targeting "
-                + selectedPersonas.getFirst().getName();
+                + selectedPersonas.get(0).getName();
 
         if (selectedPersonas.size() != 1) {
             JOptionPane.showMessageDialog(
@@ -143,7 +143,7 @@ public class PersonaListView extends JPanel implements PropertyChangeListener {
         }
 
         final GenerateVisualInputData inputData = new GenerateVisualInputData(prompt,
-                selectedPersonas.getFirst(),
+                selectedPersonas.get(0),
                 pitch);
         visionController.generateImage(inputData);
     }
