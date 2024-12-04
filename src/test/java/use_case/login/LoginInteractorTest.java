@@ -4,6 +4,8 @@ import data_access.InMemoryUserDataAccessObject;
 import entity.DBUserFactory;
 import entity.User;
 import entity.UserFactory;
+import interface_adapter.ViewModel;
+import interface_adapter.login.LoginState;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,12 +14,14 @@ class LoginInteractorTest {
 
     @Test
     void successTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
+        LoginInputData inputData = new LoginInputData("Paul", "password",
+                new ViewModel<>("log in"));
         LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
         UserFactory factory = new DBUserFactory();
         User user = factory.create("Paul", "password");
         userRepository.save(user);
+        userRepository.setCurrentUser(user);
 
         LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
             @Override
@@ -42,12 +46,14 @@ class LoginInteractorTest {
 
     @Test
     void successUserLoggedInTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
+        LoginInputData inputData = new LoginInputData("Paul", "password",
+                new ViewModel<>("log in"));
         LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
         UserFactory factory = new DBUserFactory();
         User user = factory.create("Paul", "password");
         userRepository.save(user);
+        userRepository.setCurrentUser(user);
 
         LoginOutputBoundary successPresenter = new LoginOutputBoundary() {
             @Override
@@ -74,12 +80,15 @@ class LoginInteractorTest {
 
     @Test
     void failurePasswordMismatchTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "wrong");
+        LoginInputData inputData = new LoginInputData("Paul", "wrong", new ViewModel<>(
+                "log in"
+        ));
         LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
 
         UserFactory factory = new DBUserFactory();
         User user = factory.create("Paul", "password");
         userRepository.save(user);
+        userRepository.setCurrentUser(user);
 
         LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
             @Override
@@ -104,8 +113,10 @@ class LoginInteractorTest {
 
     @Test
     void failureUserDoesNotExistTest() {
-        LoginInputData inputData = new LoginInputData("Paul", "password");
+        LoginInputData inputData = new LoginInputData("Paul", "password",
+                new ViewModel<LoginState>("log in"));
         LoginUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        userRepository.setCurrentUser(null);
 
         LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
             @Override

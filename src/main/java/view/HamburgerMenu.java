@@ -27,6 +27,7 @@ import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaState;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.vision.VisionState;
+import use_case.logout.LogoutUserDataAccessInterface;
 
 /**
  * A panel for the hamburger menu.
@@ -69,31 +70,31 @@ public class HamburgerMenu extends JPanel {
             public void actionPerformed(ActionEvent evt) {
                 if (viewModel.getState() instanceof DashboardState) {
                     final DashboardState currentState = (DashboardState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof AccountSettingsState) {
                     final AccountSettingsState currentState = (AccountSettingsState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getConfirmedPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getConfirmedPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof PitchState) {
                     final PitchState currentState = (PitchState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof ExpertState) {
                     final ExpertState currentState = (ExpertState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof PersonaState) {
                     final PersonaState currentState = (PersonaState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof VisionState) {
                     final VisionState currentState = (VisionState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else if (viewModel.getState() instanceof ComparePersonasState) {
                     final ComparePersonasState currentState = (ComparePersonasState) viewModel.getState();
-                    loginController.execute(currentState.getUsername(), currentState.getPassword());
+                    loginController.execute(currentState.getUsername(), currentState.getPassword(), viewModel);
                 }
                 else {
                     JOptionPane.showMessageDialog(dashboardItem, ERROR_FIELD);
