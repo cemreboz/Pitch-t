@@ -3,9 +3,7 @@ package view;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
-
 import interface_adapter.account_settings.AccountSettingsController;
 import interface_adapter.compare_personas.ComparePersonasState;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
@@ -36,14 +34,23 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
 
         setLayout(new BorderLayout());
 
+        // Hamburger Menu Panel
+        JPanel topPanel = new JPanel(new BorderLayout());
+        hamburgerMenu = new HamburgerMenu(compareViewModel);
+        topPanel.add(hamburgerMenu, BorderLayout.WEST);
+        add(topPanel, BorderLayout.NORTH);
+
         // Panel for persona information
-        JPanel personasPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        JPanel personasPanel = new JPanel(new GridLayout(1, 2, 20, 10));
+        personasPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Persona 1 panel
         JPanel persona1Panel = new JPanel();
         persona1Panel.setLayout(new BoxLayout(persona1Panel, BoxLayout.Y_AXIS));
+        persona1Panel.setBorder(BorderFactory.createTitledBorder("Persona 1"));
         persona1NameLabel = new JLabel();
-        persona1OpinionArea = new JTextArea(5, 20);
+        persona1NameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        persona1OpinionArea = new JTextArea(5, 25);
         persona1OpinionArea.setWrapStyleWord(true);
         persona1OpinionArea.setLineWrap(true);
         persona1OpinionArea.setEditable(false);
@@ -55,8 +62,10 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
         // Persona 2 panel
         JPanel persona2Panel = new JPanel();
         persona2Panel.setLayout(new BoxLayout(persona2Panel, BoxLayout.Y_AXIS));
+        persona2Panel.setBorder(BorderFactory.createTitledBorder("Persona 2"));
         persona2NameLabel = new JLabel();
-        persona2OpinionArea = new JTextArea(5, 20);
+        persona2NameLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        persona2OpinionArea = new JTextArea(5, 25);
         persona2OpinionArea.setWrapStyleWord(true);
         persona2OpinionArea.setLineWrap(true);
         persona2OpinionArea.setEditable(false);
@@ -67,25 +76,25 @@ public class PersonaComparisonView extends JPanel implements PropertyChangeListe
 
         personasPanel.add(persona1Panel);
         personasPanel.add(persona2Panel);
-        hamburgerMenu = new HamburgerMenu(compareViewModel);
-        personasPanel.add(hamburgerMenu);
         add(personasPanel, BorderLayout.CENTER);
 
         // Panel for similarities and differences
         JPanel comparisonPanel = new JPanel();
         comparisonPanel.setLayout(new BoxLayout(comparisonPanel, BoxLayout.Y_AXIS));
-        similaritiesArea = new JTextArea(3, 40);
+        comparisonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        similaritiesArea = new JTextArea(3, 50);
         similaritiesArea.setWrapStyleWord(true);
         similaritiesArea.setLineWrap(true);
         similaritiesArea.setEditable(false);
 
-        differencesArea = new JTextArea(3, 40);
+        differencesArea = new JTextArea(3, 50);
         differencesArea.setWrapStyleWord(true);
         differencesArea.setLineWrap(true);
         differencesArea.setEditable(false);
 
         comparisonPanel.add(new JLabel("Similarities:"));
         comparisonPanel.add(new JScrollPane(similaritiesArea));
+        comparisonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         comparisonPanel.add(new JLabel("Differences:"));
         comparisonPanel.add(new JScrollPane(differencesArea));
 

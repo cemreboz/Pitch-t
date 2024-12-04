@@ -45,13 +45,13 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
         List<Persona> personas = inputData.getPersonas();
         Pitch currentPitch = inputData.getCurrentPitch();
 
-        if (personas.size() != 2) {
+        Persona persona1 = personas.get(0);
+        Persona persona2 = personas.get(1);
+
+        if (persona1 == null || persona2 == null) {
             outputBoundary.prepareFailView("Exactly two personas must be selected for comparison.");
             return;
         }
-
-        Persona persona1 = personas.get(0);
-        Persona persona2 = personas.get(1);
 
         // Create a descriptive system message to send to GPT
         String systemMessage = createComparisonSystemMessage(currentPitch, persona1, persona2);
@@ -103,6 +103,7 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
      * @return The constructed system message as a String.
      */
     private String createComparisonSystemMessage(Pitch pitch, Persona persona1, Persona persona2) {
+
         // Construct a descriptive system message for GPT API
         StringBuilder sb = new StringBuilder();
         sb.append("You are an assistant that helps analyze and compare user personas based on a given product pitch.\n");
@@ -172,23 +173,20 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
      */
     private String parseOpinion(JSONObject opinionJson) {
         StringBuilder opinion = new StringBuilder();
-        try {
-            JSONArray likesArray = opinionJson.getJSONArray("likes");
-            JSONArray dislikesArray = opinionJson.getJSONArray("dislikes");
 
-            opinion.append("Likes:\n");
-            for (int i = 0; i < likesArray.length(); i++) {
-                opinion.append("- ").append(likesArray.getString(i)).append("\n");
-            }
+        JSONArray likesArray = opinionJson.getJSONArray("likes");
+        JSONArray dislikesArray = opinionJson.getJSONArray("dislikes");
 
-            opinion.append("\nDislikes:\n");
-            for (int i = 0; i < dislikesArray.length(); i++) {
-                opinion.append("- ").append(dislikesArray.getString(i)).append("\n");
-            }
-
-        } catch (JSONException e) {
-            throw new IllegalArgumentException("Error parsing persona opinion: " + e.getMessage(), e);
+        opinion.append("Likes:\n");
+        for (int i = 0; i < likesArray.length(); i++) {
+            opinion.append("- ").append(likesArray.getString(i)).append("\n");
         }
+
+        opinion.append("\nDislikes:\n");
+        for (int i = 0; i < dislikesArray.length(); i++) {
+            opinion.append("- ").append(dislikesArray.getString(i)).append("\n");
+        }
+
         return opinion.toString().trim();
     }
 
