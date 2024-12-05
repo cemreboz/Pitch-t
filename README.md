@@ -1,4 +1,4 @@
-# 📦 My Package
+# 📦 Pitch!t
 
 Repository: https://github.com/cemreboz/Pitch-t
 
@@ -8,7 +8,7 @@ Repository: https://github.com/cemreboz/Pitch-t
 1. [🌟 Highlights](#-highlights)
 2. [ℹ️ Overview](#-overview)
 3. [✍️ Authors](#-authors)
-4. [🚀 Usage](-#usage)
+4. [🚀 Usage](#-usage)
 5. [⬇️ Installation](#-installation)
 6. [💭 Feedback and Contributing](#-feedback-and-contributing)
 7. [📜 License](#-license)
