@@ -128,10 +128,25 @@ Follow these steps to install and set up **Pitch!t**:
 
 ## 💭 Feedback and Contributing
 
-Here's the link to our repository: https://github.com/cemreboz/Pitch-t
+We value your feedback and encourage you to share your thoughts to help improve **Pitch!t**. Here's how you can provide feedback:
 
-You can take a look at the commits, pull requests, and code reviews done by our team members. 
+1. **Via GitHub Issues**:  
+   - Navigate to the [GitHub Issues Page](https://github.com/cemreboz/Pitch-t/issues).
+   - Click on **New Issue**.
+   - Clearly describe the feedback, suggestion, or bug in the issue form.
+   - If reporting a bug, include:
+     - Steps to reproduce the issue
+     - Expected vs. actual results
+     - Screenshots or error logs (if applicable)
 
+2. **Via Discussion Board**:  
+   - Visit our [GitHub Discussions Page](https://github.com/cemreboz/Pitch-t/discussions) for general feedback or feature suggestions.
+   - Start a new discussion or participate in an existing thread.
+
+3. **Feedback Rules**:  
+   - Provide specific, constructive feedback.
+   - Avoid vague or overly general comments (e.g., "It doesn't work"). Instead, specify what aspect isn't working and why.
+   - Be respectful in your communication.
 
 
 ## 📜 License
