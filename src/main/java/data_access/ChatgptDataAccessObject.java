@@ -36,6 +36,9 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         ViewPersonasGptDataAccessInterface {
 
     private static final String LOG_FILE_PATH = "api_calls.txt";
+    private static final String API_MISSING_MESSAGE = "API key is missing. Please set the "
+            + "OPENAI_API_KEY environment variable.";
+    private static final String CONTENT = "content";
 
     public ChatgptDataAccessObject() {
     }
@@ -69,15 +72,14 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
             final String apiKey = PitchitManager.getApiKey();
 
             if (apiKey == null || apiKey.isEmpty()) {
-                throw new IllegalArgumentException(
-                        "API key is missing. Please set the OPENAI_API_KEY environment variable.");
+                throw new IllegalArgumentException(API_MISSING_MESSAGE);
             }
 
             final JSONArray messagesJson = new JSONArray();
             for (ChatMessage message : messages) {
                 final JSONObject messageJson = new JSONObject();
                 messageJson.put("role", message.getRole());
-                messageJson.put("content", message.getContent());
+                messageJson.put(CONTENT, message.getContent());
                 messagesJson.put(messageJson);
             }
 
@@ -110,32 +112,37 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
         final String apiKey = PitchitManager.getApiKey();
 
         if (apiKey == null || apiKey.isEmpty()) {
-            throw new IllegalArgumentException("API key is missing. Please set the OPENAI_API_KEY environment variable.");
+            throw new IllegalArgumentException(API_MISSING_MESSAGE);
         }
 
         // Construct the request body for the API call
-        List<ChatMessage> messages = new ArrayList<>();
+        final List<ChatMessage> messages = new ArrayList<>();
         messages.add(new ChatMessage("system", systemMessage));
 
         // Make the API call and get response
         return getInteraction(messages);
     }
 
+    /**
+     * Accessing the ChatGPT API for personas and experts.
+     * @param messages all of the messages in a certain format.
+     * @return the response from the API call.
+     * @throws RuntimeException if the API call fails.
+     */
     public String getInteraction(List<ChatMessage> messages) {
         final String result;
         try {
             final String apiKey = PitchitManager.getApiKey();
 
             if (apiKey == null || apiKey.isEmpty()) {
-                throw new IllegalArgumentException(
-                        "API key is missing. Please set the OPENAI_API_KEY environment variable.");
+                throw new IllegalArgumentException(API_MISSING_MESSAGE);
             }
 
             final JSONArray messagesJson = new JSONArray();
             for (ChatMessage message : messages) {
                 final JSONObject messageJson = new JSONObject();
                 messageJson.put("role", message.getRole());
-                messageJson.put("content", message.getContent());
+                messageJson.put(CONTENT, message.getContent());
                 messagesJson.put(messageJson);
             }
 
@@ -170,7 +177,7 @@ public class ChatgptDataAccessObject implements DetailedtaDataAccessInterface,
             final JSONArray choices = jsonResponse.getJSONArray("choices");
             if (!choices.isEmpty()) {
                 final JSONObject firstChoice = choices.getJSONObject(0);
-                content = firstChoice.getJSONObject("message").getString("content").trim();
+                content = firstChoice.getJSONObject("message").getString(CONTENT).trim();
             }
             else {
                 content = "No content found in the API response.";
