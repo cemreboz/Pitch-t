@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * Represents a chat message with role, content, and timestamp.
  */
 public class ChatMessage {
-    private String role; // "system", "user", or "assistant"
+    private String role;
     private String content;
     private LocalDateTime timestamp;
 
