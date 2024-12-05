@@ -14,16 +14,6 @@ Repository: https://github.com/cemreboz/Pitch-t
 8. [📜 License](#-license)
 
 
-## ✍️ Authors
-
-This project was created by Team Pitch!t as part of Group #159.
-
-- Allan - https://github.com/just2ghosts
-- Rainy - https://github.com/rainycore
-- Viktor - https://github.com/vdomash
-- Jad - https://github.com/lebgdecasa
-- Cemre - https://github.com/cemreboz
-
 
 ## 🌟 Highlights
 
@@ -34,6 +24,17 @@ This project was created by Team Pitch!t as part of Group #159.
 - **User Story #4**: Get detailed information on which audiences would be targeted by your pitch.
 - **User Story #5**: Generate visuals for your products for AI analysis and feedback.
 
+
+
+## ✍️ Authors
+
+This project was created by Team Pitch!t as part of Group #159.
+
+- Allan - https://github.com/just2ghosts
+- Rainy - https://github.com/rainycore
+- Viktor - https://github.com/vdomash
+- Jad - https://github.com/lebgdecasa
+- Cemre - https://github.com/cemreboz
 
 
 
