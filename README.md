@@ -88,8 +88,43 @@ This tool is ideal for entrepreneurs, startup founders, or marketing professiona
 
 ## ⚙️ Installation
 
-No installation steps required.
+**Technical Requirements**
+-  IntelliJ IDEA: Version 2020.1 or higher is recommended.
+-  Download IntelliJ IDEA: https://www.jetbrains.com/idea/download
+-  Java Development Kit (JDK): Version 11 or higher.
+-  Download the JDK: https://www.oracle.com/java/technologies/javase-jdk11-downloads.html
+-  Maven: Required for dependency management.
+-  Included with IntelliJ IDEA but can also be downloaded separately: https://maven.apache.org/download.cgi
 
+**Supported Operating Systems**
+-  Windows: Windows 10 or higher
+-  macOS: macOS Mojave (10.14) or higher
+-  Linux: Ubuntu 20.04 or higher, or any system with JDK 11+ installed
+
+Follow these steps to install and set up **Pitch!t**:
+
+1. Ensure you have the latest version of Intellij installed.
+
+2. Clone the repository:
+
+   ```sh
+   git clone https://github.com/PitchIt/PitchIt.git
+   
+4. Launch IntelliJ IDEA on your system.
+   - Click on File > Open.
+   - Navigate to the directory where the repository was cloned and select the Pitch-t folder.
+   - IntelliJ will automatically load the project. If prompted to import the project settings, choose Maven or Gradle (based on your setup).
+  
+5. Build the Project.
+   - Ensure all dependencies are resolved:
+   - IntelliJ will prompt you to download necessary dependencies automatically.
+   - If not, open the Maven tool window (on the right side of IntelliJ) and click on Reload All Projects.
+   - Wait for the build process to complete. If you see any errors, double-check your internet connection or re-import the project.
+
+6. Run the Application
+   - Locate the Main class in the app package.
+   - Right-click the file and select Run 'Main'.
+   - The application will start, and you can access its functionalities via the terminal or the GUI (if implemented).
 
 ## 💭 Feedback and Contributing
 
