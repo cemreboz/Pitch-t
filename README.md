@@ -6,7 +6,7 @@ Repository: https://github.com/cemreboz/Pitch-t
 
 ## 📖 Table of Contents
 1. [🌟 Highlights](#-highlights)
-2. [ℹ️ Overview](%EF%B8%8F-overview)
+2. [ℹ️ Overview](#%EF%B8%8F-overview)
 3. [✍️ Authors](#%EF%B8%8F-authors)
 4. [🚀 Usage](#-usage)
 5. [⬇️ Installation](#%EF%B8%8F-installation)
