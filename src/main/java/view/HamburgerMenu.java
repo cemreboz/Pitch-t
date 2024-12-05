@@ -27,7 +27,6 @@ import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.persona.PersonaState;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.vision.VisionState;
-import use_case.logout.LogoutUserDataAccessInterface;
 
 /**
  * A panel for the hamburger menu.

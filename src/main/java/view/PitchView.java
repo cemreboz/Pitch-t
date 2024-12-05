@@ -3,24 +3,15 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.List;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import entity.Pitch;
 import interface_adapter.ViewManagerModel;
@@ -31,9 +22,7 @@ import interface_adapter.new_pitch.ShowNewPitchController;
 import interface_adapter.pitch.PitchState;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.targetaudience.DetailedController;
-import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
-import org.json.JSONException;
 import use_case.set_targetaudience.DetailedInputData;
 
 /**
@@ -48,6 +37,8 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     public static final int TARGETAUDIENCE_FONT = 18;
     public static final int BIGGER_SPACING = 20;
     public static final int PITCH_NAME_SIZE = 22;
+    public static final String PITCH_ERROR_MSG = "Error loading pitch: ";
+    public static final String ERROR = "Error";
     private final String viewName = "pitch";
     private final PitchViewModel pitchViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -130,11 +121,11 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         final Pitch pitch = state.getPitch();
 
         if (pitch == null) {
-            String error = state.getPitchLoadError();
+            final String error = state.getPitchLoadError();
             JOptionPane.showMessageDialog(
                     this,
-                    "Error loading pitch: " + error,
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    PITCH_ERROR_MSG + error,
+                    ERROR, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -211,8 +202,8 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             final String error = pitchState.getPitchLoadError();
             JOptionPane.showMessageDialog(
                     this,
-                    "Error loading pitch: " + error,
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    PITCH_ERROR_MSG + error,
+                    ERROR, JOptionPane.ERROR_MESSAGE);
         }
         else {
             this.viewPersonasController.execute(pitch);
@@ -228,8 +219,8 @@ public class PitchView extends JPanel implements PropertyChangeListener {
             final String error = pitchState.getPitchLoadError();
             JOptionPane.showMessageDialog(
                     this,
-                    "Error loading pitch: " + error,
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    PITCH_ERROR_MSG + error,
+                    ERROR, JOptionPane.ERROR_MESSAGE);
         }
         else {
             final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(),
@@ -238,7 +229,7 @@ public class PitchView extends JPanel implements PropertyChangeListener {
                 this.detailedController.generateDetailed(inputData);
             }
             catch (Exception error) {
-                JOptionPane.showMessageDialog(this, error.getMessage(), "Error",
+                JOptionPane.showMessageDialog(this, error.getMessage(), ERROR,
                         JOptionPane.ERROR_MESSAGE);
             }
         }

@@ -9,7 +9,6 @@ public class GenerateVisualOutputData {
     private final String username;
     private final String password;
 
-
     public GenerateVisualOutputData(String imagePath, String message, String username, String password) {
         this.imagePath = imagePath;
         this.message = message;

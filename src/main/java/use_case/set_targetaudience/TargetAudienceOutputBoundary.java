@@ -7,6 +7,7 @@ public interface TargetAudienceOutputBoundary {
     /**
      * Success view.
      * @param outputData the outputdata for General Target Audience.
+     * @throws Exception if any error occurs during data fetching
      */
     void prepareSuccessView(TargetAudienceOuputData outputData) throws Exception;
 
