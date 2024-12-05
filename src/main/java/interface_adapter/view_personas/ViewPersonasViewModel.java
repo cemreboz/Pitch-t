@@ -9,6 +9,6 @@ public class ViewPersonasViewModel extends ViewModel<ViewPersonasState> {
 
     public ViewPersonasViewModel() {
         super("personas list");
-        setState(new ViewPersonasState());  // Initialize with an empty state
+        setState(new ViewPersonasState());
     }
 }

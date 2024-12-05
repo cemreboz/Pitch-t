@@ -6,7 +6,7 @@ import use_case.persona.PersonaInputBoundary;
 import use_case.persona.PersonaInputData;
 
 /**
- * The controller for the persona (show chat) use case
+ * The controller for the persona (show chat) use case.
  */
 public class PersonaController {
 

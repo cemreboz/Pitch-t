@@ -1,10 +1,10 @@
 package interface_adapter.view_personas;
 
-import entity.Persona;
-import entity.Pitch;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.Persona;
+import entity.Pitch;
 
 /**
  * State class for the View Personas use case.

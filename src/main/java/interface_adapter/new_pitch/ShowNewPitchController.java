@@ -3,6 +3,9 @@ package interface_adapter.new_pitch;
 import use_case.show_new_pitch.ShowNewPitchInputBoundary;
 import use_case.show_new_pitch.ShowNewPitchInputData;
 
+/**
+ * Class for Showing the new pitch controller.
+ */
 public class ShowNewPitchController {
 
     private final ShowNewPitchInputBoundary showNewPitchUseCaseInputBoundary;

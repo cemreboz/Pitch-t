@@ -3,8 +3,6 @@ package interface_adapter.create_pitch;
 import use_case.create_pitch.CreateNewPitchInputBoundary;
 import use_case.create_pitch.CreateNewPitchInputData;
 
-import java.util.List;
-
 /**
  * The controller for the Create New Pitch Use Case.
  */
@@ -23,6 +21,7 @@ public class CreateNewPitchController {
      * @param description    the description of the pitch
      * @param image          the image URL/path associated with the pitch
      * @param targetAudience the list of target audiences for the pitch
+     * @throws Exception if there is an error with calling this method.
      */
     public void execute(String name, String description, String image, String targetAudience) throws Exception {
         // Creating an input data object for the use case

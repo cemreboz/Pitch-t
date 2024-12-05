@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.DBUser;
-import entity.Pitch;
 import entity.User;
-import use_case.set_targetaudience.TargetAudienceInteractor;
 
 /**
  * The state for the New Pitch View Model.
@@ -75,12 +73,12 @@ public class CreateNewPitchState {
         this.errorMessage = errorMessage;
     }
 
-    public void setLoading(boolean isLoading) {
-        this.isLoading = isLoading;
+    public void setLoading(boolean loading) {
+        this.isLoading = loading;
     }
 
-    public void setSuccess(boolean isSuccess) {
-        this.isSuccess = isSuccess;
+    public void setSuccess(boolean success) {
+        this.isSuccess = success;
     }
 
     public void setCurrentUser(User currentUser) {

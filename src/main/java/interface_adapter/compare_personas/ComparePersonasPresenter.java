@@ -1,8 +1,8 @@
 package interface_adapter.compare_personas;
 
+import interface_adapter.ViewManagerModel;
 import use_case.compare_personas.ComparePersonasOutputBoundary;
 import use_case.compare_personas.ComparePersonasOutputData;
-import interface_adapter.ViewManagerModel;
 
 /**
  * Presenter for the Compare Personas use case.
@@ -20,7 +20,7 @@ public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
     @Override
     public void prepareSuccessView(ComparePersonasOutputData outputData) {
         // Create a new ComparePersonasState based on the output data
-        ComparePersonasState state = new ComparePersonasState();
+        final ComparePersonasState state = new ComparePersonasState();
         state.setPersona1(outputData.getPersona1());
         state.setPersona2(outputData.getPersona2());
         state.setPersona1Opinion(outputData.getPersona1Opinion());
@@ -44,7 +44,7 @@ public class ComparePersonasPresenter implements ComparePersonasOutputBoundary {
     @Override
     public void prepareFailView(String errorMessage) {
         // Set the error message in the state
-        ComparePersonasState state = new ComparePersonasState();
+        final ComparePersonasState state = new ComparePersonasState();
         state.setErrorMessage(errorMessage);
 
         // Update the view model state and notify the UI components

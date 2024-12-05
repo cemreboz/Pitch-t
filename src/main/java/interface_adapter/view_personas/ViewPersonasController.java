@@ -3,7 +3,6 @@ package interface_adapter.view_personas;
 import entity.Pitch;
 import use_case.view_personas.ViewPersonasInputBoundary;
 import use_case.view_personas.ViewPersonasInputData;
-import use_case.view_personas.ViewPersonasInteractor;
 
 /**
  * The controller for the View Personas Use Case.
@@ -17,6 +16,7 @@ public class ViewPersonasController {
 
     /**
      * The execute method.
+     * @param pitch the pitch used to view personas.
      */
     public void execute(Pitch pitch) {
         final ViewPersonasInputData inputData = new ViewPersonasInputData(pitch);
