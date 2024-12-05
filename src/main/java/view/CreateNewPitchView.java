@@ -1,10 +1,5 @@
 package view;
 
-import interface_adapter.create_pitch.CreateNewPitchController;
-import interface_adapter.create_pitch.CreateNewPitchState;
-import interface_adapter.create_pitch.CreateNewPitchViewModel;
-import interface_adapter.login.LoginController;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -15,8 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
+
+import interface_adapter.create_pitch.CreateNewPitchController;
+import interface_adapter.create_pitch.CreateNewPitchState;
+import interface_adapter.create_pitch.CreateNewPitchViewModel;
+import interface_adapter.login.LoginController;
 
 /**
  * The view for creating a new pitch.
@@ -139,6 +138,8 @@ public class CreateNewPitchView extends JPanel implements PropertyChangeListener
 
     /**
      * Handles the save pitch action.
+     *
+     * @throws Exception if an error occurs during the save process
      */
     private void savePitch() throws Exception {
         final String name = nameField.getText().trim();
