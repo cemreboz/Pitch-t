@@ -107,7 +107,7 @@ Follow these steps to install and set up **Pitch!t**:
 
 2. Clone the repository:
 
-   ```sh
+   ```
    git clone https://github.com/PitchIt/PitchIt.git
    
 4. Launch IntelliJ IDEA on your system.
@@ -147,8 +147,73 @@ We value your feedback and encourage you to share your thoughts to help improve 
    - Provide specific, constructive feedback.
    - Avoid vague or overly general comments (e.g., "It doesn't work"). Instead, specify what aspect isn't working and why.
    - Be respectful in your communication.
+  
+4. **What to Expect After Submitting Feedback**:
+   - Your feedback will be reviewed by the development team within **3-5 business days**.
+   - Valid issues and suggestions will be added to the project roadmap or backlog.
+   - You may be contacted for additional details or clarifications.
+  
+### Contributing to Pitch!t
 
+We welcome contributions to **Pitch!t** from developers, designers, and anyone interested in improving the project.
 
+#### How to Contribute
+1. **Fork the Repository**:  
+   - Navigate to the [Pitch!t Repository](https://github.com/cemreboz/Pitch-t) on GitHub.
+   - Click the **Fork** button at the top-right corner.
+
+2. **Clone Your Fork**:  
+   ```bash
+   git clone https://github.com/your-username/Pitch-t.git
+   cd Pitch-t
+
+3. Create a Feature Branch:
+   ```bash
+   git checkout -b feature/YourFeatureName
+
+4. Make Your Changes:
+   - Add your feature or fix a bug.
+   - Ensure your code follows the project's coding standards and structure.
+   - Include comments and documentation where necessary.
+     
+5. Test Your Changes:
+   - Run all tests to ensure your changes do not introduce any bugs.
+   - If necessary, add new tests to validate your work.
+
+6. Commit and Push Your Changes:
+   ```bash
+   git add .
+   git commit -m "Add Your Feature Description"
+   git push origin feature/YourFeatureName
+
+7. Submit a Pull Request (PR):
+
+   - Navigate to your forked repository on GitHub.
+   - Click the New Pull Request button.
+   - Provide a detailed description of your changes in the PR form.
+  
+**Guidelines for Contributions**
+   - Respect the Project's Vision: Ensure your changes align with the goals of the project.
+   - Focus on Quality: Follow the coding standards and include tests for your code.
+   - Provide Context: When submitting a PR, include:
+   - The problem your contribution solves.
+   - The solution you've implemented.
+   - Any trade-offs or limitations.
+
+**Reviewing and Merging Contributions**
+   - Pull Request Review:
+   - Your PR will be reviewed by a project maintainer within 5 business days.
+   - Feedback may be provided to improve your contribution.
+
+**Approval:**
+   - If approved, your changes will be merged into the main branch.
+   - Significant contributions may be highlighted in the project's release notes or README.
+
+**Contributions That Are Not Accepted**
+   - Submissions that introduce unnecessary complexity or deviate from the project goals.
+   -Changes that are poorly documented or lack test coverage.
+   - Contributions that violate the project's structure or do not adhere to Clean Architecture.
+     
 ## 📜 License
 
 This project is licensed under a **Public Domain Dedication** license. The **CC0 1.0 Universal** license explicitly waives all copyright and related rights, allowing the work to be freely used, shared, modified, and distributed by anyone, even for commercial purposes, without requiring permission or attribution.
