@@ -2,14 +2,25 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import entity.Pitch;
 import interface_adapter.ViewManagerModel;
@@ -22,119 +33,60 @@ import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.targetaudience.DetailedController;
 import interface_adapter.targetaudience.DetailedTargetAudiencePageViewModel;
 import interface_adapter.view_personas.ViewPersonasController;
+import org.json.JSONException;
 import use_case.set_targetaudience.DetailedInputData;
 
 /**
- * The view for when a user wants to view the details of a specific pitch.
+ * The view for displaying the details of a specific pitch.
  */
 public class PitchView extends JPanel implements PropertyChangeListener {
 
+    public static final String FONT = "Arial";
+    public static final int FONT_SIZE = 24;
+    public static final int SPACING = 10;
+    public static final int REGULAR_FONT = 16;
+    public static final int TARGETAUDIENCE_FONT = 18;
+    public static final int BIGGER_SPACING = 20;
+    public static final int PITCH_NAME_SIZE = 22;
     private final String viewName = "pitch";
     private final PitchViewModel pitchViewModel;
     private final ViewManagerModel viewManagerModel;
     private HamburgerMenu hamburgerMenu;
 
-    private final int fifty = 50;
-    private final int hundred = 100;
-    private final int threeHundred = 300;
-    private final int thousand = 1000;
-    private final int fourHundred = 400;
-    private final int sixHundred = 600;
-
     private final ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
-    private JPanel namePanel;
     private ViewPersonasController viewPersonasController;
-    private DetailedController detailedController;
-    private JComboBox<String> audienceDropdown;
     private ExpertController expertController;
+    private DetailedController detailedController;
 
+    private JPanel contentPanel;
+
+    /**
+     * Constructs a new PitchView.
+     *
+     * @param pitchViewModel   the ViewModel for the pitch
+     * @param viewManagerModel the ViewManagerModel for navigation
+     */
     public PitchView(PitchViewModel pitchViewModel, ViewManagerModel viewManagerModel) {
         this.pitchViewModel = pitchViewModel;
         this.pitchViewModel.addPropertyChangeListener(this);
 
         this.viewManagerModel = viewManagerModel;
 
+        this.setLayout(new BorderLayout());
+        this.setBackground(Color.WHITE);
+
+        // Create Header Panel
         final JPanel headerPanel = createHeaderPanel();
+        add(headerPanel, BorderLayout.NORTH);
 
-        final PitchState state = pitchViewModel.getState();
-        final String pitchName = state.getPitch().getName();
+        // Create Content Panel
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(Color.WHITE);
+        add(contentPanel, BorderLayout.WEST);
 
-        final JLabel nameLabel = new JLabel(pitchName);
-
-        namePanel = new JPanel();
-        namePanel.add(nameLabel);
-
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(headerPanel);
-        this.add(namePanel);
-
-        // Add the "View Personas" button
-        final JButton viewPersonasButton = new JButton("View Personas");
-        viewPersonasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleViewPersonasButton();
-            }
-        });
-
-        this.add(viewPersonasButton);
-
-        final JButton viewTargetAudienceButton = new JButton("View Detailed Target Audience");
-        viewTargetAudienceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    handleViewTargetAudienceButton();
-                }
-                catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-        this.add(viewTargetAudienceButton);
-    }
-
-    private void handleViewTargetAudienceButton() throws Exception {
-        final PitchState pitchState = pitchViewModel.getState();
-        final Pitch pitch = pitchState.getPitch();
-
-        if (pitch == null) {
-            // Handle error scenario - pitch not loaded properly
-            final String error = pitchState.getPitchLoadError();
-            JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Get the selected target audience category from the JComboBox
-            final String selectedAudienceCategory = (String) audienceDropdown.getSelectedItem();
-
-            if (selectedAudienceCategory == null || selectedAudienceCategory.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please select a target audience category.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            } else {
-                // Create DetailedInputData with the selected audience category
-                final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(), selectedAudienceCategory);
-                if (detailedController != null) {
-                    // Generate the detailed target audience data
-                    detailedController.generateDetailed(inputData);
-
-                    // Assuming detailedController correctly updates the ViewModel
-                    // Create an instance of DetailedView and display it in a pop-up
-                    SwingUtilities.invokeLater(() -> showDetailedViewPopup());
-                }
-            }
-        }
-    }
-
-    private void showDetailedViewPopup() {
-        // Create an instance of DetailedView
-        DetailedTargetAudiencePageViewModel detailedViewModel = new DetailedTargetAudiencePageViewModel();
-        DetailedView detailedView = new DetailedView(detailedViewModel);
-        detailedView.setController(detailedController);
-
-        // Create a dialog to wrap the DetailedView
-        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Detailed Target Audience", true);
-        dialog.getContentPane().add(detailedView);
-        dialog.setSize(sixHundred, fourHundred);
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+        // Load initial state
+        updateContent();
     }
 
     private JPanel createHeaderPanel() {
@@ -144,113 +96,151 @@ public class PitchView extends JPanel implements PropertyChangeListener {
         final JPanel headerPanel = new JPanel();
         headerPanel.setBackground(Color.WHITE);
         headerPanel.setLayout(new BorderLayout());
-        headerPanel.setMaximumSize(new Dimension(thousand, hundred));
 
         hamburgerMenu = new HamburgerMenu(pitchViewModel);
         hamburgerMenu.setBackground(Color.WHITE);
 
         final JLabel title = new JLabel("Pitch View");
+        title.setFont(new Font(FONT, Font.BOLD, FONT_SIZE));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
 
         final JPanel menuWrapper = new JPanel();
         menuWrapper.setLayout(new BorderLayout());
-        menuWrapper.setMaximumSize(new Dimension(fifty, fifty));
         menuWrapper.setBackground(Color.WHITE);
-
         menuWrapper.add(hamburgerMenu, BorderLayout.CENTER);
+
         headerPanel.add(menuWrapper, BorderLayout.WEST);
-        headerPanel.add(logoLabel, BorderLayout.EAST);
         headerPanel.add(title, BorderLayout.CENTER);
+        headerPanel.add(logoLabel, BorderLayout.EAST);
 
         return headerPanel;
     }
 
-    private JPanel createFooterPanel() {
-        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        final JButton personaButton = new JButton("Personas");
-        buttonPanel.add(personaButton);
-
-        final JButton askExpertsButton = new JButton("Ask Experts");
-        buttonPanel.add(askExpertsButton);
-
-        personaButton.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        final PitchState state = pitchViewModel.getState();
-                        expertController.execute(state.getUsername(), state.getPassword());
-                    }
-                }
-        );
-
-        askExpertsButton.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        final PitchState state = pitchViewModel.getState();
-                        expertController.execute(state.getUsername(), state.getPassword());
-                    }
-                }
-        );
-
-        return buttonPanel;
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final PitchState state = (PitchState) evt.getNewValue();
-        if (state.getPitchLoadError() != null) {
-            JOptionPane.showMessageDialog(null, state.getPitchLoadError());
+        if ("state".equals(evt.getPropertyName())) {
+            updateContent();
         }
-        else if (state.getDetailedTaLoadError() != null) {
-            JOptionPane.showMessageDialog(null, state.getDetailedTaLoadError());
-        }
-        else {
-
-            final String newPitchName = state.getPitch().getName();
-            namePanel.removeAll();
-
-            final JLabel nameLabel = new JLabel(newPitchName);
-            namePanel.add(nameLabel);
-
-            final String newPitchDescription = state.getPitch().getDescription();
-            final JLabel descriptionLabel = new JLabel(newPitchDescription);
-            descriptionLabel.setPreferredSize(new Dimension(threeHundred, descriptionLabel.getPreferredSize().height));
-            namePanel.add(descriptionLabel);
-
-            final String newPitchImage = state.getPitch().getImage();
-            if (newPitchImage != null) {
-                final JLabel imageLabel = new JLabel(newPitchImage);
-                namePanel.add(imageLabel);
-            }
-
-            final JPanel audiencePanel = new JPanel();
-            audiencePanel.setLayout(new BoxLayout(audiencePanel, BoxLayout.Y_AXIS));
-            audiencePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Target Audiences"));
-
-            // Create a JComboBox for the target audiences
-            audienceDropdown = new JComboBox<>(state.getPitch().getTargetAudienceList().toArray(new String[0]));
-            audiencePanel.add(new JLabel("Select Audience:"));
-            audiencePanel.add(audienceDropdown);
-            namePanel.add(audiencePanel);
-        }
-
-        namePanel.revalidate();
-        namePanel.repaint();
-
     }
 
-    // Start of View Personas user flow
+    private void updateContent() {
+        contentPanel.removeAll();
+
+        final PitchState state = pitchViewModel.getState();
+        final Pitch pitch = state.getPitch();
+
+        if (pitch == null) {
+            String error = state.getPitchLoadError();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error loading pitch: " + error,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Pitch Name (on the left)
+        final JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        namePanel.setBackground(Color.WHITE);
+        final JLabel nameLabel = new JLabel(pitch.getName());
+        nameLabel.setFont(new Font(FONT, Font.BOLD, PITCH_NAME_SIZE));
+        namePanel.add(nameLabel);
+        contentPanel.add(namePanel);
+
+        // Spacing between name and description
+        contentPanel.add(Box.createVerticalStrut(SPACING));
+
+        // Pitch Description
+        final JLabel descriptionLabel = new JLabel(pitch.getDescription());
+        descriptionLabel.setFont(new Font(FONT, Font.PLAIN, REGULAR_FONT));
+        descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        contentPanel.add(descriptionLabel);
+
+        // Spacing between description and target audiences
+        contentPanel.add(Box.createVerticalStrut(BIGGER_SPACING));
+
+        // Target Audiences
+        final List<String> targetAudiences = pitch.getTargetAudienceList();
+        if (targetAudiences != null && !targetAudiences.isEmpty()) {
+            final JLabel audienceLabel = new JLabel("Target Audiences:");
+            audienceLabel.setFont(new Font(FONT, Font.BOLD, TARGETAUDIENCE_FONT));
+            audienceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            contentPanel.add(audienceLabel);
+
+            contentPanel.add(Box.createVerticalStrut(SPACING));
+
+            for (String audience : targetAudiences) {
+                final JLabel audienceItem = new JLabel("- " + audience);
+                audienceItem.setFont(new Font(FONT, Font.PLAIN, REGULAR_FONT));
+                audienceItem.setAlignmentX(Component.LEFT_ALIGNMENT);
+                contentPanel.add(audienceItem);
+            }
+        }
+
+        // Spacing before the button
+        contentPanel.add(Box.createVerticalStrut(BIGGER_SPACING));
+
+        // Add the "View Personas" button
+        final JButton viewPersonasButton = new JButton("View Personas");
+        viewPersonasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleViewPersonasButton();
+            }
+        });
+        final JButton viewDetailedButton = new JButton("View Detailed Target Audiences");
+        viewDetailedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleDetailedTaButton();
+            }
+        });
+
+        contentPanel.add(viewPersonasButton);
+        contentPanel.add(viewDetailedButton);
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    // Handle View Personas Button Click
     private void handleViewPersonasButton() {
-        // Assuming you have an instance of PitchState
         final PitchState pitchState = pitchViewModel.getState();
         final Pitch pitch = pitchState.getPitch();
 
         if (pitch == null) {
-            // Handle error scenario - pitch not loaded properly
             final String error = pitchState.getPitchLoadError();
-            JOptionPane.showMessageDialog(this, "Error loading pitch: " + error, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error loading pitch: " + error,
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
             this.viewPersonasController.execute(pitch);
+        }
+    }
+
+    // Handle View Personas Button Click
+    private void handleDetailedTaButton() {
+        final PitchState pitchState = pitchViewModel.getState();
+        final Pitch pitch = pitchState.getPitch();
+
+        if (pitch == null) {
+            final String error = pitchState.getPitchLoadError();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error loading pitch: " + error,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            final DetailedInputData inputData = new DetailedInputData(pitch.getName(), pitch.getDescription(),
+                    pitch.getTargetAudienceList().toString());
+            try {
+                this.detailedController.generateDetailed(inputData);
+            }
+            catch (Exception error) {
+                JOptionPane.showMessageDialog(this, error.getMessage(), "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -263,24 +253,27 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     }
 
     /**
-     * Method to set hamburger menu login controller.
-     * @param loginController login controller
+     * Sets the login controller for the hamburger menu.
+     *
+     * @param loginController the login controller
      */
     public void setLoginController(LoginController loginController) {
         hamburgerMenu.setLoginController(loginController);
     }
 
     /**
-     * Method to set hamburger menu account settings controller.
-     * @param accountSettingsController account settings.
+     * Sets the account settings controller for the hamburger menu.
+     *
+     * @param accountSettingsController the account settings controller
      */
     public void setAccountSettingsController(AccountSettingsController accountSettingsController) {
         hamburgerMenu.setAccountSettingsController(accountSettingsController);
     }
 
     /**
-     * Method to set hamburger menu expert controller.
-     * @param expertController expert controller
+     * Sets the expert controller for the hamburger menu.
+     *
+     * @param expertController the expert controller
      */
     public void setExpertController(ExpertController expertController) {
         this.expertController = expertController;
@@ -288,8 +281,9 @@ public class PitchView extends JPanel implements PropertyChangeListener {
     }
 
     /**
-     * Method to set hamburger menu new pitch controller.
-     * @param newPitchController new pitch controller
+     * Sets the new pitch controller for the hamburger menu.
+     *
+     * @param newPitchController the new pitch controller
      */
     public void setNewPitchController(ShowNewPitchController newPitchController) {
         hamburgerMenu.setNewPitchController(newPitchController);

@@ -52,7 +52,6 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
         }
     }
 
-    /** Populate some fake personas for visualization. */
     private List<Persona> populateFakePersonas(Pitch pitch) {
         try {
             String systemMessage = createSystemMessage(pitch);
@@ -63,9 +62,9 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
             // Parse the response to extract personas
             return parsePersonasFromJson(response);
         } catch (Exception e) {
-            viewPersonasOutputBoundary.prepareFailView("An error occurred while generating personas: " + e.getMessage());
-            e.printStackTrace();
-            return List.of();
+            String errorMessage = "An error occurred while generating personas: " + e.getMessage();
+            viewPersonasOutputBoundary.prepareFailView(errorMessage);
+            throw new IllegalStateException(errorMessage, e); // Rethrow the exception to ensure proper test handling
         }
     }
 

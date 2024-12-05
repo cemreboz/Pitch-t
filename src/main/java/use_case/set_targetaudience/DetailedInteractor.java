@@ -1,8 +1,12 @@
 package use_case.set_targetaudience;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import entity.DBUser;
+import entity.Pitch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,10 +20,13 @@ public class DetailedInteractor implements DetailedInputBoundary {
 
     private final DetailedtaDataAccessInterface dataAccess;
     private final DetailedOutputBoundary outputBoundary;
+    private final DetailedDataObjectAccessInterface dataObjectAccess;
 
-    public DetailedInteractor(DetailedtaDataAccessInterface dataAccess, DetailedOutputBoundary outputBoundary) {
+    public DetailedInteractor(DetailedtaDataAccessInterface dataAccess, DetailedOutputBoundary outputBoundary,
+                              DetailedDataObjectAccessInterface dataObjectAccess) {
         this.dataAccess = dataAccess;
         this.outputBoundary = outputBoundary;
+        this.dataObjectAccess = dataObjectAccess;
     }
 
     /**
@@ -88,6 +95,16 @@ public class DetailedInteractor implements DetailedInputBoundary {
             }
 
             final List<DetailedTargetAudience> parseDetailedTargetAudience = parseDetailedTargetAudience(response);
+
+            final DBUser currentUser = (DBUser) dataObjectAccess.getCurrentUser();
+            final Pitch currentPitch = currentUser.getPitchByName(inputData.getPitchname());
+            final List<String> generalTa = currentPitch.getTargetAudienceList();
+            final Map<String, DetailedTargetAudience> newMap = new HashMap<String, DetailedTargetAudience>();
+            final int size = Math.min(generalTa.size(), parseDetailedTargetAudience.size());
+            for (int i = 0; i < size; i++) {
+                newMap.put(generalTa.get(i), parseDetailedTargetAudience.get(i));
+            }
+            currentPitch.setDetailedTargetAudienceMap(newMap);
             final DetailedOutputData outputData = new DetailedOutputData(parseDetailedTargetAudience);
             outputBoundary.prepareSuccessView(outputData);
         }

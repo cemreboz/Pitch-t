@@ -1,6 +1,7 @@
 package use_case.targetaudience;
 
 import data_access.ChatgptDataAccessObject;
+import entity.User;
 import org.junit.jupiter.api.Test;
 import org.json.JSONException;
 import use_case.set_targetaudience.*;
@@ -38,7 +39,13 @@ public class DetailedInteractorTest {
         };
 
         // Create the interactor
-        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary);
+        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary,
+                new DetailedDataObjectAccessInterface() {
+            @Override
+            public User getCurrentUser() {
+                return null;
+            }
+        });
 
         // Execute the use case
         interactor.execute(inputData);
@@ -75,7 +82,13 @@ public class DetailedInteractorTest {
         };
 
         // Create the interactor
-        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary);
+        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary,
+                new DetailedDataObjectAccessInterface() {
+                    @Override
+                    public User getCurrentUser() {
+                        return null;
+                    }
+                });
 
         // Execute the use case
         interactor.execute(inputData);
@@ -108,7 +121,13 @@ public class DetailedInteractorTest {
         };
 
         // Create the interactor
-        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary);
+        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary,
+                new DetailedDataObjectAccessInterface() {
+                    @Override
+                    public User getCurrentUser() {
+                        return null;
+                    }
+                });
 
         // Expect an exception
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -154,7 +173,13 @@ public class DetailedInteractorTest {
         };
 
         // Create the interactor
-        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary);
+        DetailedInteractor interactor = new DetailedInteractor(dataAccessObject, outputBoundary, new DetailedDataObjectAccessInterface() {
+
+            @Override
+            public User getCurrentUser() {
+                return null;
+            }
+        });
 
         // Execute the use case
         interactor.execute(inputData);

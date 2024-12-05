@@ -6,11 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.ChatExpertDataAccessObject;
-import data_access.ChatgptDataAccessObject;
-import data_access.FileVisualDataAccessObject;
-import data_access.InMemoryUserDataAccessObject;
-import data_access.VisualDataAccessObject;
+import data_access.*;
+import entity.DBUser;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -23,6 +20,8 @@ import interface_adapter.chat_expert.ChatExpertController;
 import interface_adapter.chat_expert.ChatExpertPresenter;
 import interface_adapter.chat_persona.ChatPersonaController;
 import interface_adapter.chat_persona.ChatPersonaPresenter;
+import interface_adapter.chat_vision.ChatVisionController;
+import interface_adapter.chat_vision.ChatVisionPresenter;
 import interface_adapter.compare_personas.ComparePersonasController;
 import interface_adapter.compare_personas.ComparePersonasPresenter;
 import interface_adapter.compare_personas.ComparePersonasViewModel;
@@ -73,6 +72,10 @@ import use_case.chat_persona.ChatPersonaDataAccessInterface;
 import use_case.chat_persona.ChatPersonaInputBoundary;
 import use_case.chat_persona.ChatPersonaInteractor;
 import use_case.chat_persona.ChatPersonaOutputBoundary;
+import use_case.chat_vision.ChatVisionDataAccessInterface;
+import use_case.chat_vision.ChatVisionInputBoundary;
+import use_case.chat_vision.ChatVisionInteractor;
+import use_case.chat_vision.ChatVisionOutputBoundary;
 import use_case.compare_personas.ComparePersonasGptAccessInterface;
 import use_case.compare_personas.ComparePersonasInputBoundary;
 import use_case.compare_personas.ComparePersonasInteractor;
@@ -146,7 +149,7 @@ public class AppBuilder {
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
     // thought question: is the hard dependency below a problem?
-    private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
+    private final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(userFactory);
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
@@ -249,7 +252,7 @@ public class AppBuilder {
      */
     public AppBuilder addVisionView() {
         visionViewModel = new VisionViewModel();
-        visionView = new VisionView(visionViewModel);
+        visionView = new VisionView(visionViewModel, viewManagerModel);
         cardPanel.add(visionView, visionView.getViewName());
         return this;
     }
@@ -546,21 +549,14 @@ public class AppBuilder {
      * @return this builder.
      */
     public AppBuilder addDetailedTargetAudienceUseCase() {
-        // Instantiate output boundary
         final DetailedOutputBoundary detailedOutputBoundary = new DetailedTargetAudiencePresenter(
                 detailedTargetAudiencePageViewModel);
 
-        // Instantiate data access interface
         final DetailedtaDataAccessInterface detailedDataAccessInterface = new ChatgptDataAccessObject();
-
-        // Create the interactor
-        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(
-                detailedDataAccessInterface, detailedOutputBoundary);
-
-        // Create the controller using the interactor
+        final DetailedInputBoundary detailedInteractor = new DetailedInteractor(detailedDataAccessInterface,
+                detailedOutputBoundary, userDataAccessObject);
         final DetailedController detailedController = new DetailedController(detailedInteractor);
 
-        // Set the controller for the detailed view
         detailedView.setController(detailedController);
         pitchView.setDetailedController(detailedController);
 
@@ -621,7 +617,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addVisionUseCase() {
-        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel);
+        final GenerateVisualOutputBoundary generateVisualOutputBoundary = new VisionPresenter(visionViewModel,
+                viewManagerModel);
         final GenerateVisualInputBoundary generateVisualInteractor = new GenerateVisualInteractor(
                 new VisualDataAccessObject(),
                 userDataAccessObject,
@@ -630,6 +627,28 @@ public class AppBuilder {
 
         final VisionController visionController = new VisionController(generateVisualInteractor);
         visionView.setVisionController(visionController);
+
+        // Set the controller for the Persona List View
+        personaListView.setVisionController(visionController);
+
+        return this;
+    }
+
+    /**
+     * Adds the chat with individual expert use case.
+     * @return this builder
+     */
+    public AppBuilder addChatVisionUseCase() {
+        final ChatVisionOutputBoundary chatVisionOutputBoundary = new ChatVisionPresenter(
+                visionViewModel, viewManagerModel);
+        final ChatVisionDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
+
+        final ChatVisionInputBoundary chatVisionInteractor = new ChatVisionInteractor(
+                chatgptDataAccessObject, chatVisionOutputBoundary);
+
+        final ChatVisionController chatVisionController = new ChatVisionController(
+                chatVisionInteractor);
+        visionView.setChatVisionController(chatVisionController);
         return this;
     }
 

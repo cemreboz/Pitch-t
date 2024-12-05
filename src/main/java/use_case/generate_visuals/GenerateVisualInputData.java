@@ -1,17 +1,20 @@
 package use_case.generate_visuals;
 
+import entity.Persona;
+import entity.Pitch;
+
 /**
  * The input data for the Generate Visual Use Case.
  */
 public class GenerateVisualInputData {
     private final String prompt;
-    private final String personaName;
-    private final String pitchName;
+    private final Persona persona;
+    private final Pitch pitch;
 
-    public GenerateVisualInputData(String prompt, String personaName, String pitchName) {
+    public GenerateVisualInputData(String prompt, Persona persona, Pitch pitch) {
         this.prompt = prompt;
-        this.personaName = personaName;
-        this.pitchName = pitchName;
+        this.persona = persona;
+        this.pitch = pitch;
     }
 
     public String getPrompt() {
@@ -19,10 +22,10 @@ public class GenerateVisualInputData {
     }
 
     public String getPersonaName() {
-        return personaName;
+        return persona.getName();
     }
 
     public String getPitchName() {
-        return pitchName;
+        return pitch.getName();
     }
 }

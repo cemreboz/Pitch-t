@@ -17,6 +17,7 @@ import use_case.generate_visuals.VisionDBDataAccessObject;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.persona.PersonaDataAccessInterface;
+import use_case.set_targetaudience.DetailedDataObjectAccessInterface;
 import use_case.show_new_pitch.ShowNewPitchDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.view_personas.ViewPersonasDataAccessInterface;
@@ -38,7 +39,8 @@ public class InMemoryUserDataAccessObject implements SignupUserDataAccessInterfa
         PersonaDataAccessInterface,
         VisionDBDataAccessObject,
         ViewPersonasDataAccessInterface,
-        ComparePersonasDataAccessInterface {
+        ComparePersonasDataAccessInterface,
+        DetailedDataObjectAccessInterface {
 
     private final Map<String, User> users = new HashMap<>();
 
