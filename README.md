@@ -6,10 +6,10 @@ Repository: https://github.com/cemreboz/Pitch-t
 
 ## 📖 Table of Contents
 1. [🌟 Highlights](#-highlights)
-2. [ℹ️ Overview](#-overview)
-3. [✍️ Authors](#-authors)
+2. [ℹ️ Overview](ℹ%EF%B8%8F-overview)
+3. [✍️ Authors](#%EF%B8%8F-authors)
 4. [🚀 Usage](#-usage)
-5. [⬇️ Installation](#-installation)
+5. [⬇️ Installation](#%EF%B8%8F-installation)
 6. [💭 Feedback and Contributing](#-feedback-and-contributing)
 7. [📜 License](#-license)
 
@@ -33,6 +33,10 @@ their ideas and strategies by simulating conversations with AI personas. Whether
 pitching a business, or gauging the impact of a marketing campaign, Pitch!t helps you gain valuable insights from
 personas crafted to reflect your target audience. We created this platform to empower aspiring entrepreneurs to better
 understand their customers, validate their ideas, and refine their pitches — all with the help of cutting-edge AI.
+
+PitchIt is a software designed to simplify pitch creation for entrepreneurs, startups, and marketers by automating the process of persona generation, target audience identification, and pitch analysis.
+PitchIt was made to address the need for streamlined persona-based analysis when creating product pitches. It helps marketers quickly build target personas, compare them, and understand the best way to target potential customers.
+This tool is ideal for entrepreneurs, startup founders, or marketing professionals looking to make informed decisions about product positioning, branding, and customer engagement.
 
 
 ## ✍️ Authors
