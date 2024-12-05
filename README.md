@@ -116,18 +116,18 @@ Follow these steps to install and set up **Pitch!t**:
    - Navigate to the directory where the repository was cloned and select the Pitch-t folder.
    - IntelliJ will automatically load the project. If prompted to import the project settings, choose Maven or Gradle (based on your setup).
 
-4.5. Set API Key. (Optional)
+5. (Optional) Set API Key.
    - Set environment variable "OPENAI_API_KEY" with your OpenAI key. https://openai.com/index/openai-api/
    - Locate all instances of PitchitManager.getApiKey(). (Double-shift to search project)
    - Repalce with System.getEnv("OPENAI_API_KEY"). 
   
-5. Build the Project.
+6. Build the Project.
    - Ensure all dependencies are resolved:
    - IntelliJ will prompt you to download necessary dependencies automatically.
    - If not, open the Maven tool window (on the right side of IntelliJ) and click on Reload All Projects.
    - Wait for the build process to complete. If you see any errors, double-check your internet connection or re-import the project.
 
-6. Run the Application
+7. Run the Application
    - Locate the Main class in the app package.
    - Right-click the file and select Run 'Main'.
    - The application will start, and you can access its functionalities via the terminal or the GUI (if implemented).
