@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -180,51 +181,112 @@ public class DetailedView extends JPanel implements PropertyChangeListener {
             attributes = new ArrayList<>();
         }
         else {
-            attributes = List.of(new String[]{"Interests and Passions", String.join(comma,
+            attributes = List.of(
+                    new String[]{"Interests and Passions", String.join(comma,
                             safeList(detailedTargetAudience.getInterestsAndPassions()))},
                     new String[]{"Values", String.join(comma, safeList(detailedTargetAudience.getValues()))},
                     new String[]{"Personality Traits", String.join(comma, safeList(
                             detailedTargetAudience.getPersonalityTraits()))},
-                    new String[]{"Lifestyle", safeString(detailedTargetAudience.getLifestyle())});
+                    new String[]{"Lifestyle", safeString(detailedTargetAudience.getLifestyle())}
+            );
         }
         return attributes;
     }
 
     private List<String[]> getBehavioralAttributes() {
-        if (detailedTargetAudience == null) return List.of();
+        final List<String[]> attributes;
+        if (detailedTargetAudience == null) {
+            attributes = new ArrayList<>();
+        }
+        else {
+            attributes = new ArrayList<>();
 
-        return List.of(
-                new String[]{"Early Adopter", detailedTargetAudience.isEarlyAdopter() ? yes : no},
-                new String[]{"Tech Savviness", safeString(detailedTargetAudience.getTechSavviness())},
-                new String[]{"Gadget Ownership", String.join(comma, safeList(
-                        detailedTargetAudience.getGadgetOwnership()))},
-                new String[]{"Media Consumption", String.join(comma, safeList(
-                        detailedTargetAudience.getMediaConsumption()))},
-                new String[]{"Online Engagement", String.join(comma, safeList(
-                        detailedTargetAudience.getOnlineEngagement()))},
-                new String[]{"Influencer", detailedTargetAudience.isInfluencer() ? yes : no}
-        );
+            final String earlyAdopterValue;
+            if (detailedTargetAudience.isEarlyAdopter()) {
+                earlyAdopterValue = yes;
+            }
+            else {
+                earlyAdopterValue = no;
+            }
+            attributes.add(new String[]{"Early Adopter", earlyAdopterValue});
+
+            attributes.add(new String[]{"Tech Savviness", safeString(detailedTargetAudience.getTechSavviness())});
+            attributes.add(new String[]{"Gadget Ownership", String.join(comma, safeList(
+                    detailedTargetAudience.getGadgetOwnership()))});
+            attributes.add(new String[]{"Media Consumption", String.join(comma, safeList(
+                    detailedTargetAudience.getMediaConsumption()))});
+            attributes.add(new String[]{"Online Engagement", String.join(comma, safeList(
+                    detailedTargetAudience.getOnlineEngagement()))});
+
+            final String influencerValue;
+            if (detailedTargetAudience.isInfluencer()) {
+                influencerValue = yes;
+            }
+            else {
+                influencerValue = no;
+            }
+            attributes.add(new String[]{"Influencer", influencerValue});
+        }
+        return attributes;
     }
 
     private List<String[]> getOtherAttributes() {
-        if (detailedTargetAudience == null) return List.of();
+        final List<String[]> attributes;
+        if (detailedTargetAudience == null) {
+            attributes = new ArrayList<>();
+        }
+        else {
+            attributes = new ArrayList<>();
 
-        return List.of(
-                new String[]{"Event Participation", String.join(comma, safeList(detailedTargetAudience.getEventParticipation()))},
-                new String[]{"Hobbies", String.join(comma, safeList(detailedTargetAudience.getHobbies()))},
-                new String[]{"Brand Affinity", String.join(comma, safeList(detailedTargetAudience.getBrandAffinity()))},
-                new String[]{"Environmental Concerns", detailedTargetAudience.isEnvironmentalConcerns() ? yes : no},
-                new String[]{"Global Perspective", detailedTargetAudience.isGlobalPerspective() ? yes : no},
-                new String[]{"Multilingual Abilities", detailedTargetAudience.isMultilingualAbilities() ? yes : no}
-        );
+            attributes.add(new String[]{"Event Participation", String.join(comma, safeList(
+                    detailedTargetAudience.getEventParticipation()))});
+            attributes.add(new String[]{"Hobbies", String.join(comma, safeList(detailedTargetAudience.getHobbies()))});
+            attributes.add(new String[]{"Brand Affinity", String.join(comma, safeList(
+                    detailedTargetAudience.getBrandAffinity()))});
+
+            final String environmentalConcernsValue;
+            if (detailedTargetAudience.isEnvironmentalConcerns()) {
+                environmentalConcernsValue = yes;
+            }
+            else {
+                environmentalConcernsValue = no;
+            }
+            attributes.add(new String[]{"Environmental Concerns", environmentalConcernsValue});
+
+            final String globalPerspectiveValue;
+            if (detailedTargetAudience.isGlobalPerspective()) {
+                globalPerspectiveValue = yes;
+            }
+            else {
+                globalPerspectiveValue = no;
+            }
+            attributes.add(new String[]{"Global Perspective", globalPerspectiveValue});
+
+            final String multilingualAbilitiesValue;
+            if (detailedTargetAudience.isMultilingualAbilities()) {
+                multilingualAbilitiesValue = yes;
+            }
+            else {
+                multilingualAbilitiesValue = no;
+            }
+            attributes.add(new String[]{"Multilingual Abilities", multilingualAbilitiesValue});
+        }
+        return attributes;
     }
 
     private String safeString(String value) {
-        return value != null && !value.isEmpty() ? value : "N/A";
+        final String valuable;
+        if (value != null && !value.isEmpty()) {
+            valuable = value;
+        }
+        else {
+            valuable = "N/A";
+        }
+        return valuable;
     }
 
     private List<String> safeList(List<String> list) {
-        return list != null ? list : List.of();
+        return Objects.requireNonNullElseGet(list, List::of);
     }
 
     public String getViewName() {
