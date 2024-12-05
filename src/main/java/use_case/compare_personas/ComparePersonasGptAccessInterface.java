@@ -1,10 +1,17 @@
 package use_case.compare_personas;
 
-import entity.ChatMessage;
 import java.io.IOException;
-import java.util.List;
 
+/**
+ * Interface for the comparing personas access interface.
+ */
 public interface ComparePersonasGptAccessInterface {
-
+    /**
+     * Method for accessing the API.
+     * @param message the input to send to chatgpt.
+     * @return the output of the chatgpt response.
+     * @throws IOException if there is an error with accessing the API call.
+     * @throws InterruptedException If there is an error with getting the API response.
+     */
     String utilizeApi(String message) throws IOException, InterruptedException;
 }

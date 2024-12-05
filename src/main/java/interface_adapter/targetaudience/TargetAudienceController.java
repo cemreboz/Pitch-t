@@ -3,8 +3,6 @@ package interface_adapter.targetaudience;
 import use_case.set_targetaudience.TargetAudienceInputBoundary;
 import use_case.set_targetaudience.TargetAudienceInputData;
 
-import java.util.List;
-
 /**
  * Controller class that generates the target audience.
  */
@@ -19,6 +17,7 @@ public class TargetAudienceController {
     /**
      * Generates the Target Audience.
      * @param inputData The Input data for the general Target Audience.
+     * @return the generated target audience.
      * @throws Exception if there is an error with generating the target audience.
      */
     public String generate(TargetAudienceInputData inputData) throws Exception {

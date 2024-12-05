@@ -6,8 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.*;
-import entity.DBUser;
+import data_access.ChatExpertDataAccessObject;
+import data_access.ChatgptDataAccessObject;
+import data_access.DBUserDataAccessObject;
+import data_access.FileVisualDataAccessObject;
+import data_access.VisualDataAccessObject;
 import entity.DBUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -450,7 +453,8 @@ public class AppBuilder {
 
         //        // Block for the ViewPersonasController
         //        ViewPersonasGptDataAccessInterface chatgptDataAccessObject = new ChatgptDataAccessObject();
-        //        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(chatgptDataAccessObject);
+        //        ViewPersonasInputBoundary viewPersonasInteractor = new ViewPersonasInteractor(
+        //        chatgptDataAccessObject);
         //        ViewPersonasController viewPersonasController = new ViewPersonasController(viewPersonasInteractor);
         //        pitchView.setViewPersonasController(viewPersonasController);
 
@@ -580,11 +584,11 @@ public class AppBuilder {
                 chatgptDataAccessObject, comparePersonasOutputBoundary, userDataAccessObject);
 
         // Create the controller using the Interactor
-        final ComparePersonasController comparePersonasController = new ComparePersonasController(
+        final ComparePersonasController comparingController = new ComparePersonasController(
                 comparePersonasInteractor);
 
         // Set the controller for the Persona List View
-        personaListView.setComparePersonasController(comparePersonasController);
+        personaListView.setComparePersonasController(comparingController);
 
         return this;
     }

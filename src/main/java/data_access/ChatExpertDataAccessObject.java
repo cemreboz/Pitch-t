@@ -36,7 +36,7 @@ public class ChatExpertDataAccessObject implements ChatExpertDataAccessInterface
                         + "After selling Broadcast.com, he became an influential investor "
                         + "across tech, sports, and entertainment. "
                         + "Mark is direct, competitive, and growth-focused. He values clear, scalable "
-                        + "ideas and isn’t afraid to call "
+                        + "ideas and isn't afraid to call "
                         + "out weaknesses, backing only pitches that show true potential for innovation and success.",
                 "expert_avatars/mark-cuban.png"));
 

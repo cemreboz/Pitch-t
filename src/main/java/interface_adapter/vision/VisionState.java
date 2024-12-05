@@ -75,16 +75,16 @@ public class VisionState {
         return isLoading;
     }
 
-    public void setLoading(boolean isLoading) {
-        this.isLoading = isLoading;
+    public void setLoading(boolean loading) {
+        this.isLoading = loading;
     }
 
     public boolean isSuccess() {
         return isSuccess;
     }
 
-    public void setSuccess(boolean isSuccess) {
-        this.isSuccess = isSuccess;
+    public void setSuccess(boolean success) {
+        this.isSuccess = success;
     }
 
     public void setVisionResponse(String visionResponse) {

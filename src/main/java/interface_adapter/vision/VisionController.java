@@ -1,7 +1,5 @@
 package interface_adapter.vision;
 
-import entity.Persona;
-import entity.Pitch;
 import use_case.generate_visuals.GenerateVisualInputBoundary;
 import use_case.generate_visuals.GenerateVisualInputData;
 

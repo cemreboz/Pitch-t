@@ -1,8 +1,8 @@
 package use_case.chat_vision;
 
-import entity.ChatMessage;
-
 import java.util.List;
+
+import entity.ChatMessage;
 
 /**
  * Data access interface for retrieving persona chat data.

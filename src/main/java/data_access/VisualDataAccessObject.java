@@ -1,16 +1,16 @@
 package data_access;
 
-import app.PitchitManager;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import entity.Visual;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+
+import app.PitchitManager;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import entity.Visual;
 
 /**
  * Data Access Object for interacting with visual generation data.
@@ -19,6 +19,7 @@ public class VisualDataAccessObject {
 
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
     private static final String API_KEY = PitchitManager.getApiKey();
+    private static final int CODE = 200;
 
     private final List<Visual> imageStorage = new ArrayList<>();
 
@@ -27,17 +28,18 @@ public class VisualDataAccessObject {
      *
      * @param prompt The combined system and user input prompt.
      * @param model  The model to use, e.g., "dall-e-3".
-     * @param n      The number of images to generate.
+     * @param num      The number of images to generate.
      * @param size   The size of the generated images, e.g., "1024x1024".
      * @return The generated image URL.
      * @throws Exception If an error occurs during the API call.
+     * @throws RuntimeException if the API key is missing.
      */
-    public static String generateImage(String prompt, String model, int n, String size) throws Exception {
+    public static String generateImage(String prompt, String model, int num, String size) throws Exception {
         if (API_KEY == null || API_KEY.isEmpty()) {
             throw new RuntimeException("API key is missing. Ensure the OPENAI_API_KEY environment variable is set.");
         }
         final ObjectMapper objectMapper = new ObjectMapper();
-        final String payload = objectMapper.writeValueAsString(new ImageGenerationRequest(model, prompt, n, size));
+        final String payload = objectMapper.writeValueAsString(new ImageGenerationRequest(model, prompt, num, size));
 
         final HttpClient client = HttpClient.newHttpClient();
         final HttpRequest request = HttpRequest.newBuilder()
@@ -49,7 +51,7 @@ public class VisualDataAccessObject {
 
         final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == CODE) {
             return extractImageUrl(response.body());
         }
         else {
@@ -95,17 +97,19 @@ public class VisualDataAccessObject {
         imageStorage.clear();
     }
 
-    // Inner class for API request data structure
+    /**
+     * Class for all of the input to generate image.
+     */
     static class ImageGenerationRequest {
-        public String model;
-        public String prompt;
-        public int n;
-        public String size;
+        private String model;
+        private String prompt;
+        private int num;
+        private String size;
 
-        public ImageGenerationRequest(String model, String prompt, int n, String size) {
+        ImageGenerationRequest(String model, String prompt, int num, String size) {
             this.model = model;
             this.prompt = prompt;
-            this.n = n;
+            this.num = num;
             this.size = size;
         }
     }

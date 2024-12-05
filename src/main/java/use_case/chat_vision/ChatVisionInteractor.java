@@ -1,12 +1,12 @@
 package use_case.chat_vision;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.ChatMessage;
 import entity.Persona;
 import entity.Pitch;
 import entity.Visual;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Interactor for the chat_persona use case.
@@ -15,7 +15,8 @@ public class ChatVisionInteractor implements ChatVisionInputBoundary {
     private final ChatVisionDataAccessInterface chatgptDataAccessObject;
     private final ChatVisionOutputBoundary outputBoundary;
 
-    public ChatVisionInteractor(ChatVisionDataAccessInterface chatgptDataAccessObject, ChatVisionOutputBoundary outputBoundary) {
+    public ChatVisionInteractor(ChatVisionDataAccessInterface chatgptDataAccessObject,
+                                ChatVisionOutputBoundary outputBoundary) {
         this.chatgptDataAccessObject = chatgptDataAccessObject;
         this.outputBoundary = outputBoundary;
     }

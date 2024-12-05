@@ -1,7 +1,5 @@
 package use_case.compare_personas;
 
-import use_case.compare_personas.ComparePersonasInputData;
-
 /**
  * Input Boundary for comparing personas.
  */

@@ -1,7 +1,8 @@
 package interface_adapter.compare_personas;
 
-import entity.Persona;
 import java.util.List;
+
+import entity.Persona;
 
 /**
  * State for the Compare Personas View Model.

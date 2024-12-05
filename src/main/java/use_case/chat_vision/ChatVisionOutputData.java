@@ -1,8 +1,8 @@
 package use_case.chat_vision;
 
-import entity.ChatMessage;
-
 import java.util.List;
+
+import entity.ChatMessage;
 
 /**
  * Output data class for the Chat with Persona use case.

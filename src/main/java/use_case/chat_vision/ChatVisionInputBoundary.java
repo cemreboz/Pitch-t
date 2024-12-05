@@ -1,7 +1,5 @@
 package use_case.chat_vision;
 
-import use_case.chat_persona.ChatPersonaInputData;
-
 /**
  * Input boundary for the chat persona use case.
  */

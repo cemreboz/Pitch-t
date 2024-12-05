@@ -1,5 +1,8 @@
 package use_case.compare_personas;
 
+/**
+ * Interface for the output boundary for compare personas.
+ */
 public interface ComparePersonasOutputBoundary {
     /**
      * Prepares the failure view if the comparison fails.

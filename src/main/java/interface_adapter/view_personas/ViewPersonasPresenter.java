@@ -19,12 +19,12 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
 
     @Override
     public void prepareSuccessView(ViewPersonasOutputData outputData) {
-        ViewPersonasState state = new ViewPersonasState();
+        final ViewPersonasState state = new ViewPersonasState();
         state.setPersonas(outputData.getPersonas());
         state.setThisPitch(outputData.getPitch());
         state.setUsername(outputData.getUsername());
         state.setPassword(outputData.getPassword());
-        state.setErrorMessage(null); // No error in the success case
+        state.setErrorMessage(null);
 
         // Update the view model with the successful output
         viewPersonasViewModel.setState(state);
@@ -36,8 +36,8 @@ public class ViewPersonasPresenter implements ViewPersonasOutputBoundary {
 
     @Override
     public void prepareFailView(String errorMessage) {
-        ViewPersonasState state = new ViewPersonasState();
-        state.setPersonas(null); // No personas in the failure case
+        final ViewPersonasState state = new ViewPersonasState();
+        state.setPersonas(null);
         state.setErrorMessage(errorMessage);
 
         // Update the view model with the failure output
