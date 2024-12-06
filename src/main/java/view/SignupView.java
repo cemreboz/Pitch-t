@@ -109,7 +109,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-
         // Add Listeners
         addUsernameListener();
         addPasswordListener();

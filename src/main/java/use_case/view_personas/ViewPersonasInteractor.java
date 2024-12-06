@@ -1,15 +1,16 @@
 package use_case.view_personas;
 
-import entity.DBUser;
-import entity.Persona;
-import entity.Pitch;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import entity.DBUser;
+import entity.Persona;
+import entity.Pitch;
 
 /**
  * Interactor for the View Personas use case.
@@ -54,30 +55,36 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
 
     private List<Persona> populateFakePersonas(Pitch pitch) {
         try {
-            String systemMessage = createSystemMessage(pitch);
+            final String systemMessage = createSystemMessage(pitch);
 
             // Use the GPT API to generate personas based on the pitch details
-            String response = gptAccessInterface.utilizeApi(systemMessage);
+            final String response = gptAccessInterface.utilizeApi(systemMessage);
 
             // Parse the response to extract personas
             return parsePersonasFromJson(response);
-        } catch (Exception e) {
-            String errorMessage = "An error occurred while generating personas: " + e.getMessage();
+        }
+        catch (Exception e) {
+            final String errorMessage = "An error occurred while generating personas: " + e.getMessage();
             viewPersonasOutputBoundary.prepareFailView(errorMessage);
-            throw new IllegalStateException(errorMessage, e); // Rethrow the exception to ensure proper test handling
+            throw new IllegalStateException(errorMessage, e);
+            // Rethrow the exception to ensure proper test handling
         }
     }
 
     private String createSystemMessage(Pitch pitch) {
         // Construct a descriptive system message for GPT API
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append("Generate user personas based on the following pitch details.\n");
         sb.append("Pitch Name: ").append(pitch.getName()).append("\n");
         sb.append("Description: ").append(pitch.getDescription()).append("\n");
         sb.append("Target Audiences: ").append(String.join(", ", pitch.getTargetAudienceList())).append("\n");
 
-        sb.append("Return a valid JSON response that is an array of JSON objects. Each target audience is a distinct group. ");
-        sb.append("For each given target audience, include a JSON object which contains the the following key, value pairs:\n");
+        sb.append("Return a valid JSON response that is an array of JSON objects. "
+                +
+                "Each target audience is a distinct group. ");
+        sb.append("For each given target audience, include a JSON object which contains the the following key, "
+                +
+                "value pairs:\n");
         sb.append("    \"name\": [string] The name of the persona.\n");
         sb.append("    \"age\": [integer] The age of the persona, in years\n");
         sb.append("    \"gender\": [Male/Female] The gender of the persona.\n");
@@ -95,13 +102,13 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
     }
 
     private List<Persona> parsePersonasFromJson(String jsonString) {
-        List<Persona> personas = new ArrayList<>();
+        final List<Persona> personas = new ArrayList<>();
         try {
-            JSONArray personaArray = new JSONArray(jsonString);
+            final JSONArray personaArray = new JSONArray(jsonString);
 
             for (int i = 0; i < personaArray.length(); i++) {
-                JSONObject personaJson = personaArray.getJSONObject(i);
-                Persona persona = new Persona();
+                final JSONObject personaJson = personaArray.getJSONObject(i);
+                final Persona persona = new Persona();
                 persona.setPersonaID(i);
                 persona.setName(personaJson.getString("name"));
                 persona.setAge(personaJson.getInt("age"));
@@ -119,7 +126,8 @@ public class ViewPersonasInteractor implements ViewPersonasInputBoundary {
                 // Populate other fields as needed
                 personas.add(persona);
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             throw new IllegalArgumentException("Error parsing personas from JSON response", e);
         }
         return personas;

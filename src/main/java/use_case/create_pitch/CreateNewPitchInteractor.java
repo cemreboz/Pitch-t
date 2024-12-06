@@ -1,18 +1,21 @@
 package use_case.create_pitch;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+
 import data_access.ChatgptDataAccessObject;
 import entity.DBUser;
 import entity.Pitch;
 import interface_adapter.pitch.PitchViewModel;
 import interface_adapter.targetaudience.TargetAudienceController;
 import interface_adapter.targetaudience.TargetAudiencePresenter;
-import org.jetbrains.annotations.NotNull;
-import use_case.dashboard_show_pitch.DashboardOutputData;
-import use_case.show_new_pitch.ShowNewPitchOutputBoundary;
-import use_case.set_targetaudience.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import use_case.set_targetaudience.TargetAudienceDataAccessInterface;
+import use_case.set_targetaudience.TargetAudienceInputBoundary;
+import use_case.set_targetaudience.TargetAudienceInputData;
+import use_case.set_targetaudience.TargetAudienceInteractor;
+import use_case.set_targetaudience.TargetAudienceOutputBoundary;
 
 /**
  * Interactor for creating a new pitch and associating it with a user.
@@ -51,8 +54,6 @@ public class CreateNewPitchInteractor implements CreateNewPitchInputBoundary {
         final TargetAudienceInputData targetAudienceInputData = new TargetAudienceInputData(
                 createNewPitchInputData.getName(), createNewPitchInputData.getDescription());
         final String targetaudience = targetAudienceController.generate(targetAudienceInputData);
-        // Image is nice but not mandatory.
-        // TODO: validate image somehow?
 
         final List<String> targetAudienceList = parseTargetAudience(targetaudience);
 

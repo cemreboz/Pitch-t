@@ -10,7 +10,7 @@ public interface TargetAudienceDataAccessInterface {
      *
      * @param systemMessage The message sent to the Chatgpt system.
      * @param userMessage   Dependent on the pitch itself.
-     * @return
+     * @return a string representing the generated target audience.
      * @throws Exception If any error occurs during data fetching.
      */
     String generateTargetAudience(String systemMessage, String userMessage) throws Exception;

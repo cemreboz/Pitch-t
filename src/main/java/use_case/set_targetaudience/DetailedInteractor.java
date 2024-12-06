@@ -5,19 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import entity.DBUser;
-import entity.Pitch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import entity.DBUser;
 import entity.DetailedTargetAudience;
+import entity.Pitch;
 
 /**
  * Class for the Detailed Target Audience Interactor.
  */
 public class DetailedInteractor implements DetailedInputBoundary {
 
+    public static final int NUM_3 = 3;
+    public static final int NUM_4 = 4;
+    public static final String UNKNOWN = "unknown";
     private final DetailedtaDataAccessInterface dataAccess;
     private final DetailedOutputBoundary outputBoundary;
     private final DetailedDataObjectAccessInterface dataObjectAccess;
@@ -80,11 +83,11 @@ public class DetailedInteractor implements DetailedInputBoundary {
             response = response.trim();
 
             if (response.startsWith("```") && response.endsWith("```")) {
-                response = response.substring(3, response.length() - 3).trim();
+                response = response.substring(NUM_3, response.length() - NUM_3).trim();
             }
 
             if (response.startsWith("json")) {
-                response = response.substring(4).trim();
+                response = response.substring(NUM_4).trim();
             }
 
             response = response.replace("\\\"", "\"");
@@ -136,19 +139,21 @@ public class DetailedInteractor implements DetailedInputBoundary {
             if (demographicAttributes != null) {
                 audience.setMinAge(demographicAttributes.optInt("MinAge", 0));
                 audience.setMaxAge(demographicAttributes.optInt("MaxAge", 0));
-                audience.setGender(demographicAttributes.optString("Gender", "unknown"));
-                audience.setEducationLevel(demographicAttributes.optString("EducationLevel", "unknown"));
-                audience.setOccupation(demographicAttributes.optString("Occupation", "unknown"));
-                audience.setIncomeLevel(demographicAttributes.optString("IncomeLevel", "unknown"));
-                audience.setGeographicLocation(demographicAttributes.optString("GeographicLocation", "unknown"));
+                audience.setGender(demographicAttributes.optString("Gender", UNKNOWN));
+                audience.setEducationLevel(demographicAttributes.optString("EducationLevel", UNKNOWN));
+                audience.setOccupation(demographicAttributes.optString("Occupation", UNKNOWN));
+                audience.setIncomeLevel(demographicAttributes.optString("IncomeLevel", UNKNOWN));
+                audience.setGeographicLocation(demographicAttributes.optString("GeographicLocation", UNKNOWN));
             }
 
             // Parse Psychographic Attributes
             final JSONObject psychographicAttributes = jsonResponse.optJSONObject("PsychographicAttributes");
             if (psychographicAttributes != null) {
-                audience.setInterestsAndPassions(jsonArrayToList(psychographicAttributes.optJSONArray("InterestsAndPassions")));
+                audience.setInterestsAndPassions(jsonArrayToList(psychographicAttributes.optJSONArray(
+                        "InterestsAndPassions")));
                 audience.setValues(jsonArrayToList(psychographicAttributes.optJSONArray("Values")));
-                audience.setPersonalityTraits(jsonArrayToList(psychographicAttributes.optJSONArray("PersonalityTraits")));
+                audience.setPersonalityTraits(jsonArrayToList(psychographicAttributes.optJSONArray(
+                        "PersonalityTraits")));
                 audience.setLifestyle(psychographicAttributes.optString("Lifestyle", ""));
             }
 

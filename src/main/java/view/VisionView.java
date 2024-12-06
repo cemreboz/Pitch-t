@@ -26,6 +26,11 @@ import use_case.generate_visuals.GenerateVisualInputData;
  * The View for the Vision Page.
  */
 public class VisionView extends JPanel implements PropertyChangeListener {
+    public static final int FRAME_WIDTH = 800;
+    public static final int FRAME_HEIGHT = 600;
+    public static final int FONT_SIZE = 24;
+    public static final int FONT_SIZE_BODY = 16;
+    public static final int FONT_SIZE_SUBHEAD = 14;
     private final String viewName = "vision";
     private final String fontArial = "Arial";
 
@@ -61,17 +66,17 @@ public class VisionView extends JPanel implements PropertyChangeListener {
     }
 
     private void buildHeader() {
-        setSize(800, 600);
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         final JPanel headerPanel = new JPanel(new BorderLayout());
         final JLabel headerLabel = new JLabel("Vision for Chosen Persona", SwingConstants.CENTER);
-        headerLabel.setFont(new Font(fontArial, Font.BOLD, 24));
+        headerLabel.setFont(new Font(fontArial, Font.BOLD, FONT_SIZE));
         headerPanel.add(headerLabel, BorderLayout.CENTER);
 
         // Left side: Hamburger menu and logo
         hamburgerMenu = createHamburgerMenu();
         final JLabel logo = new JLabel("Pitch!t");
-        logo.setFont(new Font(fontArial, Font.BOLD, 24));
+        logo.setFont(new Font(fontArial, Font.BOLD, FONT_SIZE));
 
         final JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         logoPanel.add(hamburgerMenu);
@@ -103,7 +108,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         visionPanel.setBorder(BorderFactory.createTitledBorder("Generated Visual"));
 
         adLabel = new JLabel("Visual is generating...", SwingConstants.CENTER);
-        adLabel.setFont(new Font(fontArial, Font.ITALIC, 16));
+        adLabel.setFont(new Font(fontArial, Font.ITALIC, FONT_SIZE_BODY));
 
         visionPanel.add(adLabel, BorderLayout.CENTER);
 
@@ -119,7 +124,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
-        chatArea.setFont(new Font(fontArial, Font.PLAIN, 14));
+        chatArea.setFont(new Font(fontArial, Font.PLAIN, FONT_SIZE_SUBHEAD));
 
         final JScrollPane chatScrollPane = new JScrollPane(chatArea);
         chatPanel.add(chatScrollPane, BorderLayout.CENTER);
@@ -134,7 +139,7 @@ public class VisionView extends JPanel implements PropertyChangeListener {
         // Footer Panel: Chat Bar
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        messageInput.setFont(new Font(fontArial, Font.PLAIN, 14));
+        messageInput.setFont(new Font(fontArial, Font.PLAIN, FONT_SIZE_SUBHEAD));
 
         // Allow sending message with Enter key
         messageInput.addActionListener(event -> sendMessage());
@@ -181,6 +186,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
 
     /**
      * Set persona and pitch.
+     * @param persona the persona to be set
+     * @param pitch   the pitch to be set
      */
     public void setPersonaAndPitch(Persona persona, Pitch pitch) {
         this.persona = persona;
@@ -284,7 +291,8 @@ public class VisionView extends JPanel implements PropertyChangeListener {
             final Image image = imageIcon.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             adLabel.setIcon(new ImageIcon(image));
             adLabel.setText(null);
-        } else {
+        }
+        else {
             adLabel.setIcon(null);
             adLabel.setText("No image available.");
         }

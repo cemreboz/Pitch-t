@@ -37,6 +37,15 @@ import interface_adapter.new_pitch.ShowNewPitchController;
  */
 public class ExpertChatView extends JPanel implements PropertyChangeListener {
 
+    public static final String FONT = "Arial";
+    public static final int FONT_SIZE = 24;
+    public static final int SIZE_50 = 50;
+    public static final int SIZE_18 = 18;
+    public static final int SIZE_5 = 5;
+    public static final int SIZE_16 = 16;
+    public static final int NUM_3 = 3;
+    public static final int SIZE_280 = 280;
+    public static final int SIZE_14 = 14;
     private final String viewName = "chat expert";
     private final ExpertViewModel expertViewModel;
     private HamburgerMenu hamburgerMenu;
@@ -85,7 +94,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         // Left side: Hamburger menu and logo
         hamburgerMenu = createHamburgerMenu();
         final JLabel logo = new JLabel("Pitch!t");
-        logo.setFont(new Font("Arial", Font.BOLD, 24));
+        logo.setFont(new Font(FONT, Font.BOLD, FONT_SIZE));
 
         final JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         logoPanel.add(hamburgerMenu);
@@ -96,9 +105,9 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         // Right side: Expert info (avatar and name)
         final JPanel expertInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         headerNameLabel = new JLabel("Select an Expert");
-        headerNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        headerNameLabel.setFont(new Font(FONT, Font.BOLD, SIZE_18));
         headerAvatarLabel = new JLabel();
-        headerAvatarLabel.setPreferredSize(new Dimension(50, 50));
+        headerAvatarLabel.setPreferredSize(new Dimension(SIZE_50, SIZE_50));
 
         expertInfoPanel.add(headerNameLabel);
         expertInfoPanel.add(headerAvatarLabel);
@@ -122,10 +131,10 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             final String description = expert[2];
 
             final JPanel expertPanel = new JPanel(new BorderLayout());
-            expertPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            expertPanel.setBorder(BorderFactory.createEmptyBorder(SIZE_5, SIZE_5, SIZE_5, SIZE_5));
 
             final JLabel nameLabel = new JLabel(name);
-            nameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            nameLabel.setFont(new Font(FONT, Font.PLAIN, SIZE_16));
 
             final JButton infoButton = new JButton("Info");
             infoButton.addActionListener(event -> JOptionPane.showMessageDialog(
@@ -134,7 +143,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             final JButton selectButton = new JButton("Select");
             selectButton.addActionListener(event -> {
                 headerNameLabel.setText(name);
-                headerAvatarLabel.setIcon(loadAvatar(expert[3]));
+                headerAvatarLabel.setIcon(loadAvatar(expert[NUM_3]));
                 selectedExpertId = expertId;
                 chatExpertController.startChat(expertId, "Hi! I'd like to discuss my idea.");
                 updateChatArea();
@@ -153,7 +162,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         }
 
         final JScrollPane expertScrollPane = new JScrollPane(expertListPanel);
-        expertScrollPane.setPreferredSize(new Dimension(280, 0));
+        expertScrollPane.setPreferredSize(new Dimension(SIZE_280, 0));
         add(expertScrollPane, BorderLayout.WEST);
     }
 
@@ -166,7 +175,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
         chatArea.setWrapStyleWord(true);
-        chatArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        chatArea.setFont(new Font(FONT, Font.PLAIN, SIZE_14));
 
         final JScrollPane chatScrollPane = new JScrollPane(chatArea);
         add(chatScrollPane, BorderLayout.CENTER);
@@ -179,7 +188,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
         // Footer Panel: Chat Bar
         final JPanel footerPanel = new JPanel(new BorderLayout());
         messageInput = new JTextField();
-        messageInput.setFont(new Font("Arial", Font.PLAIN, 14));
+        messageInput.setFont(new Font(FONT, Font.PLAIN, SIZE_14));
 
         // Allow sending message with Enter key
         messageInput.addActionListener(event -> sendMessage());
@@ -227,7 +236,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             final ImageIcon originalIcon = new ImageIcon(resource);
             // Scale the image to desired size, e.g., 50x50 pixels
             final Image image = originalIcon.getImage();
-            final Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            final Image scaledImage = image.getScaledInstance(SIZE_50, SIZE_50, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
         }
         else {
@@ -237,7 +246,7 @@ public class ExpertChatView extends JPanel implements PropertyChangeListener {
             if (defaultResource != null) {
                 final ImageIcon defaultIcon = new ImageIcon(defaultResource);
                 final Image image = defaultIcon.getImage();
-                final Image scaledImage = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                final Image scaledImage = image.getScaledInstance(SIZE_50, SIZE_50, Image.SCALE_SMOOTH);
                 return new ImageIcon(scaledImage);
             }
             else {
