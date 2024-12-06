@@ -51,6 +51,8 @@ public class ComparePersonasInteractor implements ComparePersonasInputBoundary {
 
         if (persona1 == null || persona2 == null) {
             outputBoundary.prepareFailView("Exactly two personas must be selected for comparison.");
+            // Need the return here for the method to exit early if the personas are null.
+            return;
         }
 
         // Create a descriptive system message to send to GPT

@@ -86,13 +86,18 @@ class ComparePersonasInteractorTest {
 
     @Test
     void testExecuteFailsWithInvalidPersonaCount() {
-        ComparePersonasInputData inputData = new ComparePersonasInputData(persona1, null, pitch);
+        // Test case with one null persona
+        ComparePersonasInputData inputDataNullPersona2 = new ComparePersonasInputData(persona1, null, pitch);
+        interactor.execute(inputDataNullPersona2);
 
-        // Execute interactor
-        interactor.execute(inputData);
+        assertNull(testPresenter.outputData, "Output data should be null for invalid input.");
+        assertEquals("Exactly two personas must be selected for comparison.", testPresenter.failMessage);
 
-        // Assertions
-        assertNull(testPresenter.outputData);
+        // Test case with both personas null
+        ComparePersonasInputData inputDataBothNull = new ComparePersonasInputData(null, null, pitch);
+        interactor.execute(inputDataBothNull);
+
+        assertNull(testPresenter.outputData, "Output data should be null for invalid input.");
         assertEquals("Exactly two personas must be selected for comparison.", testPresenter.failMessage);
     }
 
